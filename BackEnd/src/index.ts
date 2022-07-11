@@ -32,10 +32,10 @@ console.log('Demanding the sauce...');
 
 (
     mongoose
-    .connect(dbUri, {
+    .connect(dbUri /*, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-    })
+    }*/)
     .then(() => {
         console.log('Sauce received!');
     })
