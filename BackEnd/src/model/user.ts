@@ -149,7 +149,7 @@ export interface UserDocument extends User, Document {
      * remove a routine for the user
      * @param name identifies the routine up to be removed
      */
-    removeRoutine(name: Routine): Promise<void>;
+    removeRoutine(name: string): Promise<void>;
 
     /**
      * add a routine for the user
@@ -219,6 +219,16 @@ export const UserSchema = new Schema<UserDocument>(
     }
 )
 
+// TO DO ricorda che quando tornerai nelle route la routine dovrai maneggiare la routine name perchè c'è /userId in più
+
+// TO DO fatti delle classi che rappresentano gli errori
+export const errormsgs = {
+    404: ["No user with that identifier", 'Notification not found'],
+    500: "Internal server error",
+
+}
+
+
 UserSchema.methods.addNotification = async function (
     reqType: NotTypes,
 ): Promise<UserDocument> {
@@ -259,7 +269,14 @@ UserSchema.methods.removeDocument = async function (type: DocTypes) : Promise<Us
 }
 
 UserSchema.methods.addRoutine = async function (routine: Routine) : Promise<UserDocument> {
+    routine.name = routine.name + "/" + this._id.toString()
     this.routines.push(routine)
+    return this.save()
+}
+
+UserSchema.methods.removeRoutine = async function (name: string) : Promise<UserDocument> {
+    name = name + "/" + this._id.toString()
+    this.routines = this.routines.filter((elem: RoutineSubDocument) => elem.name !== name)
     return this.save()
 }
 
@@ -382,7 +399,7 @@ export async function updatePassword(_id: Types.ObjectId, password: string): Pro
 
 export async function getUserStats(_id: Types.ObjectId): Promise<UserStats> {
     const stat = await UserModel.findOne({ _id }, { stats: 1 }).catch((err) =>
-        Promise.reject(new Error('Sum internal error just occurred'))
+        Promise.reject(new Error('Internal server error'))
     );
 
     return !stat
@@ -417,7 +434,7 @@ export async function updateTheme(userId: Types.ObjectId, theme: string) : Promi
         return Promise.resolve()
     } catch(err) {
         let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(err)
+        return Promise.reject(new Error(er))
     }
 }
 
@@ -430,7 +447,7 @@ export async function updateSize(userId: Types.ObjectId, size: number) : Promise
         return Promise.resolve()
     } catch(err) {
         let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(err)
+        return Promise.reject(new Error(er))
     }
 }
 
@@ -443,7 +460,7 @@ export async function updateLanguage(userId: Types.ObjectId, lan: string) : Prom
         return Promise.resolve()
     } catch(err) {
         let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(err)
+        return Promise.reject(new Error(er))
     }
 }
 
@@ -456,6 +473,94 @@ export async function updateGamification(userId: Types.ObjectId, swt: boolean) :
         return Promise.resolve()
     } catch(err) {
         let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(err)
+        return Promise.reject(new Error(er))
     }
 }
+
+export async function updateRoutineName(userId: Types.ObjectId, oldName: string, newName: string): Promise<void> {
+    let user: UserDocument
+    oldName = oldName + "/" + userId.toString()
+    newName = newName + "/" + userId.toString()
+    try {
+        user = await getUserById(userId)
+        user.routines.forEach((elem, idx, vect) => {
+            if (elem.name === oldName) vect[idx].name = newName
+        })
+        await user.save()
+        return Promise.resolve()
+    } catch(err) {
+        let er: string = (typeof err === "string")? err: "Internal server error"
+        return Promise.reject(new Error(er))
+    }
+}
+
+export async function updateRoutineTemperature(userId: Types.ObjectId, routineName: string, temp: number): Promise<void> {
+    let user: UserDocument
+    routineName = routineName + "/" + userId.toString()
+    try {
+        user = await getUserById(userId)
+        user.routines.forEach((elem, idx, vect) => {
+            if (elem.name === routineName) vect[idx].temperature = temp
+        })
+        await user.save()
+        return Promise.resolve()
+    } catch(err) {
+        let er: string = (typeof err === "string")? err: "Internal server error"
+        return Promise.reject(new Error(er))
+    }
+}
+
+// this probably needs to be written again 
+export async function updateRoutineLisghtsColor(userId: Types.ObjectId, routineName: string, color: string): Promise<void> {
+    let user: UserDocument
+    routineName = routineName + "/" + userId.toString()
+    try {
+        user = await getUserById(userId)
+        user.routines.forEach((elem, idx, vect) => {
+            if (elem.name === routineName) vect[idx].lightsColor = color
+        })
+        await user.save()
+        return Promise.resolve()
+    } catch(err) {
+        let er: string = (typeof err === "string")? err: "Internal server error"
+        return Promise.reject(new Error(er))
+    }
+}
+
+
+export async function updateRoutineMusic(
+    userId: Types.ObjectId, 
+    routineName: string, 
+    musicToAdd: string[] = [], 
+    musicToRemove: string[] = []
+): Promise<void> {
+    let user: UserDocument
+    routineName = routineName + "/" + userId.toString()
+    try {
+        user = await getUserById(userId)
+        if (musicToRemove.length) removeMusic(user, routineName, musicToRemove)
+        if (musicToAdd.length) addMusic(user, routineName, musicToAdd)
+        await user.save()
+        return Promise.resolve()
+    } catch(err) {
+        let er: string = (typeof err === "string")? err: "Internal server error"
+        return Promise.reject(new Error(er))
+    }
+}
+
+function removeMusic(user: UserDocument, routineName: string, musicToRemove: string[]): void {
+    var idx: number = -1
+    do {
+        idx ++
+        if (user.routines[idx].name === routineName) {
+            user.routines[idx].music = user.routines[idx].music.filter((elem: string) => !(musicToRemove.includes(elem)))
+        }
+    } while(idx < user.routines.length && user.routines[idx].name !== routineName)
+}
+
+function addMusic(user: UserDocument, routineName: string, musicToAdd: string[]) {
+    for (var idx in user.routines) {
+        if (user.routines[idx].name === routineName) user.routines[idx].music.push(...musicToAdd)
+    }
+}
+
