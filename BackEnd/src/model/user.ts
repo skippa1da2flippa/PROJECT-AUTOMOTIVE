@@ -10,7 +10,8 @@ import {
 import {
     ODocument,
     ODocSubDocument,
-    DocumentSchema
+    DocumentSchema,
+    DocTypes
 } from '../model/document'
 import {
     UserStats,
@@ -118,12 +119,43 @@ export interface UserDocument extends User, Document {
     addNotification(type: NotTypes): Promise<UserDocument>;
 
     /**
-     * Remove a notification identified by its id
+     * Remove a notification identified by its type
      * Returns an error if the notification doesn't exist
      * @param type type of the notification to remove
      */
     removeNotification(type: NotTypes): Promise<UserDocument>;
 
+    /**
+     * Add a document identified by type and requester
+     * Return an error if an identical document already exists
+     * @param doc represents the incoming document
+     */
+    addDocument(doc: ODocument): Promise<void>;
+
+    /**
+     * Remove a document identified by its type
+     * Returns an error if the document doesn't exist
+     * @param type type of the document to remove
+     */
+    removeDocument(type: DocTypes): Promise<UserDocument>;
+
+    /**
+     * add a routine for the user
+     * @param routine represents the newly routine
+     */
+    addRoutine(routine: Routine): Promise<void>;
+
+    /**
+     * remove a routine for the user
+     * @param name identifies the routine up to be removed
+     */
+    removeRoutine(name: Routine): Promise<void>;
+
+    /**
+     * add a routine for the user
+     * @param routine represent the newly routine
+     */
+    updateRoutine(routine: Routine): Promise<void>;
 }
 
 
@@ -195,18 +227,13 @@ UserSchema.methods.addNotification = async function (
     return this.save();
 };
 
-// pop of the last notification with the same type as the one recieved as input
+
+// pop one notification with the same type as the one recieved as input
 UserSchema.methods.removeNotification = async function (
     type: string
 ): Promise<UserDocument> {
-    this.notifications.sort((n1, n2) => {
-        if (n1.createdAt > n2.createdAt) return 1
-        else if (n1.createdAt < n2.createdAt) return -1
-        else return 0
-    })
-
     for (let idx in this.notifications) {
-        if (this.notifications[idx].type === type) {
+        if (this.notifications[idx].type === type.valueOf()) {
             this.splice(parseInt(idx), 1)
             return this.save()
         }
@@ -214,6 +241,28 @@ UserSchema.methods.removeNotification = async function (
 
     return Promise.reject(new Error('Notification not found'));
 };
+
+UserSchema.methods.addDocument = async function (doc: ODocument) : Promise<void> {
+    this.documents.push(doc)
+    await this.save().catch((err) => Promise.reject(new Error("Internal server error")))
+    return Promise.resolve()
+}
+
+UserSchema.methods.removeDocument = async function (type: DocTypes) : Promise<UserDocument> {
+    for (let idx in this.docs) {
+        if (this.docs[idx].type === type.valueOf()) {
+            this.splice(parseInt(idx), 1)
+            return this.save()
+        }
+    }
+    return Promise.reject(new Error("No user with that identifier"))
+}
+
+UserSchema.methods.addRoutine = async function (routine: Routine) : Promise<UserDocument> {
+    this.routines.push(routine)
+    return this.save()
+}
+
 
 /* METHODS FOR PASSWORD MANIPULATION AND VALIDATION */
 
@@ -297,7 +346,7 @@ export async function getUserByNickname(nickname: string): Promise<UserDocument>
 export async function createUser(data: AnyKeys<UserDocument>): Promise<UserDocument> {
     const user: UserDocument = new UserModel(data);
     await user.save().catch((err) =>
-        Promise.reject(new Error('User already exists'))
+        Promise.reject(new Error('Internal server error'))
     );
     return user;
 }
@@ -356,5 +405,57 @@ export async function getUserStats(_id: Types.ObjectId): Promise<UserStats> {
         return user.save();
     } catch (err) {
         return Promise.reject(new Error(err.message));
+    }
+}
+
+export async function updateTheme(userId: Types.ObjectId, theme: string) : Promise<void> {
+    let user: UserDocument
+    try {
+        user = await getUserById(userId)
+        user.setting.theme = theme
+        await user.save()
+        return Promise.resolve()
+    } catch(err) {
+        let er: string = (typeof err === "string")? err: "Internal server error"
+        return Promise.reject(err)
+    }
+}
+
+export async function updateSize(userId: Types.ObjectId, size: number) : Promise<void> {
+    let user: UserDocument
+    try {
+        user = await getUserById(userId)
+        user.setting.size = size
+        await user.save()
+        return Promise.resolve()
+    } catch(err) {
+        let er: string = (typeof err === "string")? err: "Internal server error"
+        return Promise.reject(err)
+    }
+}
+
+export async function updateLanguage(userId: Types.ObjectId, lan: string) : Promise<void> {
+    let user: UserDocument
+    try {
+        user = await getUserById(userId)
+        user.setting.language = lan
+        await user.save()
+        return Promise.resolve()
+    } catch(err) {
+        let er: string = (typeof err === "string")? err: "Internal server error"
+        return Promise.reject(err)
+    }
+}
+
+export async function updateGamification(userId: Types.ObjectId, swt: boolean) : Promise<void> {
+    let user: UserDocument
+    try {
+        user = await getUserById(userId)
+        user.setting.gamificationHide = swt
+        await user.save()
+        return Promise.resolve()
+    } catch(err) {
+        let er: string = (typeof err === "string")? err: "Internal server error"
+        return Promise.reject(err)
     }
 }

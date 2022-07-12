@@ -23,7 +23,8 @@ export const DocumentSchema = new Schema<ODocSubDocument>(
     {
         type: {
             type: SchemaTypes.String,
-            required: true, 
+            required: true,
+            unique: true,
             enum: [DocTypes.driveLicense.valueOf(), DocTypes.stamp.valueOf()]
         }, 
 
