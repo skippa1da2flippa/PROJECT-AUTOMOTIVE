@@ -1,8 +1,7 @@
 import { Schema, SchemaTypes, Types, Document } from 'mongoose';
 import { Server } from 'socket.io';
-import { OwnerResponseListener } from '../events/client-listeners/owner_response-listener';
-import { EnjoyerRequestEmitter } from '../events/emitters/enjoyer-request-emitter';
-import { LegalInfos, LegalInfosSchema, LegalInfosSubDocument } from '../model/legalInfos'
+import { EnjoyerRequestEmitter } from '../../events/emitters/enjoyer-request-emitter';
+import { LegalInfos, LegalInfosSchema, LegalInfosSubDocument } from './legalInfos'
 
 /*
     This collection is thought not to be an embedded document due to the fact that many users can use the same veichle, setting this schema as 

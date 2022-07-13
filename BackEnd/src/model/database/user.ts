@@ -6,29 +6,29 @@ import {
     Routine,
     RoutineSubDocument,
     RoutineSchema
-} from '../model/routine'
+} from './routine'
 import {
     ODocument,
     ODocSubDocument,
     DocumentSchema,
     DocTypes
-} from '../model/document'
+} from './document'
 import {
     UserStats,
     UserStatsSubDocument,
     StatsSchema
-} from '../model/user-stats'
+} from './user-stats'
 import {
     NotTypes,
     Notification,
     NotificationSchema,
     NotificationSubDocument
-} from '../model/notification'
+} from './notification'
 import {
     Setting,
     SettingSubDocument,
     SettingSchema
-} from '../model/setting'
+} from './setting'
 
 export enum UserRoles {
     Child = 'Child',
