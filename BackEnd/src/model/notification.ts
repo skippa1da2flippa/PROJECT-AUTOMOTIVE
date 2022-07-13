@@ -6,12 +6,14 @@ import { Schema, SchemaTypes, Types } from 'mongoose';
 export enum NotTypes {
     carOccupied = 'carOccupied',
     destReached = 'destReached',
-    fuelAlmostOut = 'fuelAlmostOut'
+    fuelAlmostOut = 'fuelAlmostOut',
     // many others
 }
 
 /**
- * Interface that represents a User notification
+ * Interface that represents a User notification not meant to represent 
+ * annoying pop up notification like "Someone wants to connect to your car" but
+ * simple notification as "carOccupied, fuelAmostOut or destReached"
  */
 export interface Notification {
     /**

@@ -150,12 +150,6 @@ export interface UserDocument extends User, Document {
      * @param name identifies the routine up to be removed
      */
     removeRoutine(name: string): Promise<void>;
-
-    /**
-     * add a routine for the user
-     * @param routine represent the newly routine
-     */
-    updateRoutine(routine: Routine): Promise<void>;
 }
 
 
@@ -563,4 +557,3 @@ function addMusic(user: UserDocument, routineName: string, musicToAdd: string[])
         if (user.routines[idx].name === routineName) user.routines[idx].music.push(...musicToAdd)
     }
 }
-
