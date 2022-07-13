@@ -9,6 +9,8 @@ import * as filter from 'content-filter';
 import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
 import chalk from 'chalk';
+import { ServerJoinedListener } from "./events/client-listeners/server-joined"
+import { OwnerResponseListener } from "./events/client-listeners/owner_response-listener"
 
 
 // Remember that the runtime working dir is <root>/dist/src
@@ -107,6 +109,14 @@ export const ioServer: io.Server = new io.Server(httpServer, {
 
 ioServer.on('connection', async function (client: io.Socket) {
     console.log(chalk.bgGreen(`socket.io client ${client.id} connected`));
+
+    // A client joins its private room, so that the server has a way//
+    // to send request specifically to him
+    const serverJoined: ServerJoinedListener = new ServerJoinedListener(client, ioServer);
+    serverJoined.listen();
+
+    const ownerCarControl: OwnerResponseListener =  new OwnerResponseListener(client)
+    ownerCarControl.listen()
 
     client.on('disconnect', function () {
         console.log(chalk.bgRed(`socket.io client ${client.id} disconnected`));
