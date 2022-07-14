@@ -1,7 +1,9 @@
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 import chalk from 'chalk';
 import { OwnerResData } from "../../model/events/owner-res-data"
 import { ClientListener } from './base/client-listener';
+import { Tedis, TedisPool } from "tedis";
+import { pool } from '../..';
 
 /**
  * Class that wraps socket.io functionality to listen
@@ -10,14 +12,22 @@ import { ClientListener } from './base/client-listener';
  * specific chat, so that he can listen only to messages of such chat.
  */
  export class OwnerResponseListener extends ClientListener<OwnerResData> {
-    constructor(server: Server, client: Socket) {
+    constructor(client: Socket) {
         super(client, 'owner-response');
     }
 
     public listen(): void {
-        super.listen((data: OwnerResData) => {
-            // TO DO i don't know how to warn the enjoyer right now i created 
-            // an emitter to emit the enjoyer but i'can't imagine how to do it here
+        super.listen(async (data: OwnerResData) => {
+
+            // gets a connection from the pool
+            let tedis = await pool.getTedis()
+
+            // stores the response
+            await tedis.set(data.ownerId, data.res.toString())
+
+            // gives back the connection
+            pool.putTedis(tedis)
+
             return (data.res)? Promise.resolve() : Promise.reject()
         })
     }

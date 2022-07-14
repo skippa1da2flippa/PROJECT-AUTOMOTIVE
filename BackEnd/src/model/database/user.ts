@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { AnyKeys, Document, FilterQuery, Model, Schema, SchemaTypes, Types } from 'mongoose';
-import { Server } from 'socket.io';
 import bcrypt from 'bcrypt';
+import { ServerError } from "../errors/server-error"
 import {
     Routine,
     RoutineSubDocument,
@@ -215,14 +215,6 @@ export const UserSchema = new Schema<UserDocument>(
 
 // TO DO ricorda che quando tornerai nelle route la routine dovrai maneggiare la routine name perchè c'è /userId in più
 
-// TO DO fatti delle classi che rappresentano gli errori
-export const errormsgs = {
-    404: ["No user with that identifier", 'Notification not found'],
-    500: "Internal server error",
-
-}
-
-
 UserSchema.methods.addNotification = async function (
     reqType: NotTypes,
 ): Promise<UserDocument> {
@@ -243,12 +235,12 @@ UserSchema.methods.removeNotification = async function (
         }
     }
 
-    return Promise.reject(new Error('Notification not found'));
+    return Promise.reject(new ServerError('Notification not found'));
 };
 
 UserSchema.methods.addDocument = async function (doc: ODocument) : Promise<void> {
     this.documents.push(doc)
-    await this.save().catch((err) => Promise.reject(new Error("Internal server error")))
+    await this.save().catch((err) => Promise.reject(new ServerError("Internal server error")))
     return Promise.resolve()
 }
 
@@ -259,7 +251,7 @@ UserSchema.methods.removeDocument = async function (type: DocTypes) : Promise<Us
             return this.save()
         }
     }
-    return Promise.reject(new Error("No user with that identifier"))
+    return Promise.reject(new ServerError("No user with that identifier"))
 }
 
 UserSchema.methods.addRoutine = async function (routine: Routine) : Promise<UserDocument> {
@@ -281,13 +273,13 @@ UserSchema.methods.setPassword = async function (pwd: string): Promise<UserDocum
     const salt: string = await bcrypt
         .genSalt(10)
         .catch((error) =>
-            Promise.reject(new Error('Error with salt generation: ' + error.message))
+            Promise.reject(new ServerError('Error with salt generation'))
         );
 
     const pwdHash = await bcrypt
         .hash(pwd, salt)
         .catch((error) =>
-            Promise.reject(new Error('Error with password encryption: ' + error.message))
+            Promise.reject(new ServerError('Error with password encryption'))
         );
 
     this.salt = salt;
@@ -299,7 +291,7 @@ UserSchema.methods.validatePassword = async function (pwd: string): Promise<bool
     const hashedPw = await bcrypt
         .hash(pwd, this.salt)
         .catch((error) =>
-            Promise.reject(new Error('Error with password encryption: ' + error.message))
+            Promise.reject(new ServerError('Error with password encryption'))
         );
 
     return this.pwd_hash === hashedPw;
@@ -328,53 +320,50 @@ UserSchema.methods.setRole = async function (role: UserRoles): Promise<UserDocum
         this.roles.push(role.valueOf());
         return this.save();
     }
-    return Promise.reject(new Error('Role already set'));
+    return Promise.reject(new ServerError('Role already set'));
 };
 
 // Create "Users" collection
 export const UserModel: Model<UserDocument> = mongoose.model('User', UserSchema, 'Users');
 
 export async function getUserById(userId: Types.ObjectId): Promise<UserDocument> {
-    const userDoc = await UserModel.findOne({ _id: userId }).catch((err: Error) =>
-        Promise.reject(err)
+    const userDoc = await UserModel.findOne({ _id: userId }).catch((err) =>
+        Promise.reject(new ServerError('Internal server error'))
     );
 
     return !userDoc
-        ? Promise.reject(new Error('No user with that identifier'))
+        ? Promise.reject(new ServerError('No user with that identifier'))
         : Promise.resolve(userDoc);
 }
 
 export async function getUserByNickname(nickname: string): Promise<UserDocument> {
-    const userdata = await UserModel.findOne({ nickname }).catch((err: Error) => 
-        Promise.reject(new Error('Internal server error'))
+    const userdata = await UserModel.findOne({ nickname }).catch((err) => 
+        Promise.reject(new ServerError('Internal server error'))
     );
 
     return !userdata
-        ? Promise.reject(new Error('No user with that identifier'))
+        ? Promise.reject(new ServerError('No user with that identifier'))
         : Promise.resolve(userdata);
 }
 
 export async function createUser(data: AnyKeys<UserDocument>): Promise<UserDocument> {
     const user: UserDocument = new UserModel(data);
-    await user.save().catch((err) =>
-        Promise.reject(new Error('Internal server error'))
-    );
-    return user;
+    return user.save()
 }
 
 export async function deleteUser(filter: FilterQuery<UserDocument>): Promise<void> {
     const obj: { deletedCount?: number } = await UserModel.deleteOne(filter).catch((err) =>
-        Promise.reject(err)
+        Promise.reject(new ServerError('Internal server error'))
     );
 
     return !obj.deletedCount
-        ? Promise.reject(new Error('No user with that identifier'))
+        ? Promise.reject(new ServerError('No user with that identifier'))
         : Promise.resolve();
 }
 
 export async function updateNickName(_id: Types.ObjectId, nickname: string): Promise<void> {
     await UserModel.updateOne({ _id }, { nickname }).catch((err) => {
-        return Promise.reject(new Error(err.message));
+        return Promise.reject(new ServerError("Internal server error"));
     });
 
     return Promise.resolve();
@@ -386,18 +375,18 @@ export async function updatePassword(_id: Types.ObjectId, password: string): Pro
         user = await getUserById(_id);
         await user.setPassword(password);
     } catch (err) {
-        return Promise.reject(new Error(err.message));
+        return Promise.reject(err);
     }
     return Promise.resolve();
 }
 
 export async function getUserStats(_id: Types.ObjectId): Promise<UserStats> {
     const stat = await UserModel.findOne({ _id }, { stats: 1 }).catch((err) =>
-        Promise.reject(new Error('Internal server error'))
+        Promise.reject(new ServerError('Internal server error'))
     );
 
     return !stat
-        ? Promise.reject(new Error('No user with that identifier'))
+        ? Promise.reject(new ServerError('No user with that identifier'))
         : Promise.resolve(stat.stats);
 }
 
@@ -415,7 +404,7 @@ export async function getUserStats(_id: Types.ObjectId): Promise<UserStats> {
         user.stats.sauce = updatedStats.sauce;
         return user.save();
     } catch (err) {
-        return Promise.reject(new Error(err.message));
+        return Promise.reject(err);
     }
 }
 
@@ -424,11 +413,10 @@ export async function updateTheme(userId: Types.ObjectId, theme: string) : Promi
     try {
         user = await getUserById(userId)
         user.setting.theme = theme
-        await user.save()
+        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
         return Promise.resolve()
     } catch(err) {
-        let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(new Error(er))
+        return Promise.reject(err)
     }
 }
 
@@ -437,11 +425,10 @@ export async function updateSize(userId: Types.ObjectId, size: number) : Promise
     try {
         user = await getUserById(userId)
         user.setting.size = size
-        await user.save()
+        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
         return Promise.resolve()
     } catch(err) {
-        let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(new Error(er))
+        return Promise.reject(err)
     }
 }
 
@@ -450,11 +437,10 @@ export async function updateLanguage(userId: Types.ObjectId, lan: string) : Prom
     try {
         user = await getUserById(userId)
         user.setting.language = lan
-        await user.save()
+        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
         return Promise.resolve()
     } catch(err) {
-        let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(new Error(er))
+        return Promise.reject(err)
     }
 }
 
@@ -463,11 +449,10 @@ export async function updateGamification(userId: Types.ObjectId, swt: boolean) :
     try {
         user = await getUserById(userId)
         user.setting.gamificationHide = swt
-        await user.save()
+        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
         return Promise.resolve()
     } catch(err) {
-        let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(new Error(er))
+        return Promise.reject(err)
     }
 }
 
@@ -480,11 +465,10 @@ export async function updateRoutineName(userId: Types.ObjectId, oldName: string,
         user.routines.forEach((elem, idx, vect) => {
             if (elem.name === oldName) vect[idx].name = newName
         })
-        await user.save()
+        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
         return Promise.resolve()
     } catch(err) {
-        let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(new Error(er))
+        return Promise.reject(err)
     }
 }
 
@@ -496,11 +480,10 @@ export async function updateRoutineTemperature(userId: Types.ObjectId, routineNa
         user.routines.forEach((elem, idx, vect) => {
             if (elem.name === routineName) vect[idx].temperature = temp
         })
-        await user.save()
+        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
         return Promise.resolve()
     } catch(err) {
-        let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(new Error(er))
+        return Promise.reject(err)
     }
 }
 
@@ -513,11 +496,10 @@ export async function updateRoutineLisghtsColor(userId: Types.ObjectId, routineN
         user.routines.forEach((elem, idx, vect) => {
             if (elem.name === routineName) vect[idx].lightsColor = color
         })
-        await user.save()
+        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
         return Promise.resolve()
     } catch(err) {
-        let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(new Error(er))
+        return Promise.reject(err)
     }
 }
 
@@ -534,11 +516,10 @@ export async function updateRoutineMusic(
         user = await getUserById(userId)
         if (musicToRemove.length) removeMusic(user, routineName, musicToRemove)
         if (musicToAdd.length) addMusic(user, routineName, musicToAdd)
-        await user.save()
+        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
         return Promise.resolve()
     } catch(err) {
-        let er: string = (typeof err === "string")? err: "Internal server error"
-        return Promise.reject(new Error(er))
+        return Promise.reject(err)
     }
 }
 

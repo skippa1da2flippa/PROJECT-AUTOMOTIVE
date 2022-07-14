@@ -10,7 +10,8 @@ import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
 import chalk from 'chalk';
 import { ServerJoinedListener } from "./events/client-listeners/server-joined"
-import { OwnerResponseListener } from "./events/client-listeners/owner_response-listener"
+import { OwnerResponseListener } from "./events/client-listeners/owner-response-listener"
+import { Tedis, TedisPool } from "tedis";
 
 
 // Remember that the runtime working dir is <root>/dist/src
@@ -121,4 +122,12 @@ ioServer.on('connection', async function (client: io.Socket) {
     client.on('disconnect', function () {
         console.log(chalk.bgRed(`socket.io client ${client.id} disconnected`));
     });
+});
+
+
+// Redis pool set-up
+export const pool = new TedisPool({
+    port: Number(process.env.REDIS_PORT as string),
+    host: "127.0.0.1",
+    password: process.env.REDIS_PASSWORD as string
 });

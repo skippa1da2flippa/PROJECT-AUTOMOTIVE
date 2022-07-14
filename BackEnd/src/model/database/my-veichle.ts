@@ -1,7 +1,9 @@
-import { Schema, SchemaTypes, Types, Document } from 'mongoose';
+import mongoose, { Schema, SchemaTypes, Types, Document, Model, AnyKeys, FilterQuery } from 'mongoose';
 import { Server } from 'socket.io';
+import { pool } from '../..';
 import { EnjoyerRequestEmitter } from '../../events/emitters/enjoyer-request-emitter';
 import { LegalInfos, LegalInfosSchema, LegalInfosSubDocument } from './legalInfos'
+import { ServerError } from "../errors/server-error"
 
 /*
     This collection is thought not to be an embedded document due to the fact that many users can use the same veichle, setting this schema as 
@@ -51,7 +53,7 @@ export interface projectVeichle {
 }
 
 
-export interface projectVeichleSubDocument extends projectVeichle, Document {
+export interface projectVeichleDocument extends projectVeichle, Document {
     legalInfos: LegalInfosSubDocument;
 
     /**
@@ -71,7 +73,7 @@ export interface projectVeichleSubDocument extends projectVeichle, Document {
 // TO DO implement remove owner/change owner in a safe way
 
 
-export const myVeichleSchema = new Schema<projectVeichleSubDocument>(
+export const myVeichleSchema = new Schema<projectVeichleDocument>(
     {
         type: {
             type: SchemaTypes.String,
@@ -99,9 +101,11 @@ export const myVeichleSchema = new Schema<projectVeichleSubDocument>(
 )
 
 
-// TO DO remember to put in the front-end the 60 sec linit for the owner to answer
+// TO DO remember to put in the front-end the 60 sec limit for the owner to answer and answer anyway
 myVeichleSchema.methods.addEnjoyer = async function (enjoyerId: Types.ObjectId, ioServer: Server) : Promise<void> {
+    let res: any
     const enojerReqEmitter: EnjoyerRequestEmitter = new EnjoyerRequestEmitter(ioServer, this.owner)
+    
     // TO DO should i receive in input enjoyerName and enjoyerSurname or should i retrieve by my self?
     enojerReqEmitter.emit({
         enjoyerId: enjoyerId.toString(),
@@ -111,24 +115,61 @@ myVeichleSchema.methods.addEnjoyer = async function (enjoyerId: Types.ObjectId, 
         veichleModel: this.type
     })
 
+    // gets a connection from the pool
+    let tedis = await pool.getTedis()
 
-    // check redis if the value is true or false then pop the pair from redis 
+    // TO DO I don't think busy waiting is the answer
+    do {
+        setInterval(async () => {
+            res = await tedis.get(this.ownwer.toString())
+        }, 5000)
+    } while (res === null) 
 
+    // pop the pair
+    await tedis.del(this.owner.toString())
 
+    // gives back the connection 
+    pool.putTedis(tedis)
 
+    // update enjoyers collection
+    if (res === "true") { 
+        this.enjoyers.push(enjoyerId)
+        await this.save().catch(err => Promise.reject(new ServerError("Internal server error")))
+        return Promise.resolve()
+    }
 
-    // do this if true
-    this.enjoyers.push(enjoyerId)
-    await this.save().catch(err => Promise.reject(new Error("Internal server error")))
-    return Promise.resolve()
-
-    // else
-    return Promise.reject(new Error("Internal server error"))
+    return Promise.reject(new ServerError("Internal server error"))
 }
 
 myVeichleSchema.methods.removeEnjoyer = async function (enjoyerId: Types.ObjectId) : Promise<void> {
     this.enjoyers = this.enjoyer.filter((elem: Types.ObjectId) => elem !== enjoyerId)
-    await this.save().catch(err => Promise.reject(new Error("Internal server error")))
+    await this.save().catch(err => Promise.reject(new ServerError("Internal server error")))
     return Promise.resolve()
 }
 
+export const VeichleModel: Model<projectVeichleDocument> = mongoose.model('MyVeichle', myVeichleSchema, 'MyVeichles');
+
+export async function getCarById(carId: Types.ObjectId): Promise<projectVeichleDocument> {
+    const carDoc = await VeichleModel.findOne({ _id: carId }).catch((err) =>
+        Promise.reject(new ServerError('Internal server error'))
+    );
+
+    return !carDoc
+        ? Promise.reject(new ServerError('No car with that identifier'))
+        : Promise.resolve(carDoc);
+}
+
+export async function createCar(data: AnyKeys<projectVeichleDocument>): Promise<projectVeichleDocument> {
+    const car: projectVeichleDocument = new VeichleModel(data);
+    return car.save()
+}
+
+export async function deleteUser(filter: FilterQuery<projectVeichleDocument>): Promise<void> {
+    const obj: { deletedCount?: number } = await VeichleModel.deleteOne(filter).catch((err) =>
+        Promise.reject(new ServerError('Internal server error'))
+    );
+
+    return !obj.deletedCount
+        ? Promise.reject(new ServerError('No car with that identifier'))
+        : Promise.resolve();
+} 
