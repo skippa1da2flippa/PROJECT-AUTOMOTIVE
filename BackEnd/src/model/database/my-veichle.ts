@@ -106,7 +106,7 @@ export const myVeichleSchema = new Schema<projectVeichleDocument>(
  * 
  * @param enjoyerId 
  * @param ioServer 
- * @param onComplete this thing should be beuilt like this: 
+ * @param onComplete this thing should be built like this: 
  * const onComplete = (result: string): void => {
       if (result === "false") {
          // ...
@@ -128,7 +128,7 @@ myVeichleSchema.methods.addEnjoyer = async function (
     let temp: any
     const enojerReqEmitter: EnjoyerRequestEmitter = new EnjoyerRequestEmitter(ioServer, this.owner)
     
-    // TO DO should i receive in input enjoyerName and enjoyerSurname or should i retrieve by my self?
+    // TO DO should i receive in input enjoyerName and enjoyerSurname or should i retrieve them by my self?
     enojerReqEmitter.emit({
         enjoyerId: enjoyerId.toString(),
         enjoyerName: "",
@@ -145,7 +145,7 @@ myVeichleSchema.methods.addEnjoyer = async function (
         res = !(temp = await tedis.get(this.ownwer.toString())) ? "" : temp as string
         if (res === "true") {
             this.enjoyers.push(enjoyerId)
-            await this.save().catch(err => Promise.reject(new ServerError("Internal server error")))
+            await this.save()
             onComplete(res)
         }
         else if (res === "false") onComplete(res)
