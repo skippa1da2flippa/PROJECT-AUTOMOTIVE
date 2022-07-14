@@ -102,8 +102,30 @@ export const myVeichleSchema = new Schema<projectVeichleDocument>(
 
 
 // TO DO remember to put in the front-end the 60 sec limit for the owner to answer and answer anyway
-myVeichleSchema.methods.addEnjoyer = async function (enjoyerId: Types.ObjectId, ioServer: Server) : Promise<void> {
-    let res: any
+/**
+ * 
+ * @param enjoyerId 
+ * @param ioServer 
+ * @param onComplete this thing should be beuilt like this: 
+ * const onComplete = (result: string): void => {
+      if (result === "false") {
+         // ...
+         res.send(403).json();
+      }
+      else {
+         // ...
+         res.send(204).json();
+      }
+   };
+ */
+myVeichleSchema.methods.addEnjoyer = async function (
+    enjoyerId: Types.ObjectId, 
+    ioServer: Server, 
+    onComplete: (res: string) => void
+    ) : Promise<void> {
+
+    let res: string = ""
+    let temp: any
     const enojerReqEmitter: EnjoyerRequestEmitter = new EnjoyerRequestEmitter(ioServer, this.owner)
     
     // TO DO should i receive in input enjoyerName and enjoyerSurname or should i retrieve by my self?
@@ -118,27 +140,27 @@ myVeichleSchema.methods.addEnjoyer = async function (enjoyerId: Types.ObjectId, 
     // gets a connection from the pool
     let tedis = await pool.getTedis()
 
-    // TO DO I don't think busy waiting is the answer
-    do {
-        setInterval(async () => {
-            res = await tedis.get(this.ownwer.toString())
-        }, 5000)
-    } while (res === null) 
+    // TO DO to check
+    let interval = setInterval(async () => {
+        res = !(temp = await tedis.get(this.ownwer.toString())) ? "" : temp as string
+        if (res === "true") {
+            this.enjoyers.push(enjoyerId)
+            await this.save().catch(err => Promise.reject(new ServerError("Internal server error")))
+            onComplete(res)
+        }
+        else if (res === "false") onComplete(res)
+    }, 5000)
+    
+    setTimeout(async () => {
+        clearInterval(interval)
+        if (res === "") onComplete("false")
+         
+        //pop the pair
+        await tedis.del(this.owner.toString())
 
-    // pop the pair
-    await tedis.del(this.owner.toString())
-
-    // gives back the connection 
-    pool.putTedis(tedis)
-
-    // update enjoyers collection
-    if (res === "true") { 
-        this.enjoyers.push(enjoyerId)
-        await this.save().catch(err => Promise.reject(new ServerError("Internal server error")))
-        return Promise.resolve()
-    }
-
-    return Promise.reject(new ServerError("Internal server error"))
+        // gives back the connection 
+        pool.putTedis(tedis)
+    }, 60000)
 }
 
 myVeichleSchema.methods.removeEnjoyer = async function (enjoyerId: Types.ObjectId) : Promise<void> {

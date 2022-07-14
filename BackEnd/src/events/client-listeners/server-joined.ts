@@ -5,7 +5,7 @@ import { UserData } from '../../model/events/user-data';
 import {
     getUserById,
     UserDocument,
-} from '../../model/user';
+} from '../../model/database/user';
 import { ClientListenerNotifier } from './base/client-listener-notifier';
 
 /**
