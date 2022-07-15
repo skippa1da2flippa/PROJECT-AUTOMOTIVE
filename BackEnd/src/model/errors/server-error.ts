@@ -1,11 +1,22 @@
 
-const msgs404: string[] = ["No user with that identifier", 'Notification not found', "No car with that identifier"]
+const msgs404: string[] = [ 
+    "No user with that identifier", 
+    'Notification not found', 
+    "No vehicle with that identifier", 
+    "No vehicles related to the user"
+]
+
 const msgs400: string[] = ['Role already set'] 
-const msgs500: string[] = ["Internal server error", 'Error with password encryption', 'Error with salt generation']
+
+const msgs500: string[] = [
+    "Internal server error", 
+    'Error with password encryption', 
+    'Error with salt generation'
+]
 
 
 export class ServerError extends Error {
-    statusCode: number;
+    readonly statusCode: number;
   
     constructor(message: string) {
         super(message);

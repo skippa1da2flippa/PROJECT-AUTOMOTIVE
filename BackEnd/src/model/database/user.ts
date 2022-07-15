@@ -488,7 +488,7 @@ export async function updateRoutineTemperature(userId: Types.ObjectId, routineNa
 }
 
 // this probably needs to be written again 
-export async function updateRoutineLisghtsColor(userId: Types.ObjectId, routineName: string, color: string): Promise<void> {
+export async function updateRoutineLightsColor(userId: Types.ObjectId, routineName: string, color: string): Promise<void> {
     let user: UserDocument
     routineName = routineName + "/" + userId.toString()
     try {

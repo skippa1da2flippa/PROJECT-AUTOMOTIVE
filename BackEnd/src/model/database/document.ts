@@ -37,6 +37,5 @@ export const DocumentSchema = new Schema<ODocSubDocument>(
             type: SchemaTypes.Date,
             required: true
         }
-    }, 
-    {_id: false}
+    }
 )

@@ -5,6 +5,6 @@ export interface EnjoyerMessage {
     enjoyerId: string,
     enjoyerName: string,
     enjoyerSurname: string,
-    veichleId: string,
-    veichleModel: string
+    vehicleId: string,
+    vehicleModel: string
 }

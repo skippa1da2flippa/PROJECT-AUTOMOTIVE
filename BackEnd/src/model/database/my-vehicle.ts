@@ -6,8 +6,8 @@ import { LegalInfos, LegalInfosSchema, LegalInfosSubDocument } from './legalInfo
 import { ServerError } from "../errors/server-error"
 
 /*
-    This collection is thought not to be an embedded document due to the fact that many users can use the same veichle, setting this schema as 
-    a normal collection will probably allow us to code faster while devolping who can control the veichle through this app
+    This collection is thought not to be an embedded document due to the fact that many users can use the same Vehicle, setting this schema as 
+    a normal collection will probably allow us to code faster while devolping who can control the Vehicle through this app
 */
 
 
@@ -17,7 +17,7 @@ export enum ModelTypes {
 }
 
 
-export interface projectVeichle {
+export interface projectVehicle {
     
     /**
      * Defines the car model 
@@ -53,12 +53,12 @@ export interface projectVeichle {
 }
 
 
-export interface projectVeichleDocument extends projectVeichle, Document {
+export interface projectVehicleDocument extends projectVehicle, Document {
     legalInfos: LegalInfosSubDocument;
 
     /**
      * This function add a userId to the 'enjoyers' array
-     * @param userId represent the enjoyer id to insert
+     * @param enjoyerId represent the enjoyer id to insert
      * @param ioServer used to implement web socket connection 
      */
     addEnjoyer(enjoyerId: Types.ObjectId, ioServer: Server) : Promise<void>;
@@ -73,7 +73,7 @@ export interface projectVeichleDocument extends projectVeichle, Document {
 // TO DO implement remove owner/change owner in a safe way
 
 
-export const myVeichleSchema = new Schema<projectVeichleDocument>(
+export const myVehicleSchema = new Schema<projectVehicleDocument>(
     {
         type: {
             type: SchemaTypes.String,
@@ -118,7 +118,7 @@ export const myVeichleSchema = new Schema<projectVeichleDocument>(
       }
    };
  */
-myVeichleSchema.methods.addEnjoyer = async function (
+myVehicleSchema.methods.addEnjoyer = async function (
     enjoyerId: Types.ObjectId, 
     ioServer: Server, 
     onComplete: (res: string) => void
@@ -133,8 +133,8 @@ myVeichleSchema.methods.addEnjoyer = async function (
         enjoyerId: enjoyerId.toString(),
         enjoyerName: "",
         enjoyerSurname: "",
-        veichleId: this._id.toString(),
-        veichleModel: this.type
+        vehicleId: this._id.toString(),
+        vehicleModel: this.type
     })
 
     // gets a connection from the pool
@@ -163,35 +163,48 @@ myVeichleSchema.methods.addEnjoyer = async function (
     }, 60000)
 }
 
-myVeichleSchema.methods.removeEnjoyer = async function (enjoyerId: Types.ObjectId) : Promise<void> {
+myVehicleSchema.methods.removeEnjoyer = async function (enjoyerId: Types.ObjectId) : Promise<void> {
     this.enjoyers = this.enjoyer.filter((elem: Types.ObjectId) => elem !== enjoyerId)
     await this.save().catch(err => Promise.reject(new ServerError("Internal server error")))
     return Promise.resolve()
 }
 
-export const VeichleModel: Model<projectVeichleDocument> = mongoose.model('MyVeichle', myVeichleSchema, 'MyVeichles');
+export const VehicleModel: Model<projectVehicleDocument> = mongoose.model('MyVehicle', myVehicleSchema, 'MyVehicles');
 
-export async function getCarById(carId: Types.ObjectId): Promise<projectVeichleDocument> {
-    const carDoc = await VeichleModel.findOne({ _id: carId }).catch((err) =>
+export async function getVehicleById(carId: Types.ObjectId): Promise<projectVehicleDocument> {
+    const carDoc = await VehicleModel.findOne({ _id: carId }).catch((err) =>
         Promise.reject(new ServerError('Internal server error'))
     );
 
     return !carDoc
-        ? Promise.reject(new ServerError('No car with that identifier'))
+        ? Promise.reject(new ServerError('No vehicle with that identifier'))
         : Promise.resolve(carDoc);
 }
 
-export async function createCar(data: AnyKeys<projectVeichleDocument>): Promise<projectVeichleDocument> {
-    const car: projectVeichleDocument = new VeichleModel(data);
+export async function createCar(data: AnyKeys<projectVehicleDocument>): Promise<projectVehicleDocument> {
+    const car: projectVehicleDocument = new VehicleModel(data);
     return car.save()
 }
 
-export async function deleteUser(filter: FilterQuery<projectVeichleDocument>): Promise<void> {
-    const obj: { deletedCount?: number } = await VeichleModel.deleteOne(filter).catch((err) =>
+export async function deleteUser(filter: FilterQuery<projectVehicleDocument>): Promise<void> {
+    const obj: { deletedCount?: number } = await VehicleModel.deleteOne(filter).catch((err) =>
         Promise.reject(new ServerError('Internal server error'))
     );
 
     return !obj.deletedCount
-        ? Promise.reject(new ServerError('No car with that identifier'))
+        ? Promise.reject(new ServerError('No vehicle with that identifier'))
         : Promise.resolve();
 } 
+
+export async function getVehiclesByUserId(userId: Types.ObjectId): Promise<projectVehicleDocument[]> {
+    let vehicles: projectVehicleDocument[] = []
+    try {
+        vehicles = await VehicleModel.find({ owner: userId })
+    } catch(err) {
+        Promise.reject(new ServerError('Internal server error'))
+    }
+
+    return vehicles.length
+        ? Promise.resolve(vehicles)
+        : Promise.reject(new ServerError("No vehicles related to the user"))
+}
