@@ -2,10 +2,11 @@ import * as dotenv from 'dotenv';
 import * as path from 'path';
 import * as http from 'http';
 import express, { Express } from 'express';
+// import { registerRoutes } from './routes/utils/register-routes';
 import cors from 'cors';
 import * as io from 'socket.io';
-import * as mongoose from 'mongoose';
-import * as filter from 'content-filter';
+import mongoose = require('mongoose');
+import filter = require('content-filter');
 import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
 import chalk from 'chalk';
@@ -15,7 +16,7 @@ import { Tedis, TedisPool } from "tedis";
 
 
 // Remember that the runtime working dir is <root>/dist/src
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 export const app: Express = express();
 
@@ -27,7 +28,8 @@ export const IS_TESTING_MODE: boolean = process.env.TEST === 'true';
 
 // If testing, set test db uri, else use the other
 const dbUri: string = IS_TESTING_MODE ? process.env.TEST_DB_URI as string  : process.env.DB_URI as string;
-const serverPort: number = parseInt(process.env.PORT as string , 10);
+const serverPort: number = parseInt(process.env.PORT, 10);
+
 const serverHost: string = process.env.HOST as string ;
 
 /* Database Connection */
@@ -35,10 +37,7 @@ console.log('Demanding the sauce...');
 
 (
     mongoose
-    .connect(dbUri /*, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    }*/)
+    .connect(dbUri, {})
     .then(() => {
         console.log('Sauce received!');
     })
@@ -98,7 +97,7 @@ if (verboseLogging) {
 }
 
 /* Register express routes */
-Express.registerRoutes(app);
+// registerRoutes(app);
 
 /* socket.io server setup */
 export const ioServer: io.Server = new io.Server(httpServer, {
@@ -131,3 +130,6 @@ export const pool = new TedisPool({
     host: "127.0.0.1",
     password: process.env.REDIS_PASSWORD as string
 });
+
+
+

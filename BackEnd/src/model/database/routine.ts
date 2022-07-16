@@ -15,7 +15,8 @@ export interface Routine {
     //represent which genre is related to a certain routine
     music: string[]
 
-    //many others
+    //correct the type
+    path: any
 }
 
 export interface RoutineSubDocument extends Routine, Types.Subdocument {}
@@ -32,7 +33,6 @@ export const RoutineSchema = new Schema<RoutineSubDocument>(
         }, 
         temperature: {
             type: SchemaTypes.Number,
-            required: true
         }, 
         lightsColor: {
             type: SchemaTypes.String,
@@ -41,6 +41,9 @@ export const RoutineSchema = new Schema<RoutineSubDocument>(
         music: {
             type: [SchemaTypes.String], 
             default: ["classical"]
+        }, 
+        path: {
+            // needed data to work with google api
         }
     }
 )

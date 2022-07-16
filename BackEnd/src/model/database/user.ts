@@ -180,7 +180,7 @@ export const UserSchema = new Schema<UserDocument>(
             required: false
         },
     
-        notifications: {
+        notifications: { // delatable
             type: [NotificationSchema]
         },
 
@@ -213,7 +213,7 @@ export const UserSchema = new Schema<UserDocument>(
     }
 )
 
-// TO DO ricorda che quando tornerai nelle route la routine dovrai maneggiare la routine name perchè c'è /userId in più
+// TO DO Fai metodo che ti mette routine name normale usa una fun normale tipo return fun(routine) e sta roba qua ritorma la routine apposto
 
 UserSchema.methods.addNotification = async function (
     reqType: NotTypes,

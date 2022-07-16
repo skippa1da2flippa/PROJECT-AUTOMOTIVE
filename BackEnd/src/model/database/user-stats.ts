@@ -1,8 +1,6 @@
 import { Schema, SchemaTypes, Types} from 'mongoose';
 
-/*
-   TO DO Thropies rules for assignment should be stored inside the client and back-end just saves stats or we do need a collection to save the rules inside mongodb
-*/
+
 
 
 /**
@@ -10,7 +8,7 @@ import { Schema, SchemaTypes, Types} from 'mongoose';
  */
 export interface UserStats {
     sauce: number;
-    thropies: number;
+    thropies: number; // create a thropies collection representing what to do to win it and its rules, and its state for unlocking it
     //many others 
 }
 
@@ -26,7 +24,7 @@ export const StatsSchema = new Schema<UserStatsSubDocument>(
             default: 0,
             index: true,
         },
-        thropies: {
+        thropies: { 
             type: SchemaTypes.Number,
             default: 0,
         },

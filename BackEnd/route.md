@@ -11,15 +11,10 @@
 
 # AUTH ENDPOINTS
 
-- /api/auth/signin                                            POST user data 
-O
-- /api/auth/signin?name=<name>&surname=<surname>&psw=<psw>    GET user data 
-
-- /api/auth/signup                                            POST user data creation
-
-- /api/auth/signout                                           POST user data 
-O
 - /api/auth/signout                                           GET user data 
+
+- /api/auth/signin                                            POST user data 
+- /api/auth/signup                                            POST user data creation
 
 
 # MY VEHICLE ENDPOINTS
@@ -55,8 +50,8 @@ O
 
 # DOCUMENT ENDPOINTS
 
-- /api/users/:userId/documents                GET user documents 
-- /api/users/:userId/documents/:docId         GET user document 
+- /api/users/:userId/documents                GET user documents [get preview documents]
+- /api/users/:userId/documents/:docId         GET user document [get whole document]
 
 - /api/users/:userId/documents/:docId         DELETE user document
 

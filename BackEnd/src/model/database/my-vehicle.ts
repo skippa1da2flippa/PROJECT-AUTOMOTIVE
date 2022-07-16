@@ -59,9 +59,11 @@ export interface projectVehicleDocument extends projectVehicle, Document {
     /**
      * This function add a userId to the 'enjoyers' array
      * @param enjoyerId represent the enjoyer id to insert
+     * @param enjoyerName represents enjoyer name
+     * @param enjoyerSurname represents enjoyer surname
      * @param ioServer used to implement web socket connection 
      */
-    addEnjoyer(enjoyerId: Types.ObjectId, ioServer: Server) : Promise<void>;
+    addEnjoyer(enjoyerId: Types.ObjectId, enjoyerName: string, enjoyerSurname: string, ioServer: Server) : Promise<void>;
 
     /**
      * This function remove a userId from the 'enjoyers' array
@@ -120,6 +122,8 @@ export const myVehicleSchema = new Schema<projectVehicleDocument>(
  */
 myVehicleSchema.methods.addEnjoyer = async function (
     enjoyerId: Types.ObjectId, 
+    enjoyerName: string,
+    enjoyerSurname: string,
     ioServer: Server, 
     onComplete: (res: string) => void
     ) : Promise<void> {
@@ -128,11 +132,10 @@ myVehicleSchema.methods.addEnjoyer = async function (
     let temp: any
     const enojerReqEmitter: EnjoyerRequestEmitter = new EnjoyerRequestEmitter(ioServer, this.owner)
     
-    // TO DO should i receive in input enjoyerName and enjoyerSurname or should i retrieve them by my self?
     enojerReqEmitter.emit({
         enjoyerId: enjoyerId.toString(),
-        enjoyerName: "",
-        enjoyerSurname: "",
+        enjoyerName: enjoyerName,
+        enjoyerSurname: enjoyerSurname,
         vehicleId: this._id.toString(),
         vehicleModel: this.type
     })
@@ -186,7 +189,7 @@ export async function createCar(data: AnyKeys<projectVehicleDocument>): Promise<
     return car.save()
 }
 
-export async function deleteUser(filter: FilterQuery<projectVehicleDocument>): Promise<void> {
+export async function deleteVehicle(filter: FilterQuery<projectVehicleDocument>): Promise<void> {
     const obj: { deletedCount?: number } = await VehicleModel.deleteOne(filter).catch((err) =>
         Promise.reject(new ServerError('Internal server error'))
     );

@@ -1,0 +1,19 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Emitter = void 0;
+/**
+ * Abstract class that wraps socket.io emitter functionality
+ * for server-emitted events
+ */
+var Emitter = /** @class */ (function () {
+    function Emitter(ioServer, eventName) {
+        this.ioServer = ioServer;
+        this.eventName = eventName;
+    }
+    Emitter.prototype.emit = function (data) {
+        this.ioServer.emit(this.eventName, data);
+    };
+    return Emitter;
+}());
+exports.Emitter = Emitter;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZW1pdHRlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3NyYy9ldmVudHMvZW1pdHRlcnMvYmFzZS9lbWl0dGVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUdBOzs7R0FHRztBQUNIO0lBSUksaUJBQXNCLFFBQWdCLEVBQUUsU0FBaUI7UUFDckQsSUFBSSxDQUFDLFFBQVEsR0FBRyxRQUFRLENBQUM7UUFDekIsSUFBSSxDQUFDLFNBQVMsR0FBRyxTQUFTLENBQUM7SUFDL0IsQ0FBQztJQUVNLHNCQUFJLEdBQVgsVUFBWSxJQUFRO1FBQ2hCLElBQUksQ0FBQyxRQUFRLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxTQUFTLEVBQUUsSUFBSSxDQUFDLENBQUM7SUFDN0MsQ0FBQztJQUNMLGNBQUM7QUFBRCxDQUFDLEFBWkQsSUFZQztBQVpxQiwwQkFBTyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IFNlcnZlciB9IGZyb20gJ3NvY2tldC5pbyc7XHJcbmltcG9ydCB7IFNjaGVtYSwgVHlwZXMgfSBmcm9tICdtb25nb29zZSc7XHJcblxyXG4vKipcclxuICogQWJzdHJhY3QgY2xhc3MgdGhhdCB3cmFwcyBzb2NrZXQuaW8gZW1pdHRlciBmdW5jdGlvbmFsaXR5XHJcbiAqIGZvciBzZXJ2ZXItZW1pdHRlZCBldmVudHNcclxuICovXHJcbmV4cG9ydCBhYnN0cmFjdCBjbGFzcyBFbWl0dGVyPFQ+IHtcclxuICAgIHB1YmxpYyByZWFkb25seSBpb1NlcnZlcjogU2VydmVyO1xyXG4gICAgcHVibGljIHJlYWRvbmx5IGV2ZW50TmFtZTogc3RyaW5nO1xyXG5cclxuICAgIHByb3RlY3RlZCBjb25zdHJ1Y3Rvcihpb1NlcnZlcjogU2VydmVyLCBldmVudE5hbWU6IHN0cmluZykge1xyXG4gICAgICAgIHRoaXMuaW9TZXJ2ZXIgPSBpb1NlcnZlcjtcclxuICAgICAgICB0aGlzLmV2ZW50TmFtZSA9IGV2ZW50TmFtZTtcclxuICAgIH1cclxuXHJcbiAgICBwdWJsaWMgZW1pdChkYXRhPzogVCkge1xyXG4gICAgICAgIHRoaXMuaW9TZXJ2ZXIuZW1pdCh0aGlzLmV2ZW50TmFtZSwgZGF0YSk7XHJcbiAgICB9XHJcbn1cclxuIl19

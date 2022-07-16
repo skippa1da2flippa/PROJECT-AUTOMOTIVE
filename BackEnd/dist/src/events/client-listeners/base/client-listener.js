@@ -1,0 +1,22 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ClientListener = void 0;
+/**
+ * Abstract class that wraps functionality used to listen
+ * to client-emitted socket.io events
+ */
+var ClientListener = /** @class */ (function () {
+    function ClientListener(ioClient, eventName) {
+        this.client = ioClient;
+        this.eventName = eventName;
+    }
+    ClientListener.prototype.listen = function (onEvent) {
+        this.client.on(this.eventName, onEvent);
+    };
+    ClientListener.prototype.unListen = function () {
+        this.client.removeAllListeners(this.eventName);
+    };
+    return ClientListener;
+}());
+exports.ClientListener = ClientListener;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2xpZW50LWxpc3RlbmVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vc3JjL2V2ZW50cy9jbGllbnQtbGlzdGVuZXJzL2Jhc2UvY2xpZW50LWxpc3RlbmVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUVBOzs7R0FHRztBQUNIO0lBSUksd0JBQXNCLFFBQWdCLEVBQUUsU0FBaUI7UUFDckQsSUFBSSxDQUFDLE1BQU0sR0FBRyxRQUFRLENBQUM7UUFDdkIsSUFBSSxDQUFDLFNBQVMsR0FBRyxTQUFTLENBQUM7SUFDL0IsQ0FBQztJQUVNLCtCQUFNLEdBQWIsVUFBYyxPQUF3QztRQUNsRCxJQUFJLENBQUMsTUFBTSxDQUFDLEVBQUUsQ0FBQyxJQUFJLENBQUMsU0FBUyxFQUFFLE9BQU8sQ0FBQyxDQUFDO0lBQzVDLENBQUM7SUFFTSxpQ0FBUSxHQUFmO1FBQ0ksSUFBSSxDQUFDLE1BQU0sQ0FBQyxrQkFBa0IsQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLENBQUM7SUFDbkQsQ0FBQztJQUNMLHFCQUFDO0FBQUQsQ0FBQyxBQWhCRCxJQWdCQztBQWhCcUIsd0NBQWMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBTb2NrZXQgfSBmcm9tICdzb2NrZXQuaW8nO1xyXG5cclxuLyoqXHJcbiAqIEFic3RyYWN0IGNsYXNzIHRoYXQgd3JhcHMgZnVuY3Rpb25hbGl0eSB1c2VkIHRvIGxpc3RlblxyXG4gKiB0byBjbGllbnQtZW1pdHRlZCBzb2NrZXQuaW8gZXZlbnRzXHJcbiAqL1xyXG5leHBvcnQgYWJzdHJhY3QgY2xhc3MgQ2xpZW50TGlzdGVuZXI8VD4ge1xyXG4gICAgcHVibGljIHJlYWRvbmx5IGNsaWVudDogU29ja2V0O1xyXG4gICAgcHVibGljIHJlYWRvbmx5IGV2ZW50TmFtZTogc3RyaW5nO1xyXG5cclxuICAgIHByb3RlY3RlZCBjb25zdHJ1Y3Rvcihpb0NsaWVudDogU29ja2V0LCBldmVudE5hbWU6IHN0cmluZykge1xyXG4gICAgICAgIHRoaXMuY2xpZW50ID0gaW9DbGllbnQ7XHJcbiAgICAgICAgdGhpcy5ldmVudE5hbWUgPSBldmVudE5hbWU7XHJcbiAgICB9XHJcblxyXG4gICAgcHVibGljIGxpc3RlbihvbkV2ZW50OiAoZXZlbnREYXRhOiBUKSA9PiBQcm9taXNlPHZvaWQ+KTogdm9pZCB7XHJcbiAgICAgICAgdGhpcy5jbGllbnQub24odGhpcy5ldmVudE5hbWUsIG9uRXZlbnQpO1xyXG4gICAgfVxyXG5cclxuICAgIHB1YmxpYyB1bkxpc3RlbigpOiB2b2lkIHtcclxuICAgICAgICB0aGlzLmNsaWVudC5yZW1vdmVBbGxMaXN0ZW5lcnModGhpcy5ldmVudE5hbWUpO1xyXG4gICAgfVxyXG59XHJcbiJdfQ==
