@@ -61,7 +61,7 @@ export const authenticateToken = function (
 /**
  *  Function provided to passport middleware which verifies user credentials
  */
-const localAuth = async function (name: string, surname: string, password: string, done: Function) {
+const localAuth = async function (nickName: string, email: string, password: string, done: Function) {
     let user: UserDocument | void = await getUserByPair(name, surname).catch((err: Error) => {
         return done(err);
     });
@@ -99,11 +99,12 @@ router.post(
             userId: req.user._id,
         };
 
-        // Token generation with 1h duration
+        // Token generation with 30 sec duration (just for log in)
         const logInSignedToken = jsonwebtoken.sign(tokenData, process.env.JWT_SECRET, {
             expiresIn: '30sec',
         });
 
+        // Token generation with 30 min duration (just for roaming in the app)
         const sessionSignedToken = jsonwebtoken.sign(tokenData, process.env.JWT_SECRET, {
             expiresIn: '30min',
         });

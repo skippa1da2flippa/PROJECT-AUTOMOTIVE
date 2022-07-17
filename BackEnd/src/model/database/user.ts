@@ -47,7 +47,8 @@ export enum UserStatus {
 export interface User {
     name: string;
     surname: string;
-    nickname?: string;
+    nickname: string;
+    email: string;
     roles: string[];
     pwd_hash: string;
     salt: string;
@@ -174,9 +175,16 @@ export const UserSchema = new Schema<UserDocument>(
             required: true
         }, 
 
+        email: {
+            type: SchemaTypes.String,
+            required: true,
+            unique: true,
+            index: true
+        },
+
         nickname: {
             type: SchemaTypes.String,
-            default: "saucer"
+            unique: true
         }, 
 
         salt: {
@@ -465,6 +473,18 @@ export async function updateGamification(userId: Types.ObjectId, swt: boolean) :
     }
 }
 
+export async function updateEmail(userId: Types.ObjectId, newEmail: string) : Promise<void> {
+    let user: UserDocument
+    try {
+        user = await getUserById(userId)
+        user.email = user.nickname = newEmail
+        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
+        return Promise.resolve()
+    } catch(err) {
+        return Promise.reject(err)
+    }
+}
+
 export async function updateRoutineName(userId: Types.ObjectId, oldName: string, newName: string): Promise<void> {
     let user: UserDocument
     oldName = oldName + "/" + userId.toString()
@@ -556,7 +576,7 @@ function addMusic(user: UserDocument, routineName: string, musicToAdd: string[])
  * @return updated user
  * @private
  */
- export const setUserStatus = async (
+export const setUserStatus = async (
     userId: Types.ObjectId,
     newStatus: UserStatus
 ): Promise<UserDocument> => {
