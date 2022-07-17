@@ -21,6 +21,8 @@ import chalk from 'chalk';
 
 export const router = Router();
 
+// TO DO add second token creation
+
 /**
  * This function verifies the authentication token that comes with each
  * request to an authenticated endpoint.
@@ -59,8 +61,8 @@ export const authenticateToken = function (
 /**
  *  Function provided to passport middleware which verifies user credentials
  */
-const localAuth = async function (username: string, password: string, done: Function) {
-    let user: UserDocument | void = await getUserByNickname(username).catch((err: Error) => {
+const localAuth = async function (name: string, surname: string, password: string, done: Function) {
+    let user: UserDocument | void = await getUserByPair(name, surname).catch((err: Error) => {
         return done(err);
     });
 
@@ -98,8 +100,12 @@ router.post(
         };
 
         // Token generation with 1h duration
-        const signed_token = jsonwebtoken.sign(tokenData, process.env.JWT_SECRET, {
-            expiresIn: '1h',
+        const logInSignedToken = jsonwebtoken.sign(tokenData, process.env.JWT_SECRET, {
+            expiresIn: '30sec',
+        });
+
+        const sessionSignedToken = jsonwebtoken.sign(tokenData, process.env.JWT_SECRET, {
+            expiresIn: '30min',
         });
 
         // Block login if the user is already logged and online
@@ -117,7 +123,8 @@ router.post(
         // Return the token along with the id of the authenticated user
         return res.status(200).json({
             userId: req.user._id,
-            token: signed_token,
+            logInToken: logInSignedToken,
+            sessionToken: sessionSignedToken
         });
     }
 );
