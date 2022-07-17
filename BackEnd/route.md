@@ -7,6 +7,7 @@
 - /api/users/:userId                           DELETE user
 
 - /api/users/:userId/nickName                  PATCH user name update
+- /api/users/:userId/email                     PATCH email update 
 - /api/users/:userId/password                  PATCH user psw update
 
 
