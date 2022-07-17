@@ -9,7 +9,8 @@ import {
     getUserByNickname,
     UserDocument,
     setUserStatus,
-    UserStatus
+    UserStatus,
+    getUserByEmail
 } from '../model/database/user';
 import { AnyKeys, Types } from 'mongoose';
 import { ioServer } from '../index';
@@ -21,7 +22,7 @@ import chalk from 'chalk';
 
 export const router = Router();
 
-// TO DO add second token creation
+// TO DO quando il client riceve la risposta del login deve buildare l'header "Authorization" come segue: Refresh token,Access token.
 
 /**
  * This function verifies the authentication token that comes with each
@@ -36,18 +37,40 @@ export const authenticateToken = function (
     res: Response,
     next: NextFunction
 ) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+    const authHeaders = req.headers['authorization'];
+    const refreshToken = authHeaders && authHeaders.split(',')[0];
+    const accessToken = authHeaders && authHeaders.split(',')[1];
 
-    if (token == null) return res.sendStatus(401);
 
-    jwt.verify(token, process.env.JWT_SECRET, (err: any, content: JwtData) => {
-        if (err)
-            return res.status(403).json({
-                timestamp: toUnixSeconds(new Date()),
-                errorMessage: err.message,
-                requestPath: req.path,
-            });
+    if (refreshToken == null || accessToken == null) return res.sendStatus(403);
+
+    jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET, (err: any, content: JwtData) => {
+        if (err){
+
+            jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET, (err: any, content: JwtData) => {
+                if(err){
+                    return res.status(403).json({
+                        timestamp: toUnixSeconds(new Date()),
+                        errorMessage: err.message,
+                        requestPath: req.path,
+                    });
+                }
+                else{
+                    let accessToken = generateAccessToken(content.userId);
+                    res.locals.newAccessToken = accessToken;
+
+                    /* TO DO in every route we must remember to check if locals.newAccessToken is true, if so we should send it's value with the response
+                     *  to let client to properly store the new access token for next requests
+                     */    
+                    req.jwtContent = content;
+
+                    next();
+                }
+
+            })
+
+            
+        }
 
         // Here the content of the token is assigned
         // to its own request field, so that each endpoint
@@ -61,17 +84,27 @@ export const authenticateToken = function (
 /**
  *  Function provided to passport middleware which verifies user credentials
  */
-const localAuth = async function (nickName: string, email: string, password: string, done: Function) {
-    let user: UserDocument | void = await getUserByPair(name, surname).catch((err: Error) => {
-        return done(err);
-    });
+ const localAuth = async function (password: string, nickName: string = "", email: string = "", done: Function) {
+
+    let user: UserDocument | void
+
+    if (nickName !== "") {
+        user = await getUserByNickname(nickName).catch((err: Error) => {
+            return done(err);
+        });
+    }
+    else {
+        user = await getUserByEmail(email).catch((err: Error) => {
+            return done(err);
+        });
+    }
 
     if (user && (await user.validatePassword(password))) {
         return done(null, user);
     } else {
         return done(null, false);
     }
-};
+}
 passport.use(new Strategy(localAuth));
 
 interface AuthenticationRequestBody {
@@ -88,6 +121,20 @@ interface SignInRequest extends Request {
     user: UserDocument;
 }
 
+const generateAccessToken = (data: string): string => {
+
+    const tokensData: JwtData = {
+        userId: data,
+    };
+    // Access token generation with 1 min duration (just for roaming in the app)
+    let accessT: string = jsonwebtoken.sign(tokensData, process.env.JWT_ACCESS_TOKEN_SECRET, {
+        expiresIn: '60s',
+    });
+
+    return accessT;
+}
+
+
 /**
  *  Login endpoint, check the authentication and generate the jwt
  */
@@ -95,21 +142,19 @@ router.post(
     '/auth/signin',
     passport.authenticate('local', { session: false }),
     async (req: SignInRequest, res: Response) => {
-        const refreshTokenData: JwtData = {
+
+        const tokensData: JwtData = {
             userId: req.user._id,
         };
 
         // Refresh token generation with 2 h duration, allow a user to mantain a session and be issued with access tokens
-        const logInSignedToken = jsonwebtoken.sign(refreshTokenData, process.env.JWT_REFRESH_TOKEN_SECRET, {
+        const refreshToken = jsonwebtoken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
             expiresIn: '2h',
         });
 
-        // Access token generation with 1 min duration (just for roaming in the app)
-        const sessionSignedToken = jsonwebtoken.sign(refreshTokenData, process.env.JWT_ACCESS_TOKEN_SECRET, {
-            expiresIn: '60s',
-        });
+        const accessToken = generateAccessToken(tokensData.userId);
 
-        // Block login if the user is already logged and online
+        // Black login if the user is already logged and online
         if (
             req.user.status !== UserStatus.Offline 
         ) {
@@ -124,8 +169,8 @@ router.post(
         // Return the token along with the id of the authenticated user
         return res.status(200).json({
             userId: req.user._id,
-            logInToken: logInSignedToken,
-            sessionToken: sessionSignedToken
+            logInToken: refreshToken,
+            sessionToken: accessToken
         });
     }
 );
