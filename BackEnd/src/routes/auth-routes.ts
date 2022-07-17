@@ -95,18 +95,18 @@ router.post(
     '/auth/signin',
     passport.authenticate('local', { session: false }),
     async (req: SignInRequest, res: Response) => {
-        const tokenData: JwtData = {
+        const refreshTokenData: JwtData = {
             userId: req.user._id,
         };
 
-        // Token generation with 30 sec duration (just for log in)
-        const logInSignedToken = jsonwebtoken.sign(tokenData, process.env.JWT_SECRET, {
-            expiresIn: '30sec',
+        // Refresh token generation with 2 h duration, allow a user to mantain a session and be issued with access tokens
+        const logInSignedToken = jsonwebtoken.sign(refreshTokenData, process.env.JWT_REFRESH_TOKEN_SECRET, {
+            expiresIn: '2h',
         });
 
-        // Token generation with 30 min duration (just for roaming in the app)
-        const sessionSignedToken = jsonwebtoken.sign(tokenData, process.env.JWT_SECRET, {
-            expiresIn: '30min',
+        // Access token generation with 1 min duration (just for roaming in the app)
+        const sessionSignedToken = jsonwebtoken.sign(refreshTokenData, process.env.JWT_ACCESS_TOKEN_SECRET, {
+            expiresIn: '60s',
         });
 
         // Block login if the user is already logged and online
