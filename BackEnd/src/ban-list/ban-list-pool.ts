@@ -49,5 +49,17 @@ export class BanListPool {
 
         return Promise.resolve()
     }
+
+    static async isBanned(tokenKey: string): Promise<boolean> {
+        let tedis = await pool.getTedis()
+        
+        let value = await tedis.get(tokenKey)
+
+        pool.putTedis(tedis)
+
+        return value 
+            ? Promise.resolve(true)
+            : Promise.reject()
+    }
 }
 
