@@ -363,6 +363,16 @@ export async function getUserByNickname(nickname: string): Promise<UserDocument>
         : Promise.resolve(userdata);
 }
 
+export async function getUserByEmail(email: string): Promise<UserDocument> {
+    const userdata = await UserModel.findOne({ email }).catch((err) => 
+        Promise.reject(new ServerError('Internal server error'))
+    );
+
+    return !userdata
+        ? Promise.reject(new ServerError('No user with that identifier'))
+        : Promise.resolve(userdata);
+}
+
 export async function createUser(data: AnyKeys<UserDocument>): Promise<UserDocument> {
     const user: UserDocument = new UserModel(data);
     return user.save()
