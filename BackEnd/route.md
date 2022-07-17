@@ -1,7 +1,8 @@
 # USER ENDPOINTS
 
 - /api/users/:userId                           GET user
-- /api/users/:userId/myVehicles                GET user vehicles         
+- /api/users/:userId/myVehicles                GET user vehicles   
+- /api/users/:userId/sharedVehicle             GET user enjoyed vehicle      
 
 - /api/users/:userId                           DELETE user
 

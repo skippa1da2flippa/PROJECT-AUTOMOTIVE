@@ -29,12 +29,20 @@ import {
     SettingSubDocument,
     SettingSchema
 } from './setting'
+import { Server } from 'socket.io';
 
 export enum UserRoles {
     Child = 'Child',
     Base = 'Base',
     Owner = 'Owner'
 }
+
+export enum UserStatus {
+    Offline = 'Offline',
+    Online = 'Online',
+    InTheCar = 'In The car'
+}
+
 
 export interface User {
     name: string;
@@ -44,6 +52,7 @@ export interface User {
     pwd_hash: string;
     salt: string;
     stats: UserStats;
+    status: UserStatus;
     docs: ODocument[];
     setting: Setting;
     routines: Routine[];
@@ -538,3 +547,20 @@ function addMusic(user: UserDocument, routineName: string, musicToAdd: string[])
         if (user.routines[idx].name === routineName) user.routines[idx].music.push(...musicToAdd)
     }
 }
+
+/**
+ * Sets the status of the provided user to the provided value
+ * and notifies his friends of the change.
+ * @param userId id of the user whose status has to be changed
+ * @param newStatus new status of the user
+ * @return updated user
+ * @private
+ */
+ export const setUserStatus = async (
+    userId: Types.ObjectId,
+    newStatus: UserStatus
+): Promise<UserDocument> => {
+    let user: UserDocument = await getUserById(userId);
+    user.status = newStatus;
+    return  user.save();
+};
