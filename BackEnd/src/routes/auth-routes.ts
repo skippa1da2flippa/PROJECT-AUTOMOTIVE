@@ -84,12 +84,8 @@ export const authenticateToken = function (
 /**
  *  Function provided to passport middleware which verifies user credentials
  */
-<<<<<<< Updated upstream
- const localAuth = async function (password: string, nickName: string = "", email: string = "", done: Function) {
-=======
-const localAuth = async function (password: string, nickName: string = "", email: string = "", done: Function) {
->>>>>>> Stashed changes
 
+const localAuth = async function (password: string, nickName: string = "", email: string = "", done: Function) {
     let user: UserDocument | void
 
     if (nickName !== "") {
@@ -108,12 +104,9 @@ const localAuth = async function (password: string, nickName: string = "", email
     } else {
         return done(null, false);
     }
-<<<<<<< Updated upstream
 }
-=======
-};
 
->>>>>>> Stashed changes
+
 passport.use(new Strategy(localAuth));
 
 interface AuthenticationRequestBody {
@@ -156,8 +149,6 @@ router.post(
         const tokensData: JwtData = {
             userId: req.user._id,
         };
-
-<<<<<<< Updated upstream
         // Refresh token generation with 2 h duration, allow a user to mantain a session and be issued with access tokens
         const refreshToken = jsonwebtoken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
             expiresIn: '2h',
@@ -169,20 +160,6 @@ router.post(
         if (
             req.user.status !== UserStatus.Offline 
         ) {
-=======
-        // Token generation with 30 sec duration (just for log in)
-        const authSignedToken = jsonwebtoken.sign(tokenData, process.env.JWT_SECRET, {
-            expiresIn: '1min',
-        });
-
-        // Token generation with 30 min duration (just for roaming in the app)
-        const refreshSignedToken = jsonwebtoken.sign(tokenData, process.env.JWT_SECRET, {
-            expiresIn: '2h',
-        });
-
-        // Block login if the user is already logged and online
-        if (req.user.status !== UserStatus.Offline) {
->>>>>>> Stashed changes
             return res.status(401).json({
                 timestamp: toUnixSeconds(new Date()),
                 errorMessage: `User ${req.user.nickname} is already online`,
@@ -194,13 +171,8 @@ router.post(
         // Return the token along with the id of the authenticated user
         return res.status(200).json({
             userId: req.user._id,
-<<<<<<< Updated upstream
-            logInToken: refreshToken,
-            sessionToken: accessToken
-=======
-            authToken: authSignedToken,
-            refreshToken: refreshSignedToken
->>>>>>> Stashed changes
+            authToken: accessToken,
+            refreshToken: refreshToken
         });
     }
 );
