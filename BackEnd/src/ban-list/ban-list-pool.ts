@@ -7,6 +7,11 @@ export interface PoolData {
     insertedIn: number
 }
 
+/* CASI DI BAN
+ * -> nel caso in cui un utente abbia almeno uno dei due token non popolato (vuol dire che ha la mammina lurida) 
+ * -> quando un utente viene bannato crasto dall'intera piattaforma
+ * -> 
+ */
 
 export class BanListPool {
     static bannedReferences: PoolData[]
