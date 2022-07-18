@@ -50,6 +50,7 @@ export interface User {
     nickname: string;
     email: string;
     roles: string[];
+    enjoyedVehicles: Types.ObjectId[];
     pwd_hash: string;
     salt: string;
     stats: UserStats;
@@ -187,6 +188,11 @@ export const UserSchema = new Schema<UserDocument>(
             unique: true
         }, 
 
+        enjoyedVehicles: {
+            type: [SchemaTypes.ObjectId],
+            default: []
+        },
+
         salt: {
             type: SchemaTypes.String,
             required: false
@@ -230,7 +236,7 @@ export const UserSchema = new Schema<UserDocument>(
     }
 )
 
-// TO DO Fai metodo che ti mette routine name normale usa una fun normale tipo return fun(routine) e sta roba qua ritorma la routine apposto
+// TO DO metti apposto routine names in routine route togliendo /userid
 
 UserSchema.methods.addNotification = async function (
     reqType: NotTypes,
@@ -247,7 +253,7 @@ UserSchema.methods.removeNotification = async function (
 ): Promise<UserDocument> {
     for (let idx in this.notifications) {
         if (this.notifications[idx].type === type.valueOf()) {
-            this.splice(parseInt(idx), 1)
+            this.notifications.splice(parseInt(idx), 1)
             return this.save()
         }
     }
@@ -264,7 +270,7 @@ UserSchema.methods.addDocument = async function (doc: ODocument) : Promise<void>
 UserSchema.methods.removeDocument = async function (type: DocTypes) : Promise<UserDocument> {
     for (let idx in this.docs) {
         if (this.docs[idx].type === type.valueOf()) {
-            this.splice(parseInt(idx), 1)
+            this.docs.splice(parseInt(idx), 1)
             return this.save()
         }
     }
@@ -594,3 +600,30 @@ export const setUserStatus = async (
     user.status = newStatus;
     return  user.save();
 };
+
+export async function updateUserEnjoyedVehicles(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
+    let user: UserDocument
+    try {
+        user = await getUserById(userId)
+        user.enjoyedVehicles.push(vehicleId)
+        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
+        return Promise.resolve()
+    } catch(err) {
+        return Promise.reject(err)
+    }
+}
+
+export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
+    let user: UserDocument
+    try {
+        user = await getUserById(userId)
+        for (var idx in user.enjoyedVehicles) {
+            if (user.enjoyedVehicles[idx] === vehicleId) 
+                user.enjoyedVehicles.splice(parseInt(idx), 1)
+        }
+        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
+        return Promise.resolve()
+    } catch(err) {
+        return Promise.reject(err)
+    }
+}

@@ -4,6 +4,7 @@ import { pool } from '../..';
 import { EnjoyerRequestEmitter } from '../../events/emitters/enjoyer-request-emitter';
 import { LegalInfos, LegalInfosSchema, LegalInfosSubDocument } from './legalInfos'
 import { ServerError } from "../errors/server-error"
+import { getUserById, removeUserEnjoyedVehicle, updateUserEnjoyedVehicles, UserDocument } from './user';
 
 /*
     This collection is thought not to be an embedded document due to the fact that many users can use the same Vehicle, setting this schema as 
@@ -149,6 +150,7 @@ myVehicleSchema.methods.addEnjoyer = async function (
         if (res === "true") {
             this.enjoyers.push(enjoyerId)
             await this.save()
+            await updateUserEnjoyedVehicles(enjoyerId, this._id)
             onComplete(res)
         }
         else if (res === "false") onComplete(res)
@@ -169,13 +171,14 @@ myVehicleSchema.methods.addEnjoyer = async function (
 myVehicleSchema.methods.removeEnjoyer = async function (enjoyerId: Types.ObjectId) : Promise<void> {
     this.enjoyers = this.enjoyer.filter((elem: Types.ObjectId) => elem !== enjoyerId)
     await this.save().catch(err => Promise.reject(new ServerError("Internal server error")))
+    await removeUserEnjoyedVehicle(enjoyerId, this._id)
     return Promise.resolve()
 }
 
 export const VehicleModel: Model<projectVehicleDocument> = mongoose.model('MyVehicle', myVehicleSchema, 'MyVehicles');
 
-export async function getVehicleById(carId: Types.ObjectId): Promise<projectVehicleDocument> {
-    const carDoc = await VehicleModel.findOne({ _id: carId }).catch((err) =>
+export async function getVehicleById(vehicleId: Types.ObjectId): Promise<projectVehicleDocument> {
+    const carDoc = await VehicleModel.findOne({ _id: vehicleId }).catch((err) =>
         Promise.reject(new ServerError('Internal server error'))
     );
 
@@ -184,9 +187,9 @@ export async function getVehicleById(carId: Types.ObjectId): Promise<projectVehi
         : Promise.resolve(carDoc);
 }
 
-export async function createCar(data: AnyKeys<projectVehicleDocument>): Promise<projectVehicleDocument> {
-    const car: projectVehicleDocument = new VehicleModel(data);
-    return car.save()
+export async function createVehicle(data: AnyKeys<projectVehicleDocument>): Promise<projectVehicleDocument> {
+    const vehicle: projectVehicleDocument = new VehicleModel(data);
+    return vehicle.save()
 }
 
 export async function deleteVehicle(filter: FilterQuery<projectVehicleDocument>): Promise<void> {
@@ -211,3 +214,5 @@ export async function getVehiclesByUserId(userId: Types.ObjectId): Promise<proje
         ? Promise.resolve(vehicles)
         : Promise.reject(new ServerError("No vehicles related to the user"))
 }
+
+

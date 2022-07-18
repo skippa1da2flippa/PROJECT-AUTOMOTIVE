@@ -1,14 +1,14 @@
 # USER ENDPOINTS
 
-- /api/users/:userId                           GET user
-- /api/users/:userId/myVehicles                GET user vehicles   
-- /api/users/:userId/sharedVehicle             GET user enjoyed vehicle      
+- /api/users/@meh                           GET user
+- /api/users/@meh/myVehicles                GET user vehicles   
+- /api/users/@meh/enjoyedVehicle             GET user enjoyed vehicle      
 
-- /api/users/:userId                           DELETE user
+- /api/users/@meh                           DELETE user
 
-- /api/users/:userId/nickName                  PATCH user name update
-- /api/users/:userId/email                     PATCH email update 
-- /api/users/:userId/password                  PATCH user psw update
+- /api/users/@meh/nickName                  PATCH user name update
+- /api/users/@meh/email                     PATCH email update 
+- /api/users/@meh/password                  PATCH user psw update
 
 
 # AUTH ENDPOINTS
@@ -21,59 +21,59 @@
 
 # MY VEHICLE ENDPOINTS
 
-- /api/myVehicle/:vehicleId                   GET vehicle
-- /api/myVehicle/:vehicleId/owner             GET vehicle owner
-- /api/myVehicle/:vehicleId/enjoyers          GET vehicle enjoyers    
+- /api/myVehicle/vehicleId                   PATCH retrieve a vehicle 
+- /api/myVehicle/vehicleId/owner             PATCH retrieve vehicle owner
+- /api/myVehicle/vehicleId/enjoyers          PATCH retrieve vehicle enjoyers    
 
-- /api/myVehicle/:vehicleId                   DELETE vehicle
+- /api/myVehicle/vehicleId                   DELETE vehicle
 
-- /api/myVehicle/:vehicleId                   POST vehicle creation
+- /api/myVehicle/vehicleId                   POST vehicle creation
 
-- /api/myVehicle/:vehicleId/enjoyers          PATCH vehicle enjoyers update
-- /api/myVehicle/:vehicleId/owner             PATCH vehicle owner update
+- /api/myVehicle/vehicleId/enjoyers          PUT vehicle enjoyers update
+- /api/myVehicle/vehicleId/owner             PUT vehicle owner update
 
 
 # ROUTINE ENDPOINTS
 
-- /api/users/:userId/routines                 GET user routines
-- /api/users/:userId/routines/:routineId      GET user routine
+- /api/users/@meh/routines                 GET user routines
+- /api/users/@meh/routines/:routineId      GET user routine
 
-- /api/users/:userId/routines/:routineId      PUT user routine update   
+- /api/users/@meh/routines/:routineId      PUT user routine update   
 
-- /api/users/:userId/routines/:routineId      DELETE user routine  
+- /api/users/@meh/routines/:routineId      DELETE user routine  
 
 
 # LEGAL INFOS ENDPOINTS
 
-- /api/myVeichle/:vehicleId/legalInfos       GET vehicle legal infos   
+- /api/myVeichle/vehicleId/legalInfos       PATCH retrieve vehicle legal infos   
 
-- /api/myVeichle/:vehicleId/legalInfos       PUT vehicle legal infos update
+- /api/myVeichle/vehicleId/legalInfos       PUT vehicle legal infos update
 
 
 # DOCUMENT ENDPOINTS
 
-- /api/users/:userId/documents                GET user documents [get preview documents]
-- /api/users/:userId/documents/:docId         GET user document [get whole document]
+- /api/users/@meh/documents                GET user documents [get preview documents]
+- /api/users/@meh/documents/:docId         GET user document [get whole document]
 
-- /api/users/:userId/documents/:docId         DELETE user document
+- /api/users/@meh/documents/:docId         DELETE user document
 
 # SETTING ENDPOINTS
 
-- /api/users/:userId/setting/language                  GET user language 
-- /api/users/:userId/setting/size                      GET user text size 
-- /api/users/:userId/setting/theme                     GET user theme 
-- /api/users/:userId/setting/gamification              GET user gamification  
+- /api/users/@meh/setting/language                  GET user language 
+- /api/users/@meh/setting/size                      GET user text size 
+- /api/users/@meh/setting/theme                     GET user theme 
+- /api/users/@meh/setting/gamification              GET user gamification  
 
-- /api/users/:userId/setting/language                  PATCH user language update
-- /api/users/:userId/setting/size                      PATCH user text size update
-- /api/users/:userId/setting/theme                     PATCH user theme update
-- /api/users/:userId/setting/gamification              PATCH user gamification update  
+- /api/users/@meh/setting/language                  PATCH user language update
+- /api/users/@meh/setting/size                      PATCH user text size update
+- /api/users/@meh/setting/theme                     PATCH user theme update
+- /api/users/@meh/setting/gamification              PATCH user gamification update  
 
 # STATS ENDPOINTS 
 
-- /api/users/:userId/stats                     GET user stats
+- /api/users/@meh/stats                     GET user stats
 
-- /api/users/:userId/stats                     PUT user stats update
+- /api/users/@meh/stats                     PUT user stats update
 
 # NOTIFICATION ENDPOINTS
 DA VEDERE SE SERVE

@@ -27,7 +27,7 @@ export const API_BASE_URL: string = "api";
 export const IS_TESTING_MODE: boolean = process.env.TEST === 'true';
 
 // If testing, set test db uri, else use the other
-const dbUri: string = IS_TESTING_MODE ? process.env.TEST_DB_URI as string  : process.env.DB_URI as string;
+export const dbUri: string = IS_TESTING_MODE ? process.env.TEST_DB_URI as string  : process.env.DB_URI as string;
 const serverPort: number = parseInt(process.env.PORT, 10);
 
 const serverHost: string = process.env.HOST as string ;

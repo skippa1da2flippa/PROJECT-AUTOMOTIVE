@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Types } from 'mongoose';
 import { ServerError } from '../../model/errors/server-error';
+import { AuthenticatedRequest } from './authenticated-request';
 import { toUnixSeconds } from './date-utils';
 
 /**
@@ -43,10 +44,9 @@ export const skipLimitChecker = function (req: Request, res: Response, next: Nex
  * @param res
  * @param next
  */
-export const retrieveUserId = function (req: Request, res: Response, next: NextFunction) {
+export const retrieveUserId = function (req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
-        res.locals.userId = new Types.ObjectId(req.params.userId);
-
+        res.locals.userId = new Types.ObjectId(req.jwtContent.userId);
         next();
     } catch (err) {
         return res.status(404).json({

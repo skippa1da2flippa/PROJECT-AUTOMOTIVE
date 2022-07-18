@@ -1,6 +1,6 @@
 import { Tedis } from "tedis"
-import { pool } from ".."
-import { toUnixSeconds } from "../routes/utils/date-utils"
+import { pool } from "../.."
+import { toUnixSeconds } from "../../routes/utils/date-utils"
 
 export interface PoolData {
     tokenKey: string,
@@ -10,7 +10,7 @@ export interface PoolData {
 /* CASI DI BAN
  * -> nel caso in cui un utente abbia almeno uno dei due token non popolato (vuol dire che ha la mammina lurida) 
  * -> quando un utente viene bannato crasto dall'intera piattaforma
- * -> 
+ * -> quando la verify del refresh token fallisce 
  */
 
 export class BanListPool {
