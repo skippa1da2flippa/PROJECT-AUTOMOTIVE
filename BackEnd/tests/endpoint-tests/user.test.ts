@@ -1,13 +1,17 @@
-import { router } from "../src/routes/user-routes";
-import { app, dbUri } from "../src/index"
+import { router } from "../../src/routes/user-routes";
+import { app, dbUri } from "../../src/index"
 import mongoose, { Types } from "mongoose";
 import * as request from "supertest"
-import { apiCredentials, MongoDbApi, MongoDbSingleInsertResponse } from "./utils/mongodb-api";
-import { getUserData } from "./utils/user-helper";
-import { User, UserStatus } from "../src/model/database/user";
+import { apiCredentials, MongoDbApi, MongoDbSingleInsertResponse } from "../utils/mongodb-api";
+import { getUserData } from "../utils/user-helper";
+import { User, UserStatus } from "../../src/model/database/user";
+import axios, { AxiosRequestConfig } from "axios";
+import { JwtData } from "../../src/model/auth/jwt-data";
+import jsonwebtoken from 'jsonwebtoken';
+import { generateAccessToken } from "../../src/routes/auth-routes";
 
 
-interface userResponse {
+interface UserResponse {
     userId: string,
     nickname: string,
     name: string,
@@ -22,7 +26,21 @@ export interface ErrResponse {
     requestPath: string,
 }
 
+function setUpHeader(userId: string) {
+    const tokensData: JwtData = {
+        userId
+    };
 
+    const refreshToken = jsonwebtoken.sign(tokensData, "JWT_SECRET", {
+        expiresIn: '2h',
+    });
+
+    const accessToken = generateAccessToken(tokensData.userId);
+
+    return `${refreshToken},${accessToken}`;
+}
+
+const baseUrl: string = process.env.HOST + ":" + process.env.PORT 
 
 describe("Test: /users/:userId", () => {
 
@@ -41,11 +59,16 @@ describe("Test: /users/:userId", () => {
     }), 
 
     test("It should response the GET method", async () => {
-      const response: request.Response = await request(app).get("/users/" + data.insertedId);
-      const userRes: userResponse = response.body
-      expect(response.statusCode).toBe(201);
-      expect(userRes).toEqual(
-        expect.objectContaining<userResponse>({
+        const requestPath: string = baseUrl + "/users/@meh"
+        const header = {
+            "authorization" : setUpHeader(data.insertedId.toString())
+        }
+        const response = await axios.get<UserResponse>(requestPath, {
+            headers: header
+        });
+        const userRes: UserResponse = response.data
+        expect(userRes).toEqual(
+        expect.objectContaining<UserResponse>({
             userId: expect.any(String),
             nickname: expect.any(String),
             name: expect.any(String),
@@ -58,9 +81,14 @@ describe("Test: /users/:userId", () => {
 
     // bad userId
     test("It should have response 404", async () => {
-        const response: request.Response = await request(app).get("/users/:userId");
-        const errRes: ErrResponse = response.body
-        expect(response.statusCode).toBe(404);
+        const requestPath: string = baseUrl + "/users/@meh"
+        const header = {
+            "authorization" : setUpHeader(data.insertedId.toString())
+        }
+        const response = await axios.get<UserResponse>(requestPath, {
+            headers: header
+        });
+        const errRes: UserResponse = response.data
         expect(errRes).toEqual(
             expect(errRes).objectContaining<ErrResponse>({
                 timestamp: expect.any(Number),

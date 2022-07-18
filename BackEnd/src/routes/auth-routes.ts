@@ -124,7 +124,7 @@ interface SignInRequest extends Request {
     user: UserDocument;
 }
 
-const generateAccessToken = (data: string): string => {
+export const generateAccessToken = (data: string): string => {
 
     const tokensData: JwtData = {
         userId: data,

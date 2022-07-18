@@ -25,9 +25,6 @@ interface UserEndpointLocals {
 
 // TO DO capire bene come usare redis nelle route per migliorare le prestazioni
 
-// TO DO vedere se al posto di :userId si può mettere profile così è più pulito l'url e
-// spacchettiamo il token nel middleware di retrieveuserid per prenderci lo userid
-
 /**
  * Interface that models the response of a user endpoint
  */
