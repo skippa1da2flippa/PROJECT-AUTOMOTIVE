@@ -3,7 +3,8 @@ const msgs404: string[] = [
     "No user with that identifier", 
     'Notification not found', 
     "No vehicle with that identifier", 
-    "No vehicles related to the user"
+    "No vehicles related to the user",
+    "No enjoyed vehicles related to this user"
 ]
 
 const msgs400: string[] = ['Role already set'] 

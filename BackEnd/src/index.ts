@@ -48,7 +48,7 @@ console.log('Demanding the sauce...');
 
 )
 
-const httpServer: http.Server = http.createServer(app);
+export const httpServer: http.Server = http.createServer(app);
 httpServer.listen(serverPort, serverHost, () => {
     console.log(`HTTP Server started on ${serverHost}:${serverPort}`);
 });

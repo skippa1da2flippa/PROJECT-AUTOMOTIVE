@@ -190,7 +190,7 @@ export const UserSchema = new Schema<UserDocument>(
 
         enjoyedVehicles: {
             type: [SchemaTypes.ObjectId],
-            default: []
+            //default: []
         },
 
         salt: {
@@ -203,7 +203,7 @@ export const UserSchema = new Schema<UserDocument>(
             required: false
         },
     
-        notifications: { // delatable
+        notifications: { 
             type: [NotificationSchema]
         },
 
@@ -211,27 +211,27 @@ export const UserSchema = new Schema<UserDocument>(
             type: [SchemaTypes.String],
             required: true,
             enum: UserRoles,
-            default: [UserRoles.Base]
+            //default: [UserRoles.Base]
         },
 
         stats: {
             type: StatsSchema,
-            default: () => ({})
+            //default: () => ({})
         },
 
         routines: {
             type: [RoutineSchema],
-            default: () => ({})
+            //default: () => ({})
         },
 
         docs: {
             types: [DocumentSchema],
-            default: () => ({})
+            //default: () => ({})
         },
 
         setting: {
             type: SettingSchema,
-            default: () => ({})
+            //default: () => ({})
         }
     }
 )

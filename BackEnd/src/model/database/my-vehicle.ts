@@ -1,4 +1,5 @@
-import mongoose, { Schema, SchemaTypes, Types, Document, Model, AnyKeys, FilterQuery } from 'mongoose';
+import * as mongoose from 'mongoose';
+import { AnyKeys, Document, FilterQuery, Model, Schema, SchemaTypes, Types } from 'mongoose';
 import { Server } from 'socket.io';
 import { pool } from '../..';
 import { EnjoyerRequestEmitter } from '../../events/emitters/enjoyer-request-emitter';
@@ -44,7 +45,7 @@ export interface projectVehicle {
      * Date that the notification was created at.
      * It is automatically inserted by the database
      */
-    createdAt: Date;
+    createdAt?: Date;
 
     /**
      * Date that the notification was last updated at.

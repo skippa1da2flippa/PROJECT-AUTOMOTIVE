@@ -21,7 +21,7 @@ import { Socket } from 'socket.io';
 import chalk from 'chalk';
 
 export const router = Router();
-
+export const jsonWebToken = jsonwebtoken
 // TO DO quando il client riceve la risposta del login deve buildare l'header "Authorization" come segue: Refresh token,Access token.
 
 /**
@@ -106,8 +106,8 @@ const localAuth = async function (password: string, nickName: string = "", email
     }
 }
 
-
-passport.use(new Strategy(localAuth));
+//TO DO
+//passport.use(new Strategy(localAuth));
 
 interface AuthenticationRequestBody {
     email: string

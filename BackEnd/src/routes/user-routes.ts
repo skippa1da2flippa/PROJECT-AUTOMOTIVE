@@ -10,6 +10,7 @@ import {
     getVehiclesByUserId, 
     getVehicleById
 } from '../model/database/my-vehicle'
+import { ServerError } from '../model/errors/server-error';
 
 
 interface UserEndpointLocals {
@@ -154,7 +155,7 @@ router.get(
 );
 
 router.delete(
-    '/users/:@meh',
+    '/users/@meh',
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
@@ -174,7 +175,7 @@ router.delete(
 
 
 router.patch(
-    '/users/@meh/username',
+    '/users/@meh/nickname',
     authenticateToken,
     retrieveUserId,
     async (req: UpdateUsernameRequest, res: UserEndpointResponse) => {
@@ -241,7 +242,7 @@ router.patch(
         if (email) {
             try {
                 await usr.updateEmail(userId, email);
-                return res.sendStatus(204);
+                return res.sendStatus(204).json({email});
             } catch (err) {
                 return res.status(err.statusCode).json({
                     timestamp: toUnixSeconds(new Date()),

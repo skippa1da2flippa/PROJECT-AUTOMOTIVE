@@ -14,26 +14,26 @@ export interface Setting {
 export interface SettingSubDocument extends Setting, Types.Subdocument {}
 
 
-export const SettingSchema = new Schema(
+export const SettingSchema = new Schema<SettingSubDocument>(
     {
         theme: {
             types: SchemaTypes.String,
-            default: "black"
+            //default: "#FFFFF"
         }, 
 
         size: {
             types: SchemaTypes.Number,
-            default: 3
+            //default: 3
         },
 
         language: {
             types: SchemaTypes.String,
-            default: "ENG"
+            //default: "ENG"
         },
 
         gamificationHide: {
             types: SchemaTypes.Boolean,
-            default: true
+            //default: true
         }
     },
     {_id: false}
