@@ -26,7 +26,6 @@ const getTestDbName = (): string => {
     const testDbUri: string = process.env.TEST_DB_URI as string;
     const afterLastSlash: string = testDbUri.split('/')[3];
     const dbName: string = afterLastSlash.split('?')[0];
-
     return dbName;
 };
 
@@ -261,7 +260,6 @@ export class MongoDbApi {
         try {
             const url: string = `${this.credentials.apiBaseUrl}${reqParams.requestPath}`;
             const reqData: Object = reqParams.body;
-
             const reqHeaders = {
                 'Content-Type': 'application/json',
                 'Access-Control-Request-Headers': '*',
@@ -278,7 +276,7 @@ export class MongoDbApi {
         } catch (err) {
             if (err instanceof Error) {
                 console.log('Error has occurred in MongoDbApi');
-                console.log(err.message);
+                console.log(err.message)
             }
 
             throw err;

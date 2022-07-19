@@ -44,7 +44,7 @@ function setUpHeader(userId: string) {
         userId
     };
 
-    const refreshToken = jsonWebToken.sign(tokensData, "JWT_SECRET", {
+    const refreshToken = jsonWebToken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
         expiresIn: '2h',
     });
 
@@ -53,7 +53,7 @@ function setUpHeader(userId: string) {
     return `${refreshToken},${accessToken}`;
 }
 
-const baseUrl: string = process.env.HOST + ":" + process.env.PORT
+const baseUrl: string = "http://" + process.env.HOST + ":" + process.env.PORT
 
 
 describe("Test: GET /users/@meh", () => {
@@ -75,6 +75,7 @@ describe("Test: GET /users/@meh", () => {
 
     test("It should response the GET method", async () => {
         const requestPath: string = baseUrl + "/users/@meh"
+        console.log(requestPath)
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
