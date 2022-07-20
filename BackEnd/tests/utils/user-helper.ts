@@ -20,8 +20,8 @@ export const knownBcryptDigest = {
  * the other data does not, so it is static.
  */
 export const getUserData = (): User => {
-    var random = randomInt(100000, 17)
-    var date = Date.now()
+    let random = randomInt(100000, 17)
+    let date = Date.now()
     return {
         name: `name-${random}-${date}`, 
         surname: `surname-${random}-${date}`,

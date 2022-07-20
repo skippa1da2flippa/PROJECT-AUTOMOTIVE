@@ -1,14 +1,15 @@
 # USER ENDPOINTS
 
-- /api/users/@meh                           GET user
-- /api/users/@meh/myVehicles                GET user vehicles   
-- /api/users/@meh/enjoyedVehicle             GET user enjoyed vehicle      
+- /api/users/@meh                                           GET user
+- /api/users/@meh/myVehicles                                GET user vehicles   
+- /api/users/@meh/enjoyedVehicle                            GET user enjoyed vehicle      
 
-- /api/users/@meh                           DELETE user
+- /api/users/@meh                                           DELETE user
 
-- /api/users/@meh/nickName                  PATCH user name update
-- /api/users/@meh/email                     PATCH email update 
-- /api/users/@meh/password                  PATCH user psw update
+- /api/users/@meh/nickName                                  PATCH user name update
+- /api/users/@meh/email                                     PATCH email update 
+- /api/users/@meh/password                                  PATCH user psw update
+- /api/users/@meh/enjoyedVehicle?action=<action>            PATCH user enjoyed Vehicle
 
 
 # AUTH ENDPOINTS

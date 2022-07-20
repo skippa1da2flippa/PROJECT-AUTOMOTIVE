@@ -9,9 +9,7 @@ const dbCollectionNames = {
     userCollection: 'Users',
     docCollection: 'Documents',
     myVehicleCollection: 'MyVehicles',
-    matchmakingCollection: 'MatchmakingQueue',
-    notificationCollection: 'Notifications',
-};
+} as const;
 
 export interface MongoDpApiCredentials {
     apiBaseUrl: string;
@@ -169,6 +167,8 @@ export class MongoDbApi {
     }
 
     public async insertVehicle(vehicleData: projectVehicle): Promise<MongoDbSingleInsertResponse> {
+        console.log("VEHICLE OWNER")
+        console.log(vehicleData.owner)
         return await this.insertDocument<projectVehicle>(vehicleData, dbCollectionNames.myVehicleCollection);
     }
 

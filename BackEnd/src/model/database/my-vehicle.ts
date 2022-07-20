@@ -5,7 +5,7 @@ import { pool } from '../..';
 import { EnjoyerRequestEmitter } from '../../events/emitters/enjoyer-request-emitter';
 import { LegalInfos, LegalInfosSchema, LegalInfosSubDocument } from './legalInfos'
 import { ServerError } from "../errors/server-error"
-import { getUserById, removeUserEnjoyedVehicle, updateUserEnjoyedVehicles, UserDocument } from './user';
+import { getUserById, removeUserEnjoyedVehicle, updateUserEnjoyedVehicle, UserDocument } from './user';
 
 /*
     This collection is thought not to be an embedded document due to the fact that many users can use the same Vehicle, setting this schema as 
@@ -151,7 +151,7 @@ myVehicleSchema.methods.addEnjoyer = async function (
         if (res === "true") {
             this.enjoyers.push(enjoyerId)
             await this.save()
-            await updateUserEnjoyedVehicles(enjoyerId, this._id)
+            await updateUserEnjoyedVehicle(enjoyerId, this._id)
             onComplete(res)
         }
         else if (res === "false") onComplete(res)
@@ -194,6 +194,16 @@ export async function createVehicle(data: AnyKeys<projectVehicleDocument>): Prom
 }
 
 export async function deleteVehicle(filter: FilterQuery<projectVehicleDocument>): Promise<void> {
+    let vehicle: projectVehicleDocument
+    try {
+        vehicle = await getVehicleById(filter._id)
+        for (let idx in vehicle.enjoyers) {
+            await removeUserEnjoyedVehicle(vehicle.enjoyers[idx], vehicle._id)
+        }
+    } catch(err) {
+        return Promise.reject(err)
+    }
+
     const obj: { deletedCount?: number } = await VehicleModel.deleteOne(filter).catch((err) =>
         Promise.reject(new ServerError('Internal server error'))
     );
@@ -208,7 +218,7 @@ export async function getVehiclesByUserId(userId: Types.ObjectId): Promise<proje
     try {
         vehicles = await VehicleModel.find({ owner: userId })
     } catch(err) {
-        Promise.reject(new ServerError('Internal server error'))
+        return Promise.reject(new ServerError('Internal server error'))
     }
 
     return vehicles.length

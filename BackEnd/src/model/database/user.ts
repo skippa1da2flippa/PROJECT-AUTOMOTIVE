@@ -493,7 +493,7 @@ export async function updateEmail(userId: Types.ObjectId, newEmail: string) : Pr
     let user: UserDocument
     try {
         user = await getUserById(userId)
-        user.email = user.nickname = newEmail
+        user.email = newEmail
         await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
         return Promise.resolve()
     } catch(err) {
@@ -601,7 +601,7 @@ export const setUserStatus = async (
     return  user.save();
 };
 
-export async function updateUserEnjoyedVehicles(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
+export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
     let user: UserDocument
     try {
         user = await getUserById(userId)
@@ -617,7 +617,7 @@ export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId
     let user: UserDocument
     try {
         user = await getUserById(userId)
-        for (var idx in user.enjoyedVehicles) {
+        for (let idx in user.enjoyedVehicles) {
             if (user.enjoyedVehicles[idx] === vehicleId) 
                 user.enjoyedVehicles.splice(parseInt(idx), 1)
         }

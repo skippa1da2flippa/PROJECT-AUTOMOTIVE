@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 import * as path from 'path';
 import * as http from 'http';
 import express, { Express } from 'express';
-// import { registerRoutes } from './routes/utils/register-routes';
+import { registerRoutes } from './routes/utils/register-routes';
 import cors from 'cors';
 import * as io from 'socket.io';
 import mongoose = require('mongoose');
@@ -21,7 +21,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 export const app: Express = express();
 
 /* Endpoints base url */
-export const API_BASE_URL: string = "api";
+export const API_BASE_URL: string = "/api";
 
 /* True if testing, false otherwise. Allows other modules to know if we're in testing mode */
 export const IS_TESTING_MODE: boolean = process.env.TEST === 'true';
@@ -97,7 +97,7 @@ if (verboseLogging) {
 }
 
 /* Register express routes */
-// registerRoutes(app);
+registerRoutes(app);
 
 /* socket.io server setup */
 export const ioServer: io.Server = new io.Server(httpServer, {

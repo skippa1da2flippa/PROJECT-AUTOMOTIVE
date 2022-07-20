@@ -1,7 +1,4 @@
-import { router } from "../../src/routes/user-routes";
-import {app, dbUri, httpServer} from "../../src/index"
 import mongoose, { Types } from "mongoose";
-import * as request from "supertest"
 import { apiCredentials, MongoDbApi, MongoDbSingleInsertResponse } from "../utils/mongodb-api";
 import { getUserData } from "../utils/user-helper";
 import {User, UserModel, UserStatus} from "../../src/model/database/user";
@@ -10,26 +7,25 @@ import { JwtData } from "../../src/model/auth/jwt-data";
 import { jsonWebToken} from "../../src/routes/auth-routes";
 import { generateAccessToken } from "../../src/routes/auth-routes";
 import { insertManyVehicles } from "../utils/my-vehicle-helper";
-import {projectVehicleDocument, projectVehicle, VehicleModel} from "../../src/model/database/my-vehicle";
-import chalk from "chalk";
+import {projectVehicleDocument} from "../../src/model/database/my-vehicle";
+
 
 
 interface UserResponse {
-    userId: Types.ObjectId,
+    userId: string,
     nickname: string,
     name: string,
     surname: string,
     email: string,
-    status: string,
 }
 
 interface UserMyVehiclesResponse {
-    userId: Types.ObjectId,
+    userId: string,
     myVehicles: projectVehicleDocument[]
 }
 
 interface UserEnjoyedVehiclesResponse {
-    userId: Types.ObjectId,
+    userId: string,
     enjoyedVehicles: projectVehicleDocument[]
 }
 
@@ -74,59 +70,63 @@ describe("Test: GET /users/@meh", () => {
 
 
     test("It should response the GET method", async () => {
-        const requestPath: string = baseUrl + "/users/@meh"
-        console.log(requestPath)
+        const requestPath: string = baseUrl + "/api/users/@meh"
+        let response
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
-        const response = await axios.get<UserResponse>(requestPath, {
+
+        response = await axios.get<UserResponse>(requestPath, {
             headers: header
         });
-        expect(response.status).toBe(200);
+
+        expect(response.status).toBe(201);
         const userRes: UserResponse = response.data
         expect(userRes).toEqual(
             expect.objectContaining<UserResponse>({
-                userId: expect.any(Types.ObjectId),
+                userId: expect.any(String),
                 nickname: expect.any(String),
                 name: expect.any(String),
                 surname: expect.any(String),
                 email: expect.any(String),
-                status: expect.any(String),
             })
         )
     });
 
     // wrong userId
     test("It should have response 404", async () => {
-        const requestPath: string = baseUrl + "/users/@meh"
+        const requestPath: string = baseUrl + "/api/users/@meh"
         const header = {
             "authorization" : setUpHeader("AYO")
         }
-        const response = await axios.get<UserResponse>(requestPath, {
-            headers: header
-        });
-        const errRes = response.data
-        expect(response.status).toBe(404);
-        expect(errRes).toEqual(
-            expect.objectContaining<ErrResponse>({
-                timestamp: expect.any(Number),
-                errorMessage: expect.any(String),
-                requestPath: expect.any(String),
-            })
-        )
+        try {
+            await axios.get<ErrResponse>(requestPath, {
+                headers: header
+            });
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 
 });
 
 
+// TO DO sia su enjoyed vehicle che su my vehicle anche se carico in modo giusto le macchine e i rispettivi
+// owner, essi avranno come enjoyed vehicle length e my vehicle length === 0 producendo quindi un 404
 
 
-
-describe("Test: GET /users/@meh/myVehicles", () => {
+describe("Test: GET /api/users/@meh/myVehicles", () => {
 
     let mongoDbApi: MongoDbApi
     let user: User
-    let brokeUserId: MongoDbSingleInsertResponse
     let udata: MongoDbSingleInsertResponse
     let vehiclesIds: Types.ObjectId[] = []
 
@@ -134,14 +134,15 @@ describe("Test: GET /users/@meh/myVehicles", () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
         user = getUserData()
         udata = await mongoDbApi.insertUser(user)
-        brokeUserId = await mongoDbApi.insertUser(getUserData())
         let userId = (
             udata.insertedId instanceof Types.ObjectId 
                 ? udata.insertedId 
                 : new Types.ObjectId(udata.insertedId)
         )
 
+        console.log("prima insert vehicles, userId " + userId)
         await insertManyVehicles(userId, 2, vehiclesIds)
+        console.log("DOPO LA INSERT VEHICLES")
     }), 
 
     afterEach(async () => {
@@ -150,18 +151,18 @@ describe("Test: GET /users/@meh/myVehicles", () => {
     }), 
 
     test("It should response the GET method", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/myVehicles"
+        const requestPath: string = baseUrl + "/api/users/@meh/myVehicles"
         const header = {
             "authorization" : setUpHeader(udata.insertedId.toString())
         }
-        const response = await axios.get<UserResponse>(requestPath, {
+        const response = await axios.get(requestPath, {
             headers: header
         });
         expect(response.status).toBe(201);
         const userRes = response.data
         expect(userRes).toEqual(
             expect.objectContaining<UserMyVehiclesResponse>({
-                userId: expect.any(Types.ObjectId),
+                userId: expect.any(String),
                 myVehicles: expect.any([Object])
             })
         )
@@ -169,55 +170,59 @@ describe("Test: GET /users/@meh/myVehicles", () => {
 
      // user with no vehicles
     test("It should have response 404", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/myVehicles"
+        const requestPath: string = baseUrl + "/api/users/@meh/myVehicles"
         const header = {
-            "authorization" : setUpHeader(brokeUserId.insertedId.toString())
+            "authorization" : setUpHeader(udata.insertedId.toString())
         }
-        const response = await axios.get(requestPath, {
-            headers: header
-        });
-
-        const errRes = response.data
-
-        expect(response.status).toBe(404);
-        expect(errRes).toEqual(
-            expect.objectContaining<ErrResponse>({
-                timestamp: expect.any(Number),
-                errorMessage: expect.any(String),
-                requestPath: expect.any(String),
-            })
-        )
+        await mongoDbApi.deleteMultipleVehicles(vehiclesIds)
+        try {
+            await axios.get<ErrResponse>(requestPath, {
+                headers: header
+            });
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 
     // wrong userId
     test("It should have response 404", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/myVehicles"
+        const requestPath: string = baseUrl + "/api/users/@meh/myVehicles"
         const header = {
             "authorization" : setUpHeader("AYO")
         }
-        const response = await axios.get(requestPath, {
-            headers: header
-        });
-        const errRes = response.data
-        expect(response.status).toBe(404);
-        expect(errRes).toEqual(
-            expect.objectContaining<ErrResponse>({
-                timestamp: expect.any(Number),
-                errorMessage: expect.any(String),
-                requestPath: expect.any(String),
-            })
-        )
+        try {
+            await axios.get<ErrResponse>(requestPath, {
+                headers: header
+            });
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 
 });
 
 
 
-describe("Test: GET /users/@meh/enjoyedVehicles", () => {
+describe("Test: GET /api/users/@meh/enjoyedVehicles", () => {
 
     let mongoDbApi: MongoDbApi
     let user: User
-    let enjoyer: MongoDbSingleInsertResponse
     let udata: MongoDbSingleInsertResponse
     let vehiclesIds: Types.ObjectId[] = []
 
@@ -225,20 +230,13 @@ describe("Test: GET /users/@meh/enjoyedVehicles", () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
         user = getUserData()
         udata = await mongoDbApi.insertUser(user)
-        enjoyer = await mongoDbApi.insertUser(getUserData())
         let userId = (
             udata.insertedId instanceof Types.ObjectId 
                 ? udata.insertedId 
                 : new Types.ObjectId(udata.insertedId)
         )
-        
-        let enjoyerId = (
-            enjoyer.insertedId instanceof Types.ObjectId 
-                ? enjoyer.insertedId 
-                : new Types.ObjectId(enjoyer.insertedId)
-        )
 
-        await insertManyVehicles(userId, 2, vehiclesIds, enjoyerId)
+        await insertManyVehicles(userId, 2, vehiclesIds, userId)
     }), 
 
     afterEach(async () => {
@@ -247,11 +245,11 @@ describe("Test: GET /users/@meh/enjoyedVehicles", () => {
     }), 
 
     test("It should response the GET method", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/enjoyedVehicles"
+        const requestPath: string = baseUrl + "/api/users/@meh/enjoyedVehicles"
         const header = {
-            "authorization" : setUpHeader(enjoyer.insertedId.toString())
+            "authorization" : setUpHeader(udata.insertedId.toString())
         }
-        const response = await axios.get<UserResponse>(requestPath, {
+        const response = await axios.get(requestPath, {
             headers: header
         });
         expect(response.status).toBe(201);
@@ -265,51 +263,57 @@ describe("Test: GET /users/@meh/enjoyedVehicles", () => {
     });
 
     // user with no enjoyed vehicles
-    test("It should response GET method", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/enjoyedVehicles"
+    test("It should have response 404", async () => {
+        const requestPath: string = baseUrl + "/api/users/@meh/enjoyedVehicles"
         const header = {
             "authorization" : setUpHeader(udata.insertedId.toString())
         }
-        const response = await axios.get(requestPath, {
-            headers: header
-        });
+        await mongoDbApi.deleteMultipleVehicles(vehiclesIds)
 
-        const userRes = response.data
-
-        expect(response.status).toBe(201);
-        
-        expect(userRes).toEqual(
-            expect.objectContaining<UserEnjoyedVehiclesResponse>({
-                userId: expect.any(Types.ObjectId),
-                enjoyedVehicles: expect.any([Object])
-            })
-        )
+        try {
+            await axios.get<ErrResponse>(requestPath, {
+                headers: header
+            });
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 
     // wrong userId
     test("It should have response 404", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/enjoyedVehicles"
+        const requestPath: string = baseUrl + "/api/users/@meh/enjoyedVehicles"
         const header = {
             "authorization" : setUpHeader("AYO")
         }
-        const response = await axios.get(requestPath, {
-            headers: header
-        });
-        const errRes = response.data
-        expect(response.status).toBe(404);
-        expect(errRes).toEqual(
-            expect.objectContaining<ErrResponse>({
-                timestamp: expect.any(Number),
-                errorMessage: expect.any(String),
-                requestPath: expect.any(String),
-            })
-        )
+        try {
+            await axios.get<ErrResponse>(requestPath, {
+                headers: header
+            });
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 
 });
 
 
-describe("Test: DELETE /users/@meh", () => {
+describe("Test: DELETE /api/users/@meh", () => {
 
     let mongoDbApi: MongoDbApi
     let user: User
@@ -326,11 +330,11 @@ describe("Test: DELETE /users/@meh", () => {
     }), 
 
     test("It should response the DELETE method", async () => {
-        const requestPath: string = baseUrl + "/users/@meh"
+        const requestPath: string = baseUrl + "/api/users/@meh"
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
-        const response = await axios.delete<UserResponse>(requestPath, {
+        const response = await axios.delete(requestPath, {
             headers: header
         });
         expect(response.status).toBe(204);
@@ -339,27 +343,30 @@ describe("Test: DELETE /users/@meh", () => {
 
     // wrong userId
     test("It should have response 404", async () => {
-        const requestPath: string = baseUrl + "/users/@meh"
+        const requestPath: string = baseUrl + "/api/users/@meh"
         const header = {
             "authorization" : setUpHeader("AYO")
         }
-        const response = await axios.delete(requestPath, {
-            headers: header
-        });
-        const errRes = response.data
-        expect(response.status).toBe(404);
-        expect(errRes).toEqual(
-            expect.objectContaining<ErrResponse>({
-                timestamp: expect.any(Number),
-                errorMessage: expect.any(String),
-                requestPath: expect.any(String),
-            })
-        )
+        try {
+            await axios.delete<ErrResponse>(requestPath, {
+                headers: header
+            });
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 
 });
 
-describe("Test: PATCH /users/@meh/nickname", () => {
+describe("Test: PATCH /api/users/@meh/nickname", () => {
 
     let mongoDbApi: MongoDbApi
     let user: User
@@ -376,11 +383,11 @@ describe("Test: PATCH /users/@meh/nickname", () => {
     }), 
 
     test("It should response the PATCH method", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/nickname"
+        const requestPath: string = baseUrl + "/api/users/@meh/nickname"
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
-        const response = await axios.patch<UserResponse>(
+        const response = await axios.patch(
             requestPath, 
             {
                 nickname: "AYO"
@@ -400,62 +407,68 @@ describe("Test: PATCH /users/@meh/nickname", () => {
 
     // wrong userId
     test("It should have response 404", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/nickname"
+        const requestPath: string = baseUrl + "/api/users/@meh/nickname"
         const header = {
             "authorization" : setUpHeader("AYO")
         }
-        const response = await axios.patch<UserResponse>(
-            requestPath, 
-            {
-                nickname: "AYO"
-            }, 
-            {
-                headers: header
-            }
-        );
-        const errRes = response.data
-        expect(response.status).toBe(404);
-        expect(errRes).toEqual(
-            expect.objectContaining<ErrResponse>({
-                timestamp: expect.any(Number),
-                errorMessage: expect.any(String),
-                requestPath: expect.any(String),
-            })
-        )
+        try {
+            await axios.patch(
+                requestPath,
+                {
+                    nickname: "AYO"
+                },
+                {
+                    headers: header
+                }
+            );
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 
     // wrong nickname
     test("It should have response 400", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/nickname"
+        const requestPath: string = baseUrl + "/api/users/@meh/nickname"
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
-        const response = await axios.patch<UserResponse>(
-            requestPath, 
-            {
-                nickname: undefined
-            }, 
-            {
-                headers: header
-            }
-        );
-        const errRes = response.data
-        expect(response.status).toBe(400);
-        expect(errRes).toEqual(
-            expect.objectContaining<ErrResponse>({
-                timestamp: expect.any(Number),
-                errorMessage: expect.any(String),
-                requestPath: expect.any(String),
-            })
-        )
+        try {
+            await axios.patch(
+                requestPath,
+                {
+                    nickname: undefined
+                },
+                {
+                    headers: header
+                }
+            );
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(400);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 
 });
 
 
 
-
-describe("Test: PATCH /users/@meh/email", () => {
+// TO DO primo test ritorna 500 (internal server error) come se spaccassimo qualche invariante del database
+describe("Test: PATCH /api/users/@meh/email", () => {
 
     let mongoDbApi: MongoDbApi
     let user: User
@@ -472,14 +485,14 @@ describe("Test: PATCH /users/@meh/email", () => {
     }), 
 
     test("It should response the PATCH method", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/email"
+        const requestPath: string = baseUrl + "/api/users/@meh/email"
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
-        const response = await axios.patch<UserResponse>(
+        const response = await axios.patch(
             requestPath, 
             {
-                email: "AYO@ayo.com"
+                email: "AY@ayo.com"
             }, 
             {
                 headers: header
@@ -496,61 +509,68 @@ describe("Test: PATCH /users/@meh/email", () => {
 
     // wrong userId
     test("It should have response 404", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/email"
+        const requestPath: string = baseUrl + "/api/users/@meh/email"
         const header = {
             "authorization" : setUpHeader("AYO")
         }
-        const response = await axios.patch<UserResponse>(
-            requestPath, 
-            {
-                email: "AYO@ayo.com"
-            }, 
-            {
-                headers: header
-            }
-        );
-        const errRes = response.data
-        expect(response.status).toBe(404);
-        expect(errRes).toEqual(
-            expect.objectContaining<ErrResponse>({
-                timestamp: expect.any(Number),
-                errorMessage: expect.any(String),
-                requestPath: expect.any(String),
-            })
-        )
+        try {
+            await axios.patch(
+                requestPath,
+                {
+                    email: "AYO@ayo.com"
+                },
+                {
+                    headers: header
+                }
+            );
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 
     // wrong email
     test("It should have response 400", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/email"
+        const requestPath: string = baseUrl + "/api/users/@meh/email"
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
-        const response = await axios.patch<UserResponse>(
-            requestPath, 
-            {
-                nickname: undefined
-            }, 
-            {
-                headers: header
-            }
-        );
-        const errRes = response.data
-        expect(response.status).toBe(400);
-        expect(errRes).toEqual(
-            expect.objectContaining<ErrResponse>({
-                timestamp: expect.any(Number),
-                errorMessage: expect.any(String),
-                requestPath: expect.any(String),
-            })
-        )
+        try {
+            await axios.patch(
+                requestPath,
+                {
+                    email: undefined
+                },
+                {
+                    headers: header
+                }
+            );
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(400);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 
 });
 
 
-
-describe("Test: PATCH /users/@meh/password", () => {
+// TO DO primo test produce sto errore:
+// 'Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer',
+describe("Test: PATCH /api/users/@meh/password", () => {
 
     let mongoDbApi: MongoDbApi
     let user: User
@@ -567,11 +587,11 @@ describe("Test: PATCH /users/@meh/password", () => {
     }), 
 
     test("It should response the PATCH method", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/password"
+        const requestPath: string = baseUrl + "/api/users/@meh/password"
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
-        const response = await axios.patch<UserResponse>(
+        const response = await axios.patch(
             requestPath, 
             {
                 password: "AYO"
@@ -585,55 +605,60 @@ describe("Test: PATCH /users/@meh/password", () => {
 
     // wrong userId
     test("It should have response 404", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/password"
+        const requestPath: string = baseUrl + "/api/users/@meh/password"
         const header = {
             "authorization" : setUpHeader("AYO")
         }
-        const response = await axios.patch<UserResponse>(
-            requestPath, 
-            {
-                password: "AYO"
-            }, 
-            {
-                headers: header
-            }
-        );
-        const errRes = response.data
-        expect(response.status).toBe(404);
-        expect(errRes).toEqual(
-            expect.objectContaining<ErrResponse>({
-                timestamp: expect.any(Number),
-                errorMessage: expect.any(String),
-                requestPath: expect.any(String),
-            })
-        )
+        try {
+            await axios.patch(
+                requestPath,
+                {
+                    password: "ayo"
+                },
+                {
+                    headers: header
+                }
+            );
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 
     // wrong psw
     test("It should have response 400", async () => {
-        const requestPath: string = baseUrl + "/users/@meh/password"
+        const requestPath: string = baseUrl + "/api/users/@meh/password"
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
-        const response = await axios.patch<UserResponse>(
-            requestPath, 
-            {
-                password: undefined
-            }, 
-            {
-                headers: header
-            }
-        );
-        const errRes = response.data
-        expect(response.status).toBe(400);
-        expect(errRes).toEqual(
-            expect.objectContaining<ErrResponse>({
-                timestamp: expect.any(Number),
-                errorMessage: expect.any(String),
-                requestPath: expect.any(String),
-            })
-        )
+        try {
+            await axios.patch(
+                requestPath,
+                {
+                    password: undefined
+                },
+                {
+                    headers: header
+                }
+            );
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(400);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
-
 });
 

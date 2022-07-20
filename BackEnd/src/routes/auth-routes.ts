@@ -41,7 +41,7 @@ export const authenticateToken = function (
     const refreshToken = authHeaders && authHeaders.split(',')[0];
     const accessToken = authHeaders && authHeaders.split(',')[1];
 
-
+    console.log("sono nel middleware di authentication")
     if (refreshToken == null || accessToken == null) return res.sendStatus(403);
 
     jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET, (err: any, content: JwtData) => {
@@ -85,19 +85,12 @@ export const authenticateToken = function (
  *  Function provided to passport middleware which verifies user credentials
  */
 
-const localAuth = async function (password: string, nickName: string = "", email: string = "", done: Function) {
+const localAuth = async function (password: string, email: string = "", done: Function) {
     let user: UserDocument | void
 
-    if (nickName !== "") {
-        user = await getUserByNickname(nickName).catch((err: Error) => {
-            return done(err);
-        });
-    }
-    else {
-        user = await getUserByEmail(email).catch((err: Error) => {
-            return done(err);
-        });
-    }
+    user = await getUserByEmail(email).catch((err: Error) => {
+        return done(err);
+    });
 
     if (user && (await user.validatePassword(password))) {
         return done(null, user);
@@ -106,8 +99,7 @@ const localAuth = async function (password: string, nickName: string = "", email
     }
 }
 
-//TO DO
-//passport.use(new Strategy(localAuth));
+passport.use(new Strategy(localAuth));
 
 interface AuthenticationRequestBody {
     email: string
