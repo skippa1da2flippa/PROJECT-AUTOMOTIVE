@@ -19,7 +19,7 @@ export const knownBcryptDigest = {
  * The username has to be unique to avoid conflicts,
  * the other data does not, so it is static.
  */
-export const getUserData = (): User => {
+export const getUserData = (enjoyedVehicles = []): User => {
     let random = randomInt(100000, 17)
     let date = Date.now()
     return {
@@ -35,7 +35,7 @@ export const getUserData = (): User => {
             sauce: 0,
             thropies: 0
         },
-        enjoyedVehicles: [],
+        enjoyedVehicles: enjoyedVehicles,
         docs: [],
         setting: {
             theme: "#FFFFF",
@@ -43,7 +43,13 @@ export const getUserData = (): User => {
             language: "EN",
             gamificationHide: false
         },
-        routines: [],
+        routines: [{
+            name: `name-${random}-${date}`,
+            temperature: 3,
+            lightsColor: "#FFFFF",
+            music: ["punk"],
+            path: "AYO"
+        }],
         notifications: [],
     };
 };

@@ -73,12 +73,12 @@ interface UpdateEmailRequest extends AuthenticatedRequest {
     body: UpdateEmailBody;
 }
 
-interface UpdateEnjoyeBody {
+interface UpdateEnjoyedBody {
     enjoyedVehicle: string
 }
 
 interface UpdateEnjoyedRequest extends AuthenticatedRequest{
-    body: UpdateEnjoyeBody
+    body: UpdateEnjoyedBody
 }
 
 
@@ -230,6 +230,15 @@ router.patch(
                 await usr.updatePassword(userId, password);
                 return res.sendStatus(204);
             } catch (err) {
+                // TO DO togli
+                if (!(err instanceof ServerError)) {
+                    return res.status(500).json({
+                        timestamp: toUnixSeconds(new Date()),
+                        errorMessage: err.message,
+                        requestPath: req.path,
+                    });
+                }
+                //fino a qua
                 return res.status(err.statusCode).json({
                     timestamp: toUnixSeconds(new Date()),
                     errorMessage: err.message,
@@ -256,7 +265,8 @@ router.patch(
         if (email) {
             try {
                 await usr.updateEmail(userId, email);
-                return res.sendStatus(204).json({email});
+                console.log("Sono qua prima della send staus")
+                return res.status(200).json({email: email});
             } catch (err) {
                 return res.status(err.statusCode).json({
                     timestamp: toUnixSeconds(new Date()),
@@ -282,21 +292,35 @@ router.patch(
     async (req: UpdateEnjoyedRequest, res: UserEndpointResponse) => {
         const { enjoyedVehicle } = req.body;
         const userId: Types.ObjectId = res.locals.userId;
+        console.log("Sono nella route PATCH")
         if (enjoyedVehicle) {
             try {
+                console.log("dentro il try")
                 if (req.query.action === "add") {
+                    console.log("Dentro il controllo req.params.action === \"add\"")
                     await usr.updateUserEnjoyedVehicle(userId, new Types.ObjectId(enjoyedVehicle));
-                    return res.sendStatus(204).json({
+                    return res.status(200).json({
                         added: enjoyedVehicle
                     });
                 }
                 else {
+                    console.log("Dentro il controllo req.params.action === \"remove\"")
                     await usr.removeUserEnjoyedVehicle(userId, new Types.ObjectId(enjoyedVehicle));
-                    return res.sendStatus(204).json({
+                    return res.status(200).json({
                         removed: enjoyedVehicle
                     });
                 }
             } catch (err) {
+                // TO DO togli
+                if (!(err instanceof ServerError)) {
+                    return res.status(500).json({
+                        timestamp: toUnixSeconds(new Date()),
+                        errorMessage: err.message,
+                        requestPath: req.path,
+                    });
+                }
+                //fino a qua
+
                 return res.status(err.statusCode).json({
                     timestamp: toUnixSeconds(new Date()),
                     errorMessage: err.message,

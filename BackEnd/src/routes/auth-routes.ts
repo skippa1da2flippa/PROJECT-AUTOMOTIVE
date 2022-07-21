@@ -19,6 +19,7 @@ import { AuthenticatedRequest } from './utils/authenticated-request';
 import { toUnixSeconds } from './utils/date-utils';
 import { Socket } from 'socket.io';
 import chalk from 'chalk';
+import {BanListPool} from "../model/ban-list/ban-list-pool";
 
 export const router = Router();
 export const jsonWebToken = jsonwebtoken
@@ -32,7 +33,7 @@ export const jsonWebToken = jsonwebtoken
  * @param res response
  * @param next function to move to the next middleware
  */
-export const authenticateToken = function (
+export const authenticateToken = async function (
     req: AuthenticatedRequest,
     res: Response,
     next: NextFunction
@@ -42,7 +43,11 @@ export const authenticateToken = function (
     const accessToken = authHeaders && authHeaders.split(',')[1];
 
     console.log("sono nel middleware di authentication")
-    if (refreshToken == null || accessToken == null) return res.sendStatus(403);
+    if (refreshToken == null || accessToken == null) {
+        if (refreshToken) await BanListPool.insertElem(refreshToken)
+        else if (accessToken) await BanListPool.insertElem(refreshToken)
+        return res.sendStatus(403);
+    }
 
     jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET, (err: any, content: JwtData) => {
         if (err){
@@ -85,7 +90,7 @@ export const authenticateToken = function (
  *  Function provided to passport middleware which verifies user credentials
  */
 
-const localAuth = async function (password: string, email: string = "", done: Function) {
+const localAuth = async function (password: string, email: string, done: Function) {
     let user: UserDocument | void
 
     user = await getUserByEmail(email).catch((err: Error) => {

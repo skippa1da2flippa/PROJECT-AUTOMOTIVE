@@ -190,7 +190,7 @@ export const UserSchema = new Schema<UserDocument>(
 
         enjoyedVehicles: {
             type: [SchemaTypes.ObjectId],
-            //default: []
+            default: []
         },
 
         salt: {
@@ -211,7 +211,7 @@ export const UserSchema = new Schema<UserDocument>(
             type: [SchemaTypes.String],
             required: true,
             enum: UserRoles,
-            //default: [UserRoles.Base]
+            default: [UserRoles.Base]
         },
 
         stats: {
@@ -489,16 +489,12 @@ export async function updateGamification(userId: Types.ObjectId, swt: boolean) :
     }
 }
 
-export async function updateEmail(userId: Types.ObjectId, newEmail: string) : Promise<void> {
-    let user: UserDocument
-    try {
-        user = await getUserById(userId)
-        user.email = newEmail
-        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
-        return Promise.resolve()
-    } catch(err) {
-        return Promise.reject(err)
-    }
+export async function updateEmail(_id: Types.ObjectId, email: string) : Promise<void> {
+    await UserModel.updateOne({ _id }, { email }).catch((err) => {
+        return Promise.reject(new ServerError("Internal server error"));
+    });
+
+    return Promise.resolve()
 }
 
 export async function updateRoutineName(userId: Types.ObjectId, oldName: string, newName: string): Promise<void> {
@@ -604,9 +600,13 @@ export const setUserStatus = async (
 export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
     let user: UserDocument
     try {
+        console.log("DENTRO la updateUserEnjoyedVehicle")
         user = await getUserById(userId)
+        console.log("EnjoyedVehicles.len PRIMA: " + user.enjoyedVehicles.length)
         user.enjoyedVehicles.push(vehicleId)
-        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
+        console.log("EnjoyedVehicles.len DOPO: " + user.enjoyedVehicles.length)
+        //TO DO rimetti apposto
+        await user.save().catch(err => Promise.reject(err))//new ServerError('Internal server error')))
         return Promise.resolve()
     } catch(err) {
         return Promise.reject(err)
@@ -616,12 +616,17 @@ export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId
 export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
     let user: UserDocument
     try {
+        console.log("DENTRO la removeUserEnjoyedVehicle")
         user = await getUserById(userId)
+        if (!user.enjoyedVehicles.includes(vehicleId)) throw new ServerError("No enjoyed vehicles related to this user")
+        console.log("EnjoyedVehicles.len PRIMA: " + user.enjoyedVehicles.length)
         for (let idx in user.enjoyedVehicles) {
             if (user.enjoyedVehicles[idx] === vehicleId) 
                 user.enjoyedVehicles.splice(parseInt(idx), 1)
         }
-        await user.save().catch(err => Promise.reject(new ServerError('Internal server error')))
+        console.log("EnjoyedVehicles.len DOPO: " + user.enjoyedVehicles.length)
+        //TO DO rimetti apposto
+        await user.save().catch(err => Promise.reject(err))//new ServerError('Internal server error')))
         return Promise.resolve()
     } catch(err) {
         return Promise.reject(err)
