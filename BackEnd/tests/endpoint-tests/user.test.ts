@@ -35,7 +35,7 @@ export interface ErrResponse {
     requestPath: string,
 }
 
-function setUpHeader(userId: string) {
+export function setUpHeader(userId: string) {
     const tokensData: JwtData = {
         userId
     };
@@ -49,7 +49,7 @@ function setUpHeader(userId: string) {
     return `${refreshToken},${accessToken}`;
 }
 
-const baseUrl: string = "http://" + process.env.HOST + ":" + process.env.PORT
+export const baseUrl: string = "http://" + process.env.HOST + ":" + process.env.PORT
 
 
 describe("Test: GET /users/@meh", () => {

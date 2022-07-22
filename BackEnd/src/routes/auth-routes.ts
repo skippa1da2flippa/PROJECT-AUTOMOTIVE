@@ -49,6 +49,9 @@ export const authenticateToken = async function (
         return res.sendStatus(403);
     }
 
+    // controllo se il token è bannato
+    if (await BanListPool.isBanned(refreshToken)) return res.sendStatus(403);
+
     jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET, (err: any, content: JwtData) => {
         if (err){
 
@@ -90,7 +93,7 @@ export const authenticateToken = async function (
  *  Function provided to passport middleware which verifies user credentials
  */
 
-const localAuth = async function (password: string, email: string, done: Function) {
+const localAuth = async function (email: string, password: string, done: Function) {
     let user: UserDocument | void
 
     user = await getUserByEmail(email).catch((err: Error) => {
@@ -108,8 +111,15 @@ passport.use(new Strategy(localAuth));
 
 interface AuthenticationRequestBody {
     email: string
-    nickname: string;
     password: string;
+}
+
+interface SignUpRequestBody {
+    email: string
+    nickname?: string;
+    password: string;
+    name: string
+    surname: string
 }
 
 interface SignInRequest extends Request {
@@ -142,11 +152,11 @@ router.post(
     '/auth/signin',
     passport.authenticate('local', { session: false }),
     async (req: SignInRequest, res: Response) => {
-
+    console.log("DENTRO SIGN IN")
         const tokensData: JwtData = {
             userId: req.user._id,
         };
-        // Refresh token generation with 2 h duration, allow a user to mantain a session and be issued with access tokens
+        // Refresh token generation with 2 h duration, allow a user to maintain a session and be issued with access tokens
         const refreshToken = jsonwebtoken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
             expiresIn: '2h',
         });
@@ -175,7 +185,7 @@ router.post(
 );
 
 interface SignUpRequest extends Request {
-    body: AuthenticationRequestBody;
+    body: SignUpRequestBody;
 }
 
 /**
@@ -183,10 +193,13 @@ interface SignUpRequest extends Request {
  */
 router.post('/auth/signup', async (req: SignUpRequest, res: Response) => {
     try {
+        console.log("son in sign up")
         // A user that registers through this endpoint becomes online right away
         const userData: AnyKeys<UserDocument> = {
-            nickname: req.body.nickname,
-
+            // nickname: req.body.nickname, TO DO CHE politica attuiamo con il nickname
+            email: req.body.email,
+            name: req.body.name,
+            surname: req.body.surname,
             // User is created with status Offline.
             // He will be set to online when he logs in
             status: UserStatus.Offline,
@@ -197,6 +210,9 @@ router.post('/auth/signup', async (req: SignUpRequest, res: Response) => {
 
         return res.status(201).json({
             userId: newUser._id,
+            name: newUser.name,
+            surname: newUser.surname,
+            email: newUser.email,
             nickname: newUser.nickname,
             roles: newUser.roles,
             status: newUser.status,
@@ -216,7 +232,6 @@ router.post(
     async (req: AuthenticatedRequest, res: Response) => {
         try {
             const userId: string = req.jwtContent.userId;
-
             // Get the client of the user that is logging out and remove it
             // from the room of that user
             // If the room doesn't exist, clientIds is undefined

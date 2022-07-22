@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">32.25% </span>
+                <span class="strong">18.27% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>30/93</span>
+                <span class='fraction'>17/93</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.38% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/13</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.5% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/16</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">34.48% </span>
+                <span class="strong">19.54% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>30/87</span>
+                <span class='fraction'>17/87</span>
             </div>
         
             
@@ -697,31 +697,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1040,31 +1040,31 @@ router.patch(
     '/users/@meh/enjoyedVehicles',
     authenticateToken,
     retrieveUserId,
-    async (req: UpdateEnjoyedRequest, res: UserEndpointResponse) =&gt; {
-        const { enjoyedVehicle } = req.body;
-        const userId: Types.ObjectId = res.locals.userId;
-        console.log("Sono nella route PATCH")
-        if (<span class="missing-if-branch" title="if path not taken" >I</span>enjoyedVehicle) {
+<span class="fstat-no" title="function not covered" >    async (r</span>eq: UpdateEnjoyedRequest, res: UserEndpointResponse<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >) =&gt; {</span></span>
+        const { <span class="cstat-no" title="statement not covered" >enjoyedVehicle } = r</span>eq.body;
+        const <span class="cstat-no" title="statement not covered" >userId: Types.ObjectId = res.locals.userId;</span>
+<span class="cstat-no" title="statement not covered" >        console.log("Sono nella route PATCH")</span>
+        if (<span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="if path not taken" >I</span>enjoyedVehicle)</span> {
             try {
-                console.log("dentro il try")
-                if (req.query.action === "add") {
-                    console.log("Dentro il controllo req.params.action === \"add\"")
-                    await usr.updateUserEnjoyedVehicle(userId, new Types.ObjectId(enjoyedVehicle));
+<span class="cstat-no" title="statement not covered" >                console.log("dentro il try")</span>
+                if (<span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="if path not taken" >I</span>req.</span>query.action === "add") {
+<span class="cstat-no" title="statement not covered" >                    console.log("Dentro il controllo req.params.action === \"add\"")</span>
+<span class="cstat-no" title="statement not covered" >                    await usr.updateUserEnjoyedVehicle(userId, new Types.ObjectId(enjoyedVehicle));</span>
 <span class="cstat-no" title="statement not covered" >                    return res.status(200).json({</span>
                         added: enjoyedVehicle
                     });
                 }
                 else {
-                    console.log("Dentro il controllo req.params.action === \"remove\"")
-                    await usr.removeUserEnjoyedVehicle(userId, new Types.ObjectId(enjoyedVehicle));
+<span class="cstat-no" title="statement not covered" >                    console.log("Dentro il controllo req.params.action === \"remove\"")</span>
+<span class="cstat-no" title="statement not covered" >                    await usr.removeUserEnjoyedVehicle(userId, new Types.ObjectId(enjoyedVehicle));</span>
 <span class="cstat-no" title="statement not covered" >                    return res.status(200).json({</span>
                         removed: enjoyedVehicle
                     });
                 }
             } catch (err) {
                 // TO DO togli
-                if (!(err instanceof ServerError)) {
-                    return res.status(500).json({
+<span class="cstat-no" title="statement not covered" >                <span class="missing-if-branch" title="if path not taken" >I</span>if (!(err instanceof ServerError)) {</span>
+<span class="cstat-no" title="statement not covered" >                    return res.status(500).json({</span>
                         timestamp: toUnixSeconds(new Date()),
                         errorMessage: err.message,
                         requestPath: req.path,
@@ -1099,7 +1099,7 @@ router.patch(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-07-21T13:50:18.977Z
+                at 2022-07-22T00:41:03.896Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

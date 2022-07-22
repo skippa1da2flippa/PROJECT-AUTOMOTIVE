@@ -8,9 +8,9 @@ export interface PoolData {
 }
 
 /* CASI DI BAN
- * -> nel caso in cui un utente abbia almeno uno dei due token non popolato (vuol dire che ha la mammina lurida) 
+ * -> nel caso in cui un utente abbia almeno uno dei due token non popolato (vuol dire che ha la mammina lurida) (fatto)
  * -> quando un utente viene bannato crasto dall'intera piattaforma
- * -> quando la verify del refresh token fallisce 
+ * -> quando la verify del refresh token fallisce ??
  */
 
 export class BanListPool {
@@ -37,12 +37,12 @@ export class BanListPool {
     }
 
     private static async deleteExpired(tedisConn: Tedis): Promise<void> {
-        for(var idx in this.bannedReferences) {
-            var duration = Math.abs(
+        for(let idx in this.bannedReferences) {
+            let duration = Math.abs(
                 toUnixSeconds(new Date()) - this.bannedReferences[idx].insertedIn
             );
 
-            var hDuration = Math.floor(duration / 60)
+            let hDuration = Math.floor(duration / 60)
 
             if (hDuration >= 2) await tedisConn.del(this.bannedReferences[idx].tokenKey)
         }
@@ -57,9 +57,7 @@ export class BanListPool {
 
         pool.putTedis(tedis)
 
-        return value 
-            ? Promise.resolve(true)
-            : Promise.reject()
+        return Promise.resolve(value !== undefined)
     }
 }
 
