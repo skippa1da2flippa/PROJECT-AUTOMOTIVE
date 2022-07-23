@@ -6,7 +6,6 @@ import { Strategy } from 'passport-local';
 
 import {
     createUser,
-    getUserByNickname,
     UserDocument,
     setUserStatus,
     UserStatus,
@@ -20,6 +19,14 @@ import { toUnixSeconds } from './utils/date-utils';
 import { Socket } from 'socket.io';
 import chalk from 'chalk';
 import {BanListPool} from "../model/ban-list/ban-list-pool";
+import {
+    getVehicleById,
+    ModelTypes,
+    ProjectVehicleDocument,
+    setVehicleStatus,
+    VehicleStatus
+} from "../model/database/my-vehicle";
+import {LegalInfos} from "../model/database/legalInfos";
 
 export const router = Router();
 export const jsonWebToken = jsonwebtoken
@@ -64,7 +71,7 @@ export const authenticateToken = async function (
                     });
                 }
                 else{
-                    let accessToken = generateAccessToken(content.userId);
+                    let accessToken = generateAccessToken(content.Id);
                     res.locals.newAccessToken = accessToken;
 
                     /* TO DO in every route we must remember to check if locals.newAccessToken is true, if so we should send it's value with the response
@@ -107,7 +114,27 @@ const localAuth = async function (email: string, password: string, done: Functio
     }
 }
 
+/**
+ *  Function provided to passport middleware which verifies vehicle credentials
+ */
+
+const vehicleAuth = async function (vehicleId: string, password: string, done: Function) {
+    let vehicle: ProjectVehicleDocument | void
+
+    vehicle = await getVehicleById(new Types.ObjectId(vehicleId)).catch((err: Error) => {
+        return done(err);
+    });
+
+    if (vehicle && (await vehicle.validatePassword(password))) {
+        return done(null, vehicle);
+    } else {
+        return done(null, false);
+    }
+}
+
+
 passport.use(new Strategy(localAuth));
+passport.use("vehicle", new Strategy(vehicleAuth));
 
 interface AuthenticationRequestBody {
     email: string
@@ -122,6 +149,11 @@ interface SignUpRequestBody {
     surname: string
 }
 
+interface VehicleRequestBody {
+    vehicleId: string
+    password: string
+}
+
 interface SignInRequest extends Request {
     body: AuthenticationRequestBody;
 
@@ -131,10 +163,23 @@ interface SignInRequest extends Request {
     user: UserDocument;
 }
 
+interface SignInVehicleRequest extends Request {
+    body: VehicleRequestBody;
+
+    /**
+     * Field inserted by passport-local authentication middleware
+     */
+    vehicle: ProjectVehicleDocument
+}
+
+
+
+
+
 export const generateAccessToken = (data: string): string => {
 
     const tokensData: JwtData = {
-        userId: data,
+        Id: data,
     };
     // Access token generation with 1 min duration (just for roaming in the app)
     let accessT: string = jsonwebtoken.sign(tokensData, process.env.JWT_ACCESS_TOKEN_SECRET, {
@@ -154,14 +199,14 @@ router.post(
     async (req: SignInRequest, res: Response) => {
     console.log("DENTRO SIGN IN")
         const tokensData: JwtData = {
-            userId: req.user._id,
+            Id: req.user._id,
         };
         // Refresh token generation with 2 h duration, allow a user to maintain a session and be issued with access tokens
         const refreshToken = jsonwebtoken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
             expiresIn: '2h',
         });
 
-        const accessToken = generateAccessToken(tokensData.userId);
+        const accessToken = generateAccessToken(tokensData.Id);
 
         // Black login if the user is already logged and online
         if (
@@ -184,16 +229,39 @@ router.post(
     }
 );
 
+router.post(
+    '/auth/myVehicle/signin',
+    passport.authenticate('vehicle', { session: false }),
+    async (req: SignInVehicleRequest, res: Response) => {
+        console.log("DENTRO SIGN IN")
+        const tokensData: JwtData = {
+            Id: req.vehicle._id,
+        };
+        // Refresh token generation with 2 h duration, allow a user to maintain a session and be issued with access tokens
+        const refreshToken = jsonwebtoken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
+            expiresIn: '30m',
+        });
+
+        const accessToken = generateAccessToken(tokensData.Id);
+
+
+        // Return the token along with the id of the authenticated user
+        return res.status(200).json({
+            vehicleId: req.vehicle._id,
+            authToken: accessToken,
+            refreshToken: refreshToken
+        });
+    }
+);
+
 interface SignUpRequest extends Request {
     body: SignUpRequestBody;
 }
 
-/**
- * Request must contain at least this information -> username: string, password: string
- */
+
 router.post('/auth/signup', async (req: SignUpRequest, res: Response) => {
     try {
-        console.log("son in sign up")
+        console.log("sono in sign up")
         // A user that registers through this endpoint becomes online right away
         const userData: AnyKeys<UserDocument> = {
             // nickname: req.body.nickname, TO DO CHE politica attuiamo con il nickname
@@ -226,12 +294,12 @@ router.post('/auth/signup', async (req: SignUpRequest, res: Response) => {
     }
 });
 
-router.post(
+router.get(
     '/auth/signout',
     authenticateToken,
     async (req: AuthenticatedRequest, res: Response) => {
         try {
-            const userId: string = req.jwtContent.userId;
+            const userId: string = req.jwtContent.Id;
             // Get the client of the user that is logging out and remove it
             // from the room of that user
             // If the room doesn't exist, clientIds is undefined
@@ -256,6 +324,48 @@ router.post(
 
             // Set the status of the user to Offline since it's logging out
             await setUserStatus(new Types.ObjectId(userId), UserStatus.Offline);
+
+            return res.status(204).json();
+        } catch (err) {
+            return res.status(400).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: err.message,
+                requestPath: req.path,
+            });
+        }
+    }
+);
+
+router.get(
+    '/auth/myVehicle/signout',
+    authenticateToken,
+    async (req: AuthenticatedRequest, res: Response) => {
+        try {
+            const vehicleId: string = req.jwtContent.Id;
+            // Get the client of the user that is logging out and remove it
+            // from the room of that user
+            // If the room doesn't exist, clientIds is undefined
+            const clientIds: Set<string> | undefined = ioServer.sockets.adapter.rooms.get(vehicleId);
+            if (clientIds) {
+                if (clientIds.size > 1) {
+                    throw new Error(
+                        "There shouldn't be more than one client listening to a specific vehicle room"
+                    );
+                }
+
+                // Logout could be called even by a client that
+                // didn't connect to the socket.io server
+                if (clientIds.size === 1) {
+                    const logoutClientId: string = clientIds.values().next().value;
+                    const logoutClient: Socket = ioServer.sockets.sockets.get(logoutClientId);
+                    logoutClient.leave(vehicleId);
+
+                    console.log(chalk.red.bold(`Vehicle ${vehicleId} left the server`));
+                }
+            }
+
+            // Set the status of the vehicle to Offline since it's logging out
+            await setVehicleStatus(new Types.ObjectId(vehicleId), VehicleStatus.Offline);
 
             return res.status(204).json();
         } catch (err) {

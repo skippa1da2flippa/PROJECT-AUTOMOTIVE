@@ -210,7 +210,7 @@ describe("Test: POST /auth/signout ", () => {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
 
-        response = await axios.post(requestPath, {},{
+        response = await axios.get(requestPath,{
             headers: header
         });
 
@@ -223,7 +223,7 @@ describe("Test: POST /auth/signout ", () => {
             "authorization" : setUpHeader("AYO")
         }
         try {
-            await axios.post(requestPath, {},{
+            await axios.get(requestPath, {
                 headers: header
             });
         } catch (err) {

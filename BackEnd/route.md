@@ -6,7 +6,7 @@
 
 - /api/users/@meh                                           DELETE user
 
-- /api/users/@meh/nickName                                  PATCH user name update
+- /api/users/@meh/nickName                                  PATCH nickname update
 - /api/users/@meh/email                                     PATCH email update 
 - /api/users/@meh/password                                  PATCH user psw update
 - /api/users/@meh/enjoyedVehicle?action=<action>            PATCH user enjoyed Vehicle
@@ -14,24 +14,30 @@
 
 # AUTH ENDPOINTS
 
-- /api/auth/signout                                           GET user data 
+- /api/auth/signout                                                     GET user data 
+- /api/auth/myVehicle/signout                                           GET vehicle data
 
-- /api/auth/signin                                            POST user data 
-- /api/auth/signup                                            POST user data creation
+- /api/auth/signin                                                      POST user data 
+- /api/auth/myVehicle/signin                                            POST vehicle data
+- /api/auth/signup                                                      POST user data creation
 
 
 # MY VEHICLE ENDPOINTS
 
-- /api/myVehicle/vehicleId                   PATCH retrieve a vehicle 
-- /api/myVehicle/vehicleId/owner             PATCH retrieve vehicle owner
-- /api/myVehicle/vehicleId/enjoyers          PATCH retrieve vehicle enjoyers    
+- /api/myVehicle/@it                                         GET vehicle
+- /api/myVehicle/@it/owner                                   GET vehicle owner
+- /api/myVehicle/@it/enjoyers                                GET vehicle enjoyers
 
-- /api/myVehicle/vehicleId                   DELETE vehicle
+- /api/myVehicle/vehicleId                                   PATCH retrieve a vehicle 
+- /api/myVehicle/vehicleId/owner                             PATCH retrieve vehicle owner
+- /api/myVehicle/vehicleId/enjoyers                          PATCH retrieve vehicle enjoyers    
 
-- /api/myVehicle/vehicleId                   POST vehicle creation
+- /api/myVehicle/vehicleId                                   DELETE vehicle
 
-- /api/myVehicle/vehicleId/enjoyers          PUT vehicle enjoyers update
-- /api/myVehicle/vehicleId/owner             PUT vehicle owner update
+- /api/myVehicle/create                                      POST vehicle creation
+
+- /api/myVehicle/vehicleId/enjoyers?action=<action>          PUT vehicle enjoyers update
+- /api/myVehicle/vehicleId/owner                             PUT vehicle owner update
 
 
 # ROUTINE ENDPOINTS

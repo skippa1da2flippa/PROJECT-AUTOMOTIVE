@@ -47,7 +47,7 @@ export const skipLimitChecker = function (req: Request, res: Response, next: Nex
 export const retrieveUserId = function (req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
         console.log("Sono nel middleware di retrieve user id")
-        res.locals.userId = new Types.ObjectId(req.jwtContent.userId);
+        res.locals.userId = new Types.ObjectId(req.jwtContent.Id);
         next();
     } catch (err) {
         return res.status(404).json({
@@ -59,18 +59,19 @@ export const retrieveUserId = function (req: AuthenticatedRequest, res: Response
 };
 
 /**
- * Middleware that tries to extract the chatId request parameter from
- * the request url.
  * If the parameter is invalid, an error response is returned.
  * The parsed param can be found in the "locals" field of the response.
+ *
+ * This middleware is developed for endpoints as myVehicles, since while receiving the request we
+ * do know a car is doing the request
  *
  * @param req
  * @param res
  * @param next
  */
-export const retrieveChatId = function (req: Request, res: Response, next: NextFunction) {
+export const retrieveVehicleId = function (req:  AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
-        res.locals.chatId = new Types.ObjectId(req.params.chatId);
+        res.locals.vehicleId = new Types.ObjectId(req.jwtContent.Id);
         next();
     } catch (err) {
         return res.status(404).json({
@@ -81,34 +82,4 @@ export const retrieveChatId = function (req: Request, res: Response, next: NextF
     }
 };
 
-/**
- * Middleware that tries to extract the matchId request parameter from
- * the request url.
- * If the parameter is invalid, an error response is returned.
- * The parsed param can be found in the "locals" field of the response.
- *
- * @param req
- * @param res
- * @param next
- */
-export const retrieveMatchId = function (req: Request, res: Response, next: NextFunction) {
-    try {
-        res.locals.matchId = new Types.ObjectId(req.params.matchId);
 
-        next();
-    } catch (err) {
-        res.status(404).json({
-            timestamp: toUnixSeconds(new Date()),
-            errorMessage: err.message,
-            requestPath: req.path,
-        });
-    }
-};
-
-export const retrieveId = function (s_id: string) {
-    try {
-        return new Types.ObjectId(s_id);
-    } catch (err) {
-        throw new ServerError('No user with that identifier');
-    }
-};

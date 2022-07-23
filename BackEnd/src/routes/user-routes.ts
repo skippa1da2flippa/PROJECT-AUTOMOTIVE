@@ -3,10 +3,10 @@ import { Router, Response } from 'express';
 import * as usr from '../model/database/user';
 import { AuthenticatedRequest } from './utils/authenticated-request';
 import { toUnixSeconds } from './utils/date-utils';
-import { retrieveUserId, retrieveId, skipLimitChecker } from './utils/param-checking';
+import { retrieveUserId, skipLimitChecker } from './utils/param-checking';
 import { authenticateToken } from './auth-routes';
 import { 
-    projectVehicleDocument, 
+    ProjectVehicleDocument,
     getVehiclesByUserId, 
     getVehicleById
 } from '../model/database/my-vehicle'
@@ -31,7 +31,7 @@ interface UserEndpointLocals {
 /**
  * Interface that models the response of a user endpoint
  */
-interface UserEndpointResponse extends Response {
+export interface UserEndpointResponse extends Response {
     locals: UserEndpointLocals;
 }
 
@@ -115,7 +115,7 @@ router.get(
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
-        let vehicles: projectVehicleDocument[]
+        let vehicles: ProjectVehicleDocument[]
         const userId: Types.ObjectId = res.locals.userId;
         console.log("DENTRO LA ROUTE")
         try {
@@ -143,7 +143,7 @@ router.get(
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
         let user: usr.UserDocument;
         const userId: Types.ObjectId = res.locals.userId;
-        let enjoyedVehicles: projectVehicleDocument[] = []
+        let enjoyedVehicles: ProjectVehicleDocument[] = []
         try {
             user = await usr.getUserById(userId);
             console.log("ENJOYER LEN: " + user.enjoyedVehicles.length)

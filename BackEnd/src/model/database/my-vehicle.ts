@@ -5,7 +5,15 @@ import { pool } from '../..';
 import { EnjoyerRequestEmitter } from '../../events/emitters/enjoyer-request-emitter';
 import { LegalInfos, LegalInfosSchema, LegalInfosSubDocument } from './legalInfos'
 import { ServerError } from "../errors/server-error"
-import { getUserById, removeUserEnjoyedVehicle, updateUserEnjoyedVehicle, UserDocument } from './user';
+import {
+    getUserById,
+    removeUserEnjoyedVehicle,
+    updateUserEnjoyedVehicle,
+    UserDocument,
+    UserSchema,
+    UserStatus
+} from './user';
+import bcrypt from "bcrypt";
 
 /*
     This collection is thought not to be an embedded document due to the fact that many users can use the same Vehicle, setting this schema as 
@@ -18,13 +26,28 @@ export enum ModelTypes {
     // cars names
 }
 
+export enum VehicleStatus {
+    Offline = 'Offline',
+    Online = 'Online'
+}
 
 export interface projectVehicle {
     
     /**
      * Defines the car model 
      */
-    type: ModelTypes, 
+    type: ModelTypes,
+
+    /**
+     * A car has a password because:
+     * access to his own route and receive its token by logging in with its id and its psw
+     * PS vehicle psw is meant to be known just to the vehicle
+     * */
+    pwd_hash: string;
+
+    salt: string;
+
+    status: VehicleStatus;
 
     /**
      * Defines the car owner
@@ -55,7 +78,7 @@ export interface projectVehicle {
 }
 
 
-export interface projectVehicleDocument extends projectVehicle, Document {
+export interface ProjectVehicleDocument extends projectVehicle, Document {
     legalInfos: LegalInfosSubDocument;
 
     /**
@@ -72,12 +95,24 @@ export interface projectVehicleDocument extends projectVehicle, Document {
      * @param userId represent the enjoyer id to remove
      */
     removeEnjoyer(enjoyerId: Types.ObjectId) : Promise<void>
+
+    /**
+     * Set a new password using bcrypt hashing and salt generation functions
+     * @param pwd new password to set
+     */
+    setPassword(pwd: string): Promise<UserDocument>;
+
+    /**
+     * Check the validity of the password with the one stored on the database
+     * @param pwd the password to check
+     */
+    validatePassword(pwd: string): Promise<boolean>;
 }
 
 // TO DO implement remove owner/change owner in a safe way
 
 
-export const myVehicleSchema = new Schema<projectVehicleDocument>(
+export const myVehicleSchema = new Schema<ProjectVehicleDocument>(
     {
         type: {
             type: SchemaTypes.String,
@@ -89,6 +124,16 @@ export const myVehicleSchema = new Schema<projectVehicleDocument>(
         owner: {
             type: SchemaTypes.ObjectId,
             required: true
+        },
+
+        salt: {
+            type: SchemaTypes.String,
+            required: false
+        },
+
+        pwd_hash: {
+            type: SchemaTypes.String,
+            required: false
         },
 
         legalInfos: {
@@ -107,21 +152,13 @@ export const myVehicleSchema = new Schema<projectVehicleDocument>(
 
 // TO DO remember to put in the front-end the 60 sec limit for the owner to answer and answer anyway
 /**
- * 
- * @param enjoyerId 
- * @param ioServer 
- * @param onComplete this thing should be built like this: 
- * const onComplete = (result: string): void => {
-      if (result === "false") {
-         // ...
-         res.send(403).json();
-      }
-      else {
-         // ...
-         res.send(204).json();
-      }
-   };
- */
+ *
+ * @param enjoyerId
+ * @param enjoyerName
+ * @param enjoyerSurname
+ * @param ioServer
+ * @param onComplete
+  */
 myVehicleSchema.methods.addEnjoyer = async function (
     enjoyerId: Types.ObjectId, 
     enjoyerName: string,
@@ -132,9 +169,9 @@ myVehicleSchema.methods.addEnjoyer = async function (
 
     let res: string = ""
     let temp: any
-    const enojerReqEmitter: EnjoyerRequestEmitter = new EnjoyerRequestEmitter(ioServer, this.owner)
+    const enjoyerReqEmitter: EnjoyerRequestEmitter = new EnjoyerRequestEmitter(ioServer, this.owner)
     
-    enojerReqEmitter.emit({
+    enjoyerReqEmitter.emit({
         enjoyerId: enjoyerId.toString(),
         enjoyerName: enjoyerName,
         enjoyerSurname: enjoyerSurname,
@@ -176,9 +213,37 @@ myVehicleSchema.methods.removeEnjoyer = async function (enjoyerId: Types.ObjectI
     return Promise.resolve()
 }
 
-export const VehicleModel: Model<projectVehicleDocument> = mongoose.model('MyVehicle', myVehicleSchema, 'MyVehicles');
+myVehicleSchema.methods.setPassword = async function (pwd: string): Promise<ProjectVehicleDocument> {
+    const salt: string = await bcrypt
+        .genSalt(10)
+        .catch((error) =>
+            Promise.reject(new ServerError('Error with salt generation'))
+        );
 
-export async function getVehicleById(vehicleId: Types.ObjectId): Promise<projectVehicleDocument> {
+    const pwdHash = await bcrypt
+        .hash(pwd, salt)
+        .catch((error) =>
+            Promise.reject(new ServerError('Error with password encryption'))
+        );
+
+    this.salt = salt;
+    this.pwd_hash = pwdHash;
+    return this.save();
+};
+
+myVehicleSchema.methods.validatePassword = async function (pwd: string): Promise<boolean> {
+    const hashedPw = await bcrypt
+        .hash(pwd, this.salt)
+        .catch((error) =>
+            Promise.reject(new ServerError('Error with password encryption'))
+        );
+
+    return this.pwd_hash === hashedPw;
+};
+
+export const VehicleModel: Model<ProjectVehicleDocument> = mongoose.model('MyVehicle', myVehicleSchema, 'MyVehicles');
+
+export async function getVehicleById(vehicleId: Types.ObjectId): Promise<ProjectVehicleDocument> {
     const carDoc = await VehicleModel.findOne({ _id: vehicleId }).catch((err) =>
         Promise.reject(new ServerError('Internal server error'))
     );
@@ -188,13 +253,13 @@ export async function getVehicleById(vehicleId: Types.ObjectId): Promise<project
         : Promise.resolve(carDoc);
 }
 
-export async function createVehicle(data: AnyKeys<projectVehicleDocument>): Promise<projectVehicleDocument> {
-    const vehicle: projectVehicleDocument = new VehicleModel(data);
+export async function createVehicle(data: AnyKeys<ProjectVehicleDocument>): Promise<ProjectVehicleDocument> {
+    const vehicle: ProjectVehicleDocument = new VehicleModel(data);
     return vehicle.save()
 }
 
-export async function deleteVehicle(filter: FilterQuery<projectVehicleDocument>): Promise<void> {
-    let vehicle: projectVehicleDocument
+export async function deleteVehicle(filter: FilterQuery<ProjectVehicleDocument>): Promise<void> {
+    let vehicle: ProjectVehicleDocument
     try {
         vehicle = await getVehicleById(filter._id)
         for (let idx in vehicle.enjoyers) {
@@ -213,8 +278,8 @@ export async function deleteVehicle(filter: FilterQuery<projectVehicleDocument>)
         : Promise.resolve();
 } 
 
-export async function getVehiclesByUserId(userId: Types.ObjectId): Promise<projectVehicleDocument[]> {
-    let vehicles: projectVehicleDocument[] = []
+export async function getVehiclesByUserId(userId: Types.ObjectId): Promise<ProjectVehicleDocument[]> {
+    let vehicles: ProjectVehicleDocument[] = []
     try {
         vehicles = await VehicleModel.find({ owner: userId })
     } catch(err) {
@@ -225,5 +290,37 @@ export async function getVehiclesByUserId(userId: Types.ObjectId): Promise<proje
         ? Promise.resolve(vehicles)
         : Promise.reject(new ServerError("No vehicles related to the user"))
 }
+
+
+
+export async function updatePassword(_id: Types.ObjectId, password: string): Promise<void> {
+    let vehicle: ProjectVehicleDocument;
+    try {
+        vehicle = await getVehicleById(_id);
+        await vehicle.setPassword(password);
+    } catch (err) {
+        return Promise.reject(err);
+    }
+    return Promise.resolve();
+}
+
+/**
+ * Sets the status of the provided user to the provided value
+ * and notifies his friends of the change.
+ * @param userId id of the user whose status has to be changed
+ * @param newStatus new status of the user
+ * @return updated user
+ * @private
+ */
+export const setVehicleStatus = async (
+    vehicleId: Types.ObjectId,
+    newStatus: VehicleStatus
+): Promise<ProjectVehicleDocument> => {
+    let vehicle: ProjectVehicleDocument = await getVehicleById(vehicleId);
+    vehicle.status = newStatus;
+    return  vehicle.save();
+};
+
+
 
 

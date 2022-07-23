@@ -3,5 +3,5 @@
  * segment of the JWTs issued by our api
  */
 export interface JwtData {
-    userId: string;
+    Id: string;
 }
