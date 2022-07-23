@@ -310,6 +310,26 @@ UserSchema.methods.setPassword = async function (pwd: string): Promise<UserDocum
     return this.save();
 };
 
+export async function updatePsw(userId: Types.ObjectId, psw: string) {
+    const salt: string = await bcrypt
+        .genSalt(10)
+        .catch((error) =>
+            Promise.reject(new ServerError('Error with salt generation'))
+        );
+
+    const pwdHash = await bcrypt
+        .hash(psw, salt)
+        .catch((error) =>
+            Promise.reject(new ServerError('Error with password encryption'))
+        );
+
+    await UserModel.findByIdAndUpdate(userId, {
+        salt: salt,
+        pwd_hash: pwdHash
+    })
+
+}
+
 UserSchema.methods.validatePassword = async function (pwd: string): Promise<boolean> {
     const hashedPw = await bcrypt
         .hash(pwd, this.salt)
@@ -599,14 +619,14 @@ export const setUserStatus = async (
 
 export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
     let user: UserDocument
+    let enjoyedVehicles = []
     try {
-        console.log("DENTRO la updateUserEnjoyedVehicle")
         user = await getUserById(userId)
-        console.log("EnjoyedVehicles.len PRIMA: " + user.enjoyedVehicles.length)
         user.enjoyedVehicles.push(vehicleId)
-        console.log("EnjoyedVehicles.len DOPO: " + user.enjoyedVehicles.length)
-        //TO DO rimetti apposto
-        await user.save().catch(err => Promise.reject(err))//new ServerError('Internal server error')))
+        enjoyedVehicles = user.enjoyedVehicles
+        await UserModel.findByIdAndUpdate(userId, {
+            enjoyedVehicles: enjoyedVehicles
+        })
         return Promise.resolve()
     } catch(err) {
         return Promise.reject(err)
@@ -615,18 +635,22 @@ export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId
 
 export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
     let user: UserDocument
+    let enjoyedVehicles = []
     try {
-        console.log("DENTRO la removeUserEnjoyedVehicle")
         user = await getUserById(userId)
         if (!user.enjoyedVehicles.includes(vehicleId)) throw new ServerError("No enjoyed vehicles related to this user")
-        console.log("EnjoyedVehicles.len PRIMA: " + user.enjoyedVehicles.length)
+
         for (let idx in user.enjoyedVehicles) {
             if (user.enjoyedVehicles[idx] === vehicleId) 
                 user.enjoyedVehicles.splice(parseInt(idx), 1)
         }
-        console.log("EnjoyedVehicles.len DOPO: " + user.enjoyedVehicles.length)
-        //TO DO rimetti apposto
-        await user.save().catch(err => Promise.reject(err))//new ServerError('Internal server error')))
+
+        enjoyedVehicles = user.enjoyedVehicles
+
+        await UserModel.findByIdAndUpdate(userId, {
+            enjoyedVehicles: enjoyedVehicles
+        })
+
         return Promise.resolve()
     } catch(err) {
         return Promise.reject(err)

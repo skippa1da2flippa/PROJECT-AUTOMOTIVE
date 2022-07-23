@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { ModelTypes } from "../../src/model/database/my-vehicle";
+import {ModelTypes, VehicleStatus} from "../../src/model/database/my-vehicle";
 import { apiCredentials, MongoDbApi } from "./mongodb-api";
 
 
@@ -10,6 +10,10 @@ export function getVehicleData(userId: Types.ObjectId, enjoyerId?: Types.ObjectI
         owner: userId,
         enjoyers: enjoyersLst,
         legalInfos: {},
+        password: "test",
+        pwd_hash: '$2b$10$u4YAbPtjj2oCbZWKgFi1NuTqpvHlj2.A7ATGkEy8PM5eSCbZdK/Da',
+        salt: '$2b$10$u4YAbPtjj2oCbZWKgFi1Nu',
+        status: VehicleStatus.Online
     }
 }
 

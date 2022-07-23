@@ -7,7 +7,7 @@ import { JwtData } from "../../src/model/auth/jwt-data";
 import { jsonWebToken} from "../../src/routes/auth-routes";
 import { generateAccessToken } from "../../src/routes/auth-routes";
 import { insertManyVehicles } from "../utils/my-vehicle-helper";
-import {projectVehicleDocument} from "../../src/model/database/my-vehicle";
+import {ProjectVehicleDocument} from "../../src/model/database/my-vehicle";
 
 
 
@@ -21,12 +21,12 @@ interface UserResponse {
 
 interface UserMyVehiclesResponse {
     userId: string,
-    myVehicles: projectVehicleDocument[]
+    myVehicles: ProjectVehicleDocument[]
 }
 
 interface UserEnjoyedVehiclesResponse {
     userId: string,
-    enjoyedVehicles: projectVehicleDocument[]
+    enjoyedVehicles: ProjectVehicleDocument[]
 }
 
 export interface ErrResponse {
@@ -37,19 +37,20 @@ export interface ErrResponse {
 
 export function setUpHeader(userId: string) {
     const tokensData: JwtData = {
-        userId
+        Id: userId
     };
 
     const refreshToken = jsonWebToken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
         expiresIn: '2h',
     });
 
-    const accessToken = generateAccessToken(tokensData.userId);
+    const accessToken = generateAccessToken(tokensData.Id);
 
     return `${refreshToken},${accessToken}`;
 }
 
 export const baseUrl: string = "http://" + process.env.HOST + ":" + process.env.PORT
+
 
 
 describe("Test: GET /users/@meh", () => {
@@ -132,12 +133,10 @@ describe("Test: GET /api/users/@meh/myVehicles", () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
         user = getUserData()
         udata = await mongoDbApi.insertUser(user)
-        let userId = (
-            udata.insertedId instanceof Types.ObjectId 
-                ? udata.insertedId 
-                : new Types.ObjectId(udata.insertedId)
-        )
+        let userId =  new Types.ObjectId(udata.insertedId)
 
+        console.log("ID PRIMA " + udata.insertedId)
+        console.log("DOPO ID " + userId)
         console.log("prima insert vehicles, userId " + userId)
         await insertManyVehicles(userId, 2, vehiclesIds)
         console.log("DOPO LA INSERT VEHICLES")
@@ -158,12 +157,14 @@ describe("Test: GET /api/users/@meh/myVehicles", () => {
         });
         expect(response.status).toBe(201);
         const userRes = response.data
+
         expect(userRes).toEqual(
-            expect.objectContaining<UserMyVehiclesResponse>({
-                userId: expect.any(String),
-                myVehicles: expect.any([Object])
-            })
+             expect.objectContaining<UserMyVehiclesResponse>({
+                  userId: expect.any(String),
+                  myVehicles: expect.any(Array)
+             })
         )
+
     });
 
      // user with no vehicles
@@ -250,8 +251,8 @@ describe("Test: GET /api/users/@meh/enjoyedVehicles", () => {
         const userRes = response.data
         expect(userRes).toEqual(
             expect.objectContaining<UserEnjoyedVehiclesResponse>({
-                userId: expect.any(Types.ObjectId),
-                enjoyedVehicles: expect.any([Object])
+                enjoyedVehicles: expect.any(Array),
+                userId: expect.any(String)
             })
         )
     });
@@ -670,7 +671,7 @@ describe("Test: PATCH /api/users/@meh/enjoyedVehicles", () => {
             headers: header,
             params: param
         });
-        expect(response.status).toBe(204);
+        expect(response.status).toBe(200);
         const userRes = response.data
         expect(userRes).toEqual(
             expect.objectContaining<{added: string}>({
@@ -695,7 +696,7 @@ describe("Test: PATCH /api/users/@meh/enjoyedVehicles", () => {
             headers: header,
             params: param
         });
-        expect(response.status).toBe(204);
+        expect(response.status).toBe(200);
         const userRes = response.data
         expect(userRes).toEqual(
             expect.objectContaining<{removed: string}>({
@@ -737,4 +738,3 @@ describe("Test: PATCH /api/users/@meh/enjoyedVehicles", () => {
 
 });
 
-// RICORDA CHE LA .save() SE NON SONO STATE FATTE MODFIFICHE RITORNA UNA ECCEZIONI CHE PER NOI è UN INTERNAL SERVER ERROR (500)

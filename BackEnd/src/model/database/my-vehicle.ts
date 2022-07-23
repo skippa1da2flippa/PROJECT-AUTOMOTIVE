@@ -86,9 +86,10 @@ export interface ProjectVehicleDocument extends projectVehicle, Document {
      * @param enjoyerId represent the enjoyer id to insert
      * @param enjoyerName represents enjoyer name
      * @param enjoyerSurname represents enjoyer surname
-     * @param ioServer used to implement web socket connection 
+     * @param ioServer used to implement web socket connection
+     * @param onComplete used to send a response
      */
-    addEnjoyer(enjoyerId: Types.ObjectId, enjoyerName: string, enjoyerSurname: string, ioServer: Server) : Promise<void>;
+    addEnjoyer(enjoyerId: Types.ObjectId, enjoyerName: string, enjoyerSurname: string, ioServer: Server, onComplete:(res: string) => void) : Promise<void>;
 
     /**
      * This function remove a userId from the 'enjoyers' array
@@ -281,7 +282,11 @@ export async function deleteVehicle(filter: FilterQuery<ProjectVehicleDocument>)
 export async function getVehiclesByUserId(userId: Types.ObjectId): Promise<ProjectVehicleDocument[]> {
     let vehicles: ProjectVehicleDocument[] = []
     try {
-        vehicles = await VehicleModel.find({ owner: userId })
+        vehicles = await VehicleModel.find()
+        console.log(vehicles)
+        // TO DO un giorno forse si mettera meglio
+        vehicles = vehicles.filter(elem => elem.owner.toString() === userId.toString())
+
     } catch(err) {
         return Promise.reject(new ServerError('Internal server error'))
     }

@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Collection, Document, FilterQuery, Types } from 'mongoose';
 import { UserDocument, getUserById, User } from "../../src/model/database/user"
 import { ODocSubDocument } from "../../src/model/database/document"
-import { projectVehicleDocument, projectVehicle } from '../../src/model/database/my-vehicle';
+import { ProjectVehicleDocument, projectVehicle } from '../../src/model/database/my-vehicle';
 
 
 const dbCollectionNames = {
@@ -123,8 +123,8 @@ export class MongoDbApi {
     /*
      * Get vehicle document by _id
      */
-    public async getVehicleDocument(vehicleId: DocId): Promise<projectVehicleDocument> {
-        return await this.getDocumentById<projectVehicleDocument>(
+    public async getVehicleDocument(vehicleId: DocId): Promise<ProjectVehicleDocument> {
+        return await this.getDocumentById<ProjectVehicleDocument>(
             dbCollectionNames.myVehicleCollection,
             vehicleId
         );
