@@ -9,7 +9,7 @@ import {
     getUserById,
     removeUserEnjoyedVehicle,
     updateUserEnjoyedVehicle,
-    UserDocument,
+    UserDocument, UserModel,
     UserSchema,
     UserStatus
 } from './user';
@@ -81,21 +81,6 @@ export interface projectVehicle {
 export interface ProjectVehicleDocument extends projectVehicle, Document {
     legalInfos: LegalInfosSubDocument;
 
-    /**
-     * This function add a userId to the 'enjoyers' array
-     * @param enjoyerId represent the enjoyer id to insert
-     * @param enjoyerName represents enjoyer name
-     * @param enjoyerSurname represents enjoyer surname
-     * @param ioServer used to implement web socket connection
-     * @param onComplete used to send a response
-     */
-    addEnjoyer(enjoyerId: Types.ObjectId, enjoyerName: string, enjoyerSurname: string, ioServer: Server, onComplete:(res: string) => void) : Promise<void>;
-
-    /**
-     * This function remove a userId from the 'enjoyers' array
-     * @param userId represent the enjoyer id to remove
-     */
-    removeEnjoyer(enjoyerId: Types.ObjectId) : Promise<void>
 
     /**
      * Set a new password using bcrypt hashing and salt generation functions
@@ -152,67 +137,7 @@ export const myVehicleSchema = new Schema<ProjectVehicleDocument>(
 
 
 // TO DO remember to put in the front-end the 60 sec limit for the owner to answer and answer anyway
-/**
- *
- * @param enjoyerId
- * @param enjoyerName
- * @param enjoyerSurname
- * @param ioServer
- * @param onComplete
-  */
-myVehicleSchema.methods.addEnjoyer = async function (
-    enjoyerId: Types.ObjectId, 
-    enjoyerName: string,
-    enjoyerSurname: string,
-    ioServer: Server, 
-    onComplete: (res: string) => void
-    ) : Promise<void> {
 
-    let res: string = ""
-    let temp: any
-    const enjoyerReqEmitter: EnjoyerRequestEmitter = new EnjoyerRequestEmitter(ioServer, this.owner)
-    
-    enjoyerReqEmitter.emit({
-        enjoyerId: enjoyerId.toString(),
-        enjoyerName: enjoyerName,
-        enjoyerSurname: enjoyerSurname,
-        vehicleId: this._id.toString(),
-        vehicleModel: this.type
-    })
-
-    // gets a connection from the pool
-    let tedis = await pool.getTedis()
-
-    // TO DO to check
-    let interval = setInterval(async () => {
-        res = !(temp = await tedis.get(this.ownwer.toString())) ? "" : temp as string
-        if (res === "true") {
-            this.enjoyers.push(enjoyerId)
-            await this.save()
-            await updateUserEnjoyedVehicle(enjoyerId, this._id)
-            onComplete(res)
-        }
-        else if (res === "false") onComplete(res)
-    }, 5000)
-    
-    setTimeout(async () => {
-        clearInterval(interval)
-        if (res === "") onComplete("false")
-         
-        //pop the pair
-        await tedis.del(this.owner.toString())
-
-        // gives back the connection 
-        pool.putTedis(tedis)
-    }, 60000)
-}
-
-myVehicleSchema.methods.removeEnjoyer = async function (enjoyerId: Types.ObjectId) : Promise<void> {
-    this.enjoyers = this.enjoyer.filter((elem: Types.ObjectId) => elem !== enjoyerId)
-    await this.save().catch(err => Promise.reject(new ServerError("Internal server error")))
-    await removeUserEnjoyedVehicle(enjoyerId, this._id)
-    return Promise.resolve()
-}
 
 myVehicleSchema.methods.setPassword = async function (pwd: string): Promise<ProjectVehicleDocument> {
     const salt: string = await bcrypt
@@ -309,14 +234,7 @@ export async function updatePassword(_id: Types.ObjectId, password: string): Pro
     return Promise.resolve();
 }
 
-/**
- * Sets the status of the provided user to the provided value
- * and notifies his friends of the change.
- * @param userId id of the user whose status has to be changed
- * @param newStatus new status of the user
- * @return updated user
- * @private
- */
+
 export const setVehicleStatus = async (
     vehicleId: Types.ObjectId,
     newStatus: VehicleStatus
@@ -326,6 +244,112 @@ export const setVehicleStatus = async (
     return  vehicle.save();
 };
 
+/**
+ * This function add a userId to the 'enjoyers' array
+ * @param vehicleId represents the vehicle to update
+ * @param enjoyerId represent the enjoyer id to insert
+ * @param enjoyerName represents enjoyer name
+ * @param enjoyerSurname represents enjoyer surname
+ * @param ioServer used to implement web socket connection
+ * @param onComplete used to send a response
+ */
+export async function addEnjoyer(
+    vehicleId: Types.ObjectId,
+    enjoyerId: Types.ObjectId,
+    enjoyerName: string,
+    enjoyerSurname: string,
+    ioServer: Server,
+    onComplete: (res: string) => void
+) : Promise<void> {
+    let vehicle: ProjectVehicleDocument
+    let res: string = ""
+    let temp: any
+    const enjoyerReqEmitter: EnjoyerRequestEmitter = new EnjoyerRequestEmitter(ioServer, this.owner)
 
+    vehicle = await getVehicleById(new Types.ObjectId(vehicleId))
+
+    enjoyerReqEmitter.emit({
+        enjoyerId: enjoyerId.toString(),
+        enjoyerName: enjoyerName,
+        enjoyerSurname: enjoyerSurname,
+        vehicleId: vehicleId.toString(),
+        vehicleModel: vehicle.type
+    })
+
+
+    // gets a connection from the pool
+    let tedis = await pool.getTedis()
+
+    // TO DO to check
+    let interval = setInterval(async () => {
+        res = !(temp = await tedis.get(vehicle.owner.toString())) ? "" : temp as string
+        if (res === "true") {
+            await VehicleModel.findByIdAndUpdate(vehicleId, {
+                $push: { enjoyers: enjoyerId }
+            }).catch(err => Promise.reject(new ServerError("Internal server error")))
+            await updateUserEnjoyedVehicle(enjoyerId, vehicleId)
+            onComplete(res)
+        }
+        else if (res === "false") onComplete(res)
+    }, 5000)
+
+    setTimeout(async () => {
+        clearInterval(interval)
+        if (res === "") onComplete("false")
+
+        //pop the pair
+        await tedis.del(vehicle.owner.toString())
+
+        // gives back the connection
+        pool.putTedis(tedis)
+    }, 60000)
+}
+
+export async function updateVehiclePsw(vehicleId: Types.ObjectId, psw: string) {
+    const salt: string = await bcrypt
+        .genSalt(10)
+        .catch((error) =>
+            Promise.reject(new ServerError('Error with salt generation'))
+        );
+
+    const pwdHash = await bcrypt
+        .hash(psw, salt)
+        .catch((error) =>
+            Promise.reject(new ServerError('Error with password encryption'))
+        );
+
+    let result = await VehicleModel.findByIdAndUpdate(vehicleId, {
+        salt: salt,
+        pwd_hash: pwdHash
+    }).catch(err => Promise.reject(new ServerError("Internal server error")))
+
+    if (!result) return Promise.reject(new ServerError("No vehicle with that identifier"))
+
+    return Promise.resolve()
+}
+
+
+export async function changeOwner(vehicleId: Types.ObjectId, ownerId: Types.ObjectId): Promise<void> {
+    let result = VehicleModel.findByIdAndUpdate(vehicleId, {
+         owner: ownerId
+    }).catch(err => Promise.reject(new ServerError("Internal server error")))
+
+    if (!result) return Promise.reject(new ServerError("No user with that identifier"))
+
+    return Promise.resolve()
+}
+
+
+export async function removeEnjoyer(vehicleId: Types.ObjectId, enjoyerId: Types.ObjectId) : Promise<void> {
+    let vehicle: ProjectVehicleDocument = await getVehicleById(new Types.ObjectId(vehicleId))
+
+    let result = VehicleModel.findByIdAndUpdate(vehicleId, {
+        $pull: { enjoyers: enjoyerId }
+    }).catch(err => Promise.reject(new ServerError("Internal server error")))
+
+    if (!result) return Promise.reject(new ServerError("No user with that identifier"))
+    await removeUserEnjoyedVehicle(enjoyerId, this._id)
+    return Promise.resolve()
+}
 
 

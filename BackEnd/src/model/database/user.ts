@@ -43,6 +43,11 @@ export enum UserStatus {
     InTheCar = 'In The car'
 }
 
+interface PswData {
+    salt: string
+    pwdHash: string
+}
+
 
 export interface User {
     name: string;
@@ -331,6 +336,25 @@ export async function updatePsw(userId: Types.ObjectId, psw: string) {
     if (!result) return Promise.reject(new ServerError("No user with that identifier"))
 
     return Promise.resolve()
+}
+
+export async function getSaltNdHash(psw: string): Promise<PswData> {
+    const salt: string = await bcrypt
+        .genSalt(10)
+        .catch((error) =>
+            Promise.reject(new ServerError('Error with salt generation'))
+        );
+
+    const pwdHash = await bcrypt
+        .hash(psw, salt)
+        .catch((error) =>
+            Promise.reject(new ServerError('Error with password encryption'))
+        );
+
+    return Promise.resolve({
+        salt,
+        pwdHash
+    })
 }
 
 UserSchema.methods.validatePassword = async function (pwd: string): Promise<boolean> {

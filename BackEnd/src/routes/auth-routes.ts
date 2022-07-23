@@ -9,7 +9,7 @@ import {
     UserDocument,
     setUserStatus,
     UserStatus,
-    getUserByEmail
+    getUserByEmail, getSaltNdHash
 } from '../model/database/user';
 import { AnyKeys, Types } from 'mongoose';
 import { ioServer } from '../index';
@@ -27,6 +27,7 @@ import {
     VehicleStatus
 } from "../model/database/my-vehicle";
 import {LegalInfos} from "../model/database/legalInfos";
+import {ServerError} from "../model/errors/server-error";
 
 export const router = Router();
 export const jsonWebToken = jsonwebtoken
@@ -264,19 +265,18 @@ interface SignUpRequest extends Request {
 router.post('/auth/signup', async (req: SignUpRequest, res: Response) => {
     try {
         console.log("sono in sign up")
+        const data = await getSaltNdHash(req.body.password)
         // A user that registers through this endpoint becomes online right away
         const userData: AnyKeys<UserDocument> = {
             // nickname: req.body.nickname, TO DO CHE politica attuiamo con il nickname
             email: req.body.email,
             name: req.body.name,
             surname: req.body.surname,
-            // User is created with status Offline.
-            // He will be set to online when he logs in
+            salt: data.salt,
+            pwd_hash: data.pwdHash,
             status: UserStatus.Offline,
         };
         const newUser: UserDocument = await createUser(userData);
-
-        await newUser.setPassword(req.body.password);
 
         return res.status(201).json({
             userId: newUser._id,
@@ -347,18 +347,18 @@ router.get(
             // Get the client of the user that is logging out and remove it
             // from the room of that user
             // If the room doesn't exist, clientIds is undefined
-            const clientIds: Set<string> | undefined = ioServer.sockets.adapter.rooms.get(vehicleId);
-            if (clientIds) {
-                if (clientIds.size > 1) {
-                    throw new Error(
-                        "There shouldn't be more than one client listening to a specific vehicle room"
+            const vehicleIds: Set<string> | undefined = ioServer.sockets.adapter.rooms.get(vehicleId);
+            if (vehicleIds) {
+                if (vehicleIds.size > 1) {
+                    throw new ServerError(
+                        "There shouldn't be more than one client vehicle listening to a specific vehicle room"
                     );
                 }
 
                 // Logout could be called even by a client that
                 // didn't connect to the socket.io server
-                if (clientIds.size === 1) {
-                    const logoutClientId: string = clientIds.values().next().value;
+                if (vehicleIds.size === 1) {
+                    const logoutClientId: string = vehicleIds.values().next().value;
                     const logoutClient: Socket = ioServer.sockets.sockets.get(logoutClientId);
                     logoutClient.leave(vehicleId);
 
@@ -371,7 +371,7 @@ router.get(
 
             return res.status(204).json();
         } catch (err) {
-            return res.status(400).json({
+            return res.status(err.statusCode).json({
                 timestamp: toUnixSeconds(new Date()),
                 errorMessage: err.message,
                 requestPath: req.path,

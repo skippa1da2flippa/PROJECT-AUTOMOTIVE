@@ -8,12 +8,11 @@ import { authenticateToken } from './auth-routes';
 import {
     ProjectVehicleDocument,
     getVehiclesByUserId,
-    getVehicleById, ModelTypes, deleteVehicle, createVehicle, projectVehicle
+    getVehicleById, ModelTypes, deleteVehicle, createVehicle, projectVehicle, addEnjoyer, removeEnjoyer, changeOwner
 } from '../model/database/my-vehicle'
-import {ServerError} from "../model/errors/server-error";
-import {UserEndpointResponse} from "./user-routes";
 import {LegalInfos} from "../model/database/legalInfos";
 import {ioServer} from "../index";
+import {getSaltNdHash} from "../model/database/user";
 
 
 interface  VehicleEndpointLocals {
@@ -226,7 +225,15 @@ router.post(
     // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per creare una car
     async (req: VehicleCreationRequest, res: Response) => {
         try {
-            await createVehicle(req.body);
+            const data = await getSaltNdHash(req.body.password)
+            const vehicleData = {
+                type: req.body.type,
+                owner: req.body.owner,
+                legalInfos: req.body.legalInfos,
+                pwd_hash: data.pwdHash,
+                salt: data.salt
+            }
+            await createVehicle(vehicleData);
             return res.status(204).json();
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -247,13 +254,13 @@ router.put(
         let vehicle: ProjectVehicleDocument
         if (enjoyerId) {
             try {
-                vehicle = await getVehicleById(new Types.ObjectId(vehicleId))
                 if (req.query.action === "add") {
                     const onComplete = (result: string) => {
                         if (result === "false") return res.send(403).json();
                         else return res.send(204).json()
                     }
-                    await vehicle.addEnjoyer(
+                    await addEnjoyer(
+                        new Types.ObjectId(vehicleId),
                         new Types.ObjectId(enjoyerId),
                         enjoyerName,
                         enjoyerSurname,
@@ -262,20 +269,13 @@ router.put(
                     );
                 }
                 else {
-                    await vehicle.removeEnjoyer(new Types.ObjectId(enjoyerId));
+                    await removeEnjoyer(
+                        new Types.ObjectId(vehicleId),
+                        new Types.ObjectId(enjoyerId)
+                    );
                     return res.status(200).json({});
                 }
             } catch (err) {
-                // TO DO togli
-                if (!(err instanceof ServerError)) {
-                    return res.status(500).json({
-                        timestamp: toUnixSeconds(new Date()),
-                        errorMessage: err.message,
-                        requestPath: req.path,
-                    });
-                }
-                //fino a qua
-
                 return res.status(err.statusCode).json({
                     timestamp: toUnixSeconds(new Date()),
                     errorMessage: err.message,
@@ -296,11 +296,9 @@ router.put("/myVehicle/vehicleId/owner",
             // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per creare una car,
         async (req: OwnerUpdateRequest, res:Response) => {
             const vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
-            let vehicle: ProjectVehicleDocument
+            const ownerId: Types.ObjectId = new Types.ObjectId(req.body.newOwner)
             try {
-                vehicle = await getVehicleById(vehicleId)
-                vehicle.owner = new Types.ObjectId(req.body.newOwner)
-                vehicle.save().catch(err => Promise.reject(new ServerError("Internal server error")))
+                await changeOwner(vehicleId, ownerId)
                 res.status(204).json()
             } catch (err) {
                 res.status(err.statusCode).json({

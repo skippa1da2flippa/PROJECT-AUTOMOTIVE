@@ -7,7 +7,10 @@ const msgs404: string[] = [
     "No enjoyed vehicles related to this user"
 ]
 
-const msgs400: string[] = ['Role already set'] 
+const msgs400: string[] = [
+    'Role already set',
+    "There shouldn't be more than one client vehicle listening to a specific vehicle room"
+]
 
 const msgs500: string[] = [
     "Internal server error", 
