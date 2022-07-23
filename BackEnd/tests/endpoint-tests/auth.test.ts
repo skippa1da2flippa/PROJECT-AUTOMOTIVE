@@ -41,12 +41,14 @@ describe("Test: POST /auth/signin ", () => {
     test("Should return a UserLogIn response", async () => {
         const requestPath: string = baseUrl + "/api/auth/signin"
         let response
-        const header = {}
+        const header = {
+            "authorization": "       "
+        }
 
         response = await axios.post<UserLogIn>(requestPath, {
             email: user.email,
             password: "test"
-        },{
+        }, {
             headers: header
         });
 

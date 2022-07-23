@@ -323,11 +323,14 @@ export async function updatePsw(userId: Types.ObjectId, psw: string) {
             Promise.reject(new ServerError('Error with password encryption'))
         );
 
-    await UserModel.findByIdAndUpdate(userId, {
+    let result = await UserModel.findByIdAndUpdate(userId, {
         salt: salt,
         pwd_hash: pwdHash
-    })
+    }).catch(err => Promise.reject(new ServerError("Internal server error")))
 
+    if (!result) return Promise.reject(new ServerError("No user with that identifier"))
+
+    return Promise.resolve()
 }
 
 UserSchema.methods.validatePassword = async function (pwd: string): Promise<boolean> {
@@ -618,15 +621,12 @@ export const setUserStatus = async (
 };
 
 export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
-    let user: UserDocument
-    let enjoyedVehicles = []
     try {
-        user = await getUserById(userId)
-        user.enjoyedVehicles.push(vehicleId)
-        enjoyedVehicles = user.enjoyedVehicles
-        await UserModel.findByIdAndUpdate(userId, {
-            enjoyedVehicles: enjoyedVehicles
-        })
+        let result = await UserModel.findByIdAndUpdate(userId, {
+            $push: { enjoyedVehicles: vehicleId }
+        }).catch(err => Promise.reject(new ServerError("Internal server error")))
+
+        if (!result) return Promise.reject(new ServerError("No user with that identifier"))
         return Promise.resolve()
     } catch(err) {
         return Promise.reject(err)
@@ -635,22 +635,15 @@ export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId
 
 export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
     let user: UserDocument
-    let enjoyedVehicles = []
     try {
         user = await getUserById(userId)
         if (!user.enjoyedVehicles.includes(vehicleId)) throw new ServerError("No enjoyed vehicles related to this user")
 
-        for (let idx in user.enjoyedVehicles) {
-            if (user.enjoyedVehicles[idx] === vehicleId) 
-                user.enjoyedVehicles.splice(parseInt(idx), 1)
-        }
+        let result = await UserModel.findByIdAndUpdate(userId, {
+            $push: { enjoyedVehicles: vehicleId }
+        }).catch(err => Promise.reject(new ServerError("Internal server error")))
 
-        enjoyedVehicles = user.enjoyedVehicles
-
-        await UserModel.findByIdAndUpdate(userId, {
-            enjoyedVehicles: enjoyedVehicles
-        })
-
+        if (!result) return Promise.reject(new ServerError("No user with that identifier"))
         return Promise.resolve()
     } catch(err) {
         return Promise.reject(err)
