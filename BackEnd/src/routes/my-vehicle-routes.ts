@@ -8,16 +8,24 @@ import { authenticateToken } from './auth-routes';
 import {
     ProjectVehicleDocument,
     getVehiclesByUserId,
-    getVehicleById, ModelTypes, deleteVehicle, createVehicle, projectVehicle, addEnjoyer, removeEnjoyer, changeOwner
+    getVehicleById,
+    ModelTypes,
+    deleteVehicle,
+    createVehicle,
+    projectVehicle,
+    addEnjoyer,
+    removeEnjoyer,
+    changeOwner,
+    updateVehiclePsw
 } from '../model/database/my-vehicle'
 import {LegalInfos} from "../model/database/legalInfos";
 import {ioServer} from "../index";
-import {getSaltNdHash} from "../model/database/user";
+import {getSaltNdHash, updatePsw} from "../model/database/user";
+import {UpdatePasswordRequest, UserEndpointResponse} from "./user-routes";
 
 
 interface  VehicleEndpointLocals {
     vehicleId: Types.ObjectId
-    type: ModelTypes
 }
 
 interface VehicleEndpointResponse extends Response {
@@ -129,6 +137,34 @@ router.get(
             return res.status(err.statusCode).json({
                 timestamp: toUnixSeconds(new Date()),
                 errorMessage: err.message,
+                requestPath: req.path,
+            });
+        }
+    }
+);
+
+router.patch(
+    '/api/myVehicle/@it/password',
+    authenticateToken,
+    retrieveVehicleId,
+    async (req: UpdatePasswordRequest, res: VehicleEndpointResponse) => {
+        const { password } = req.body;
+        const vehicleId: Types.ObjectId = res.locals.vehicleId;
+        if (password) {
+            try {
+                await updateVehiclePsw(vehicleId, password);
+                return res.sendStatus(204);
+            } catch (err) {
+                return res.status(err.statusCode).json({
+                    timestamp: toUnixSeconds(new Date()),
+                    errorMessage: err.message,
+                    requestPath: req.path,
+                });
+            }
+        } else {
+            return res.status(400).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: 'Wrong parameters',
                 requestPath: req.path,
             });
         }

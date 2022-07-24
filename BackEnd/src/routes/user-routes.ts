@@ -54,7 +54,7 @@ interface UpdatePasswordBody {
     password: string;
 }
 
-interface UpdatePasswordRequest extends AuthenticatedRequest {
+export interface UpdatePasswordRequest extends AuthenticatedRequest {
     body: UpdatePasswordBody;
 }
 

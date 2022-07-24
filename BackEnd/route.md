@@ -28,6 +28,7 @@
 - /api/myVehicle/@it/owner                                   GET vehicle owner
 - /api/myVehicle/@it/enjoyers                                GET vehicle enjoyers
 
+- /api/myVehicle/@it/password                                PATCH vehicle psw update
 - /api/myVehicle/vehicleId                                   PATCH retrieve a vehicle 
 - /api/myVehicle/vehicleId/owner                             PATCH retrieve vehicle owner
 - /api/myVehicle/vehicleId/enjoyers                          PATCH retrieve vehicle enjoyers    

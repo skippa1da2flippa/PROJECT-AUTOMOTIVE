@@ -35,9 +35,9 @@ export interface ErrResponse {
     requestPath: string,
 }
 
-export function setUpHeader(userId: string) {
+export function setUpHeader(Id: string) {
     const tokensData: JwtData = {
-        Id: userId
+        Id: Id
     };
 
     const refreshToken = jsonWebToken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
@@ -120,8 +120,7 @@ describe("Test: GET /users/@meh", () => {
 });
 
 
-// TO DO in my vehicle anche se carico in modo giusto le macchine e i rispettivi
-// owner, essi avranno come  my vehicle length === 0 producendo quindi un 404
+
 describe("Test: GET /api/users/@meh/myVehicles", () => {
 
     let mongoDbApi: MongoDbApi
@@ -217,8 +216,7 @@ describe("Test: GET /api/users/@meh/myVehicles", () => {
 });
 
 
-// sarebbe giusto tutto solo che se provi a runnare le rispote sono giuste ma ti lancia un errore strano sulla to string all'interno
-// dei node modules
+
 describe("Test: GET /api/users/@meh/enjoyedVehicles", () => {
 
     let mongoDbApi: MongoDbApi
@@ -536,8 +534,6 @@ describe("Test: PATCH /api/users/@meh/email", () => {
 });
 
 
-// TO DO primo test produce sto errore:
-// "Cannot create field 'types' in element {docs: []}",
 describe("Test: PATCH /api/users/@meh/password", () => {
 
     let mongoDbApi: MongoDbApi
@@ -631,10 +627,7 @@ describe("Test: PATCH /api/users/@meh/password", () => {
 });
 
 
-// return 500 (per colpa della save) come dio porco se spaccassi qualcosa, nel primo test quando provo ad addare mi da stom errore:
-// "Cannot create field 'types' in element {docs: []}",
 
-// nel secondo test sempre 500 (per colpa della save) mi da lo stesso problema di qua sopra e in più sembra che non trovi vehicleId
 describe("Test: PATCH /api/users/@meh/enjoyedVehicles", () => {
 
     let mongoDbApi: MongoDbApi

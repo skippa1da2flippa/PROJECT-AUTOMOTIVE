@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.62% </span>
+                <span class="strong">20.37% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>53/257</span>
+                <span class='fraction'>54/265</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">8.69% </span>
+                <span class="strong">8.51% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/46</span>
+                <span class='fraction'>4/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">2.98% </span>
+                <span class="strong">2.85% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/67</span>
+                <span class='fraction'>2/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">24.88% </span>
+                <span class="strong">24.65% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>52/209</span>
+                <span class='fraction'>53/215</span>
             </div>
         
             
@@ -714,7 +714,31 @@
 <a name='L649'></a><a href='#L649'>649</a>
 <a name='L650'></a><a href='#L650'>650</a>
 <a name='L651'></a><a href='#L651'>651</a>
-<a name='L652'></a><a href='#L652'>652</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L652'></a><a href='#L652'>652</a>
+<a name='L653'></a><a href='#L653'>653</a>
+<a name='L654'></a><a href='#L654'>654</a>
+<a name='L655'></a><a href='#L655'>655</a>
+<a name='L656'></a><a href='#L656'>656</a>
+<a name='L657'></a><a href='#L657'>657</a>
+<a name='L658'></a><a href='#L658'>658</a>
+<a name='L659'></a><a href='#L659'>659</a>
+<a name='L660'></a><a href='#L660'>660</a>
+<a name='L661'></a><a href='#L661'>661</a>
+<a name='L662'></a><a href='#L662'>662</a>
+<a name='L663'></a><a href='#L663'>663</a>
+<a name='L664'></a><a href='#L664'>664</a>
+<a name='L665'></a><a href='#L665'>665</a>
+<a name='L666'></a><a href='#L666'>666</a>
+<a name='L667'></a><a href='#L667'>667</a>
+<a name='L668'></a><a href='#L668'>668</a>
+<a name='L669'></a><a href='#L669'>669</a>
+<a name='L670'></a><a href='#L670'>670</a>
+<a name='L671'></a><a href='#L671'>671</a>
+<a name='L672'></a><a href='#L672'>672</a>
+<a name='L673'></a><a href='#L673'>673</a>
+<a name='L674'></a><a href='#L674'>674</a>
+<a name='L675'></a><a href='#L675'>675</a>
+<a name='L676'></a><a href='#L676'>676</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -880,6 +904,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1047,6 +1076,25 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -1410,6 +1458,11 @@ export enum UserStatus {
     InTheCar = 'In The car'
 }
 &nbsp;
+interface PswData {
+    salt: string
+    pwdHash: string
+}
+&nbsp;
 &nbsp;
 export interface User {
     name: string;
@@ -1698,6 +1751,25 @@ export async function <span class="fstat-no" title="function not covered" >updat
 <span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!result) <span class="cstat-no" title="statement not covered" >return Promise.reject(new ServerError("No user with that identifier"))</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return Promise.resolve()</span>
+}
+&nbsp;
+export async function <span class="fstat-no" title="function not covered" >getSaltNdHash(</span>psw: string): Promise&lt;PswData&gt; {
+    const <span class="cstat-no" title="statement not covered" >salt: string = <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >await bcrypt</span></span></span>
+        .genSalt(10)
+        .catch(<span class="fstat-no" title="function not covered" >(e</span>rror) =&gt;
+<span class="cstat-no" title="statement not covered" >            Promise.reject(new ServerError('Error with salt generation'))</span>
+        );
+&nbsp;
+    const <span class="cstat-no" title="statement not covered" >pwdHash = <span class="cstat-no" title="statement not covered" >await bcrypt</span></span>
+        .hash(psw, salt)
+        .catch(<span class="fstat-no" title="function not covered" >(e</span>rror) =&gt;
+<span class="cstat-no" title="statement not covered" >            Promise.reject(new ServerError('Error with password encryption'))</span>
+        );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return Promise.resolve({</span>
+        salt,
+        pwdHash
+    })
 }
 &nbsp;
 UserSchema.methods.validatePassword = <span class="fstat-no" title="function not covered" >async function (p</span>wd: string): Promise&lt;boolean&gt; {
@@ -2023,7 +2095,7 @@ export async function <span class="fstat-no" title="function not covered" >remov
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-07-23T21:04:50.307Z
+                at 2022-07-24T07:47:38.457Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
