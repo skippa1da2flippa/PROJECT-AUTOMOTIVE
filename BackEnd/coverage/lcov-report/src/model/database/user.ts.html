@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.37% </span>
+                <span class="strong">21.26% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>54/265</span>
+                <span class='fraction'>57/268</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">8.51% </span>
+                <span class="strong">12.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/47</span>
+                <span class='fraction'>6/48</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">2.85% </span>
+                <span class="strong">4.28% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/70</span>
+                <span class='fraction'>3/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">24.65% </span>
+                <span class="strong">25.34% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>53/215</span>
+                <span class='fraction'>55/217</span>
             </div>
         
             
@@ -738,7 +738,15 @@
 <a name='L673'></a><a href='#L673'>673</a>
 <a name='L674'></a><a href='#L674'>674</a>
 <a name='L675'></a><a href='#L675'>675</a>
-<a name='L676'></a><a href='#L676'>676</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L676'></a><a href='#L676'>676</a>
+<a name='L677'></a><a href='#L677'>677</a>
+<a name='L678'></a><a href='#L678'>678</a>
+<a name='L679'></a><a href='#L679'>679</a>
+<a name='L680'></a><a href='#L680'>680</a>
+<a name='L681'></a><a href='#L681'>681</a>
+<a name='L682'></a><a href='#L682'>682</a>
+<a name='L683'></a><a href='#L683'>683</a>
+<a name='L684'></a><a href='#L684'>684</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -1137,11 +1145,11 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1397,10 +1405,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1811,14 +1827,14 @@ UserSchema.methods.setRole = <span class="fstat-no" title="function not covered"
 // Create "Users" collection
 export const UserModel: Model&lt;UserDocument&gt; = mongoose.model('User', UserSchema, 'Users');
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >getUserById(</span>userId: Types.ObjectId): Promise&lt;UserDocument&gt; {
-    const <span class="cstat-no" title="statement not covered" >userDoc = <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >await UserModel.findOne({ _id: userId }).catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt;</span></span></span>
+export async function getUserById(userId: Types.ObjectId): Promise&lt;UserDocument&gt; {
+    const userDoc = await UserModel.findOne({ _id: userId }).catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt;
 <span class="cstat-no" title="statement not covered" >        Promise.reject(new ServerError('Internal server error'))</span>
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return !userDoc</span>
+    return !userDoc
         ? Promise.reject(new ServerError('No user with that identifier'))
-        : Promise.resolve(userDoc);
+        : <span class="branch-1 cbranch-no" title="branch not covered" >Promise.resolve(userDoc);</span>
 }
 &nbsp;
 export async function <span class="fstat-no" title="function not covered" >getUserByNickname(</span>nickname: string): Promise&lt;UserDocument&gt; {
@@ -2072,11 +2088,19 @@ export async function <span class="fstat-no" title="function not covered" >updat
     }
 }
 &nbsp;
+&nbsp;
+// TO DO dovrei chiamare la vehicleRemoveEnjoyer o lo fa il client
 export async function <span class="fstat-no" title="function not covered" >removeUserEnjoyedVehicle(</span>userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise&lt;void&gt; {
     let user: UserDocument
+    let flag: boolean
     try {
 <span class="cstat-no" title="statement not covered" >        user = <span class="cstat-no" title="statement not covered" >await getUserById(userId)</span></span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (!user.enjoyedVehicles.includes(vehicleId)) <span class="cstat-no" title="statement not covered" >throw new ServerError("No enjoyed vehicles related to this user")</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        for (let idx in user.enjoyedVehicles) {</span>
+<span class="cstat-no" title="statement not covered" >            <span class="missing-if-branch" title="if path not taken" >I</span>if (user.enjoyedVehicles[idx].toString() === vehicleId.toString()) <span class="cstat-no" title="statement not covered" >flag = true</span></span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (flag) <span class="cstat-no" title="statement not covered" >return Promise.reject(new ServerError("No enjoyed vehicles related to this user"))</span></span>
 &nbsp;
         let <span class="cstat-no" title="statement not covered" >result = <span class="cstat-no" title="statement not covered" >await UserModel.findByIdAndUpdate(userId, {</span></span>
             $push: { enjoyedVehicles: vehicleId }
@@ -2095,7 +2119,7 @@ export async function <span class="fstat-no" title="function not covered" >remov
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-07-25T11:49:18.356Z
+                at 2022-07-25T13:44:11.959Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

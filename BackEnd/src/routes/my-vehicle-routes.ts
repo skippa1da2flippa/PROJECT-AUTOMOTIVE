@@ -7,12 +7,10 @@ import {retrieveUserId, retrieveVehicleId, skipLimitChecker} from './utils/param
 import { authenticateToken } from './auth-routes';
 import {
     ProjectVehicleDocument,
-    getVehiclesByUserId,
     getVehicleById,
     ModelTypes,
     deleteVehicle,
     createVehicle,
-    projectVehicle,
     addEnjoyer,
     removeEnjoyer,
     changeOwner,
@@ -20,7 +18,7 @@ import {
 } from '../model/database/my-vehicle'
 import {LegalInfos} from "../model/database/legalInfos";
 import {ioServer} from "../index";
-import {getSaltNdHash, updatePsw} from "../model/database/user";
+import {getSaltNdHash, getUserById, updatePsw, UserDocument} from "../model/database/user";
 import {UpdatePasswordRequest, UserEndpointResponse} from "./user-routes";
 import {ServerError} from "../model/errors/server-error";
 
@@ -70,6 +68,14 @@ interface OwnerUpdateRequestBody {
 
 interface OwnerUpdateRequest extends BaseVehicleRequest {
     body: OwnerUpdateRequestBody
+}
+
+interface UserRoutineBody {
+    saucerId: string
+}
+
+interface UserRoutineRequest extends AuthenticatedRequest {
+    body: UserRoutineBody
 }
 
 
@@ -143,6 +149,28 @@ router.get(
         }
     }
 );
+
+router.patch(
+    '/myVehicle/@it/saucer/routines',
+    authenticateToken,
+    retrieveVehicleId,
+    async (req: UserRoutineRequest, res: VehicleEndpointResponse) => {
+        let userId = new Types.ObjectId(req.body.saucerId)
+        let user: UserDocument
+        try {
+            user = await getUserById(userId)
+            return res.status(201).json({
+                routines: user.routines
+            })
+        } catch (err) {
+            return res.status(err.statusCode).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: err.message,
+                requestPath: req.path,
+            });
+        }
+    }
+)
 
 router.patch(
     '/myVehicle/@it/password',
@@ -360,3 +388,4 @@ router.put(
 
     }
 )
+

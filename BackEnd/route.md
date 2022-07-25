@@ -29,6 +29,7 @@
 - /api/myVehicle/@it/enjoyers                                GET vehicle enjoyers
 
 - /api/myVehicle/@it/password                                PATCH vehicle psw update
+- /api/myVehicle/@it/saucer/routines                         PATCH retrieve routines vehicle user
 - /api/myVehicle/vehicleId                                   PATCH retrieve a vehicle 
 - /api/myVehicle/vehicleId/owner                             PATCH retrieve vehicle owner
 - /api/myVehicle/vehicleId/enjoyers                          PATCH retrieve vehicle enjoyers    
@@ -44,11 +45,11 @@
 # ROUTINE ENDPOINTS
 
 - /api/users/@meh/routines                 GET user routines
-- /api/users/@meh/routines/:routineId      GET user routine
+- /api/users/@meh/routines/name            GET user routine
 
-- /api/users/@meh/routines/:routineId      PUT user routine update   
+- /api/users/@meh/routines/name            PUT user routine update   
 
-- /api/users/@meh/routines/:routineId      DELETE user routine  
+- /api/users/@meh/routines/name            DELETE user routine  
 
 
 # LEGAL INFOS ENDPOINTS

@@ -4,14 +4,16 @@ const msgs404: string[] = [
     'Notification not found', 
     "No vehicle with that identifier", 
     "No vehicles related to the user",
-    "No enjoyed vehicles related to this user"
+    "No enjoyed vehicles related to this user",
+    "No user routine found matching the id"
 ]
 
 const msgs400: string[] = [
     'Role already set',
     "There shouldn't be more than one client vehicle listening to a specific vehicle room",
     "Users already inside the enjoyers",
-    "User already owner of the car"
+    "User already owner of the car",
+    "Routine name already with that value"
 ]
 
 const msgs500: string[] = [

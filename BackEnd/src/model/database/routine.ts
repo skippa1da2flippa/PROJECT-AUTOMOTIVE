@@ -1,4 +1,4 @@
-import { Schema, SchemaTypes, Types } from 'mongoose';
+import mongoose, {Model, Schema, SchemaTypes, Types} from 'mongoose';
 
 
 export interface Routine {
@@ -47,3 +47,6 @@ export const RoutineSchema = new Schema<RoutineSubDocument>(
         }
     }
 )
+
+export const RoutineModel: Model<RoutineSubDocument> = mongoose.model("Routine", RoutineSchema, "Routines")
+

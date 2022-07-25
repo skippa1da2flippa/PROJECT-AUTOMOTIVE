@@ -124,13 +124,15 @@ ioServer.on('connection', async function (client: io.Socket) {
 });
 
 
+const redisPort = parseInt(process.env.REDIS_PORT)
 // Redis pool set-up
-// TO DO non si avvia con redis
+// TO DO non si avvia con jest
 export const pool = new TedisPool({
-    port: Number(process.env.REDIS_PORT as string),
+    port: redisPort,
     host: "127.0.0.1",
     password: process.env.REDIS_PASSWORD as string
 });
+
 
 
 
