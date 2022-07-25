@@ -9,7 +9,9 @@ const msgs404: string[] = [
 
 const msgs400: string[] = [
     'Role already set',
-    "There shouldn't be more than one client vehicle listening to a specific vehicle room"
+    "There shouldn't be more than one client vehicle listening to a specific vehicle room",
+    "Users already inside the enjoyers",
+    "User already owner of the car"
 ]
 
 const msgs500: string[] = [

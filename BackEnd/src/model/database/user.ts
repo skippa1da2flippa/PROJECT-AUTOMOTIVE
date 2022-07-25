@@ -657,11 +657,19 @@ export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId
     }
 }
 
+
+// TO DO dovrei chiamare la vehicleRemoveEnjoyer o lo fa il client
 export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
     let user: UserDocument
+    let flag: boolean
     try {
         user = await getUserById(userId)
-        if (!user.enjoyedVehicles.includes(vehicleId)) throw new ServerError("No enjoyed vehicles related to this user")
+
+        for (let idx in user.enjoyedVehicles) {
+            if (user.enjoyedVehicles[idx].toString() === vehicleId.toString()) flag = true
+        }
+
+        if (flag) return Promise.reject(new ServerError("No enjoyed vehicles related to this user"))
 
         let result = await UserModel.findByIdAndUpdate(userId, {
             $push: { enjoyedVehicles: vehicleId }

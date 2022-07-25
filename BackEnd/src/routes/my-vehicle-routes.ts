@@ -22,6 +22,7 @@ import {LegalInfos} from "../model/database/legalInfos";
 import {ioServer} from "../index";
 import {getSaltNdHash, updatePsw} from "../model/database/user";
 import {UpdatePasswordRequest, UserEndpointResponse} from "./user-routes";
+import {ServerError} from "../model/errors/server-error";
 
 
 interface  VehicleEndpointLocals {
@@ -144,7 +145,7 @@ router.get(
 );
 
 router.patch(
-    '/api/myVehicle/@it/password',
+    '/myVehicle/@it/password',
     authenticateToken,
     retrieveVehicleId,
     async (req: UpdatePasswordRequest, res: VehicleEndpointResponse) => {
@@ -181,7 +182,11 @@ router.patch(
         try {
             vehicle = await getVehicleById(vehicleId)
             return res.status(201).json({
-                myVehicle: vehicle
+                vehicleId: vehicle._id,
+                type: vehicle.type,
+                owner: vehicle.owner,
+                enjoyers: vehicle.enjoyers,
+                legalInfos: vehicle.legalInfos
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -237,11 +242,11 @@ router.patch(
 );
 
 router.delete(
-    '/myVehicle/vehicleId',
+    '/myVehicle/:vehicleId',
     authenticateToken,
     // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per deletare una car
     async (req: BaseVehicleRequest, res: Response) => {
-        const vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId);
+        const vehicleId: Types.ObjectId = new Types.ObjectId(req.params.vehicleId);
         try {
             await deleteVehicle({ _id: vehicleId });
             return res.status(204).json();
@@ -269,8 +274,10 @@ router.post(
                 pwd_hash: data.pwdHash,
                 salt: data.salt
             }
-            await createVehicle(vehicleData);
-            return res.status(204).json();
+            let vehicleId = await createVehicle(vehicleData);
+            return res.status(200).json({
+                vehicleId
+            });
         } catch (err) {
             return res.status(err.statusCode).json({
                 timestamp: toUnixSeconds(new Date()),
@@ -303,13 +310,19 @@ router.put(
                         ioServer,
                         onComplete
                     );
+
+                    return res.status(200).json({
+                        added: enjoyerId
+                    });
                 }
                 else {
                     await removeEnjoyer(
                         new Types.ObjectId(vehicleId),
                         new Types.ObjectId(enjoyerId)
                     );
-                    return res.status(200).json({});
+                    return res.status(200).json({
+                        removed: enjoyerId
+                    });
                 }
             } catch (err) {
                 return res.status(err.statusCode).json({
@@ -328,21 +341,22 @@ router.put(
     }
 );
 
-router.put("/myVehicle/vehicleId/owner",
-            // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per creare una car,
-        async (req: OwnerUpdateRequest, res:Response) => {
-            const vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
-            const ownerId: Types.ObjectId = new Types.ObjectId(req.body.newOwner)
-            try {
-                await changeOwner(vehicleId, ownerId)
-                res.status(204).json()
-            } catch (err) {
-                res.status(err.statusCode).json({
-                    timestamp: toUnixSeconds(new Date()),
-                    errorMessage: err.message,
-                    requestPath: req.path,
-                })
-            }
+router.put(
+    "/myVehicle/vehicleId/owner",
+    // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per creare una car,
+    async (req: OwnerUpdateRequest, res:Response) => {
+        const vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
+        const ownerId: Types.ObjectId = new Types.ObjectId(req.body.newOwner)
+        try {
+            await changeOwner(vehicleId, ownerId)
+            res.status(204).json()
+        } catch (err) {
+            res.status(err.statusCode).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: err.message,
+                requestPath: req.path,
+            })
+        }
 
     }
 )
