@@ -675,3 +675,15 @@ export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId
         return Promise.reject(err)
     }
 }
+
+
+export async function deleteRoutine(userId: Types.ObjectId, name: string): Promise<void> {
+    name = name + "/" + name
+
+    const result = await RoutineModel.findOneAndDelete({ name })
+        .catch(err => Promise.reject(new ServerError("Internal server error")))
+
+    return result
+        ? Promise.resolve()
+        : Promise.reject(new ServerError("No user routine found matching the id"))
+}

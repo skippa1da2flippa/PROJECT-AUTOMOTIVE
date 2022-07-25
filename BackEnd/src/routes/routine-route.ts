@@ -4,6 +4,7 @@ import {retrieveUserId} from "./utils/param-checking";
 import {AuthenticatedRequest} from "./utils/authenticated-request";
 import {UserEndpointResponse} from "./user-routes";
 import {
+    deleteRoutine,
     getUserById,
     updateRoutineLightsColor,
     updateRoutineMusic,
@@ -92,13 +93,42 @@ router.put(
         const newName = req.body.newName || oldName
         const color = req.body.lights
         const temperature = req.body.temperature
-        const musicToAdd = req.body.musicToAdd
-        const musicToRemove = req.body.musicToRemove
+        const musicToAdd = req.body.musicToAdd || []
+        const musicToRemove = req.body.musicToRemove || []
+        if (userId && oldName && newName && color && temperature && musicToAdd && musicToRemove){
+            try {
+                if (oldName !== newName) await updateRoutineName(userId, oldName, newName)
+                await updateRoutineLightsColor(userId, newName, color)
+                await updateRoutineTemperature(userId, newName, temperature)
+                await updateRoutineMusic(userId, newName, musicToAdd, musicToRemove)
+                return res.sendStatus(204)
+            } catch(err) {
+                return res.status(err.statusCode).json({
+                    timestamp: toUnixSeconds(new Date()),
+                    errorMessage: err.message,
+                    requestPath: req.path,
+                })
+            }
+        } else {
+            return res.status(400).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: "One or more parameters are undefined",
+                requestPath: req.path,
+            })
+        }
+    }
+)
+
+router.delete(
+    "/api/users/@meh/routines/:name",
+    authenticateToken,
+    retrieveUserId,
+    async (req: RoutineUpdateRequest, res: UserEndpointResponse) => {
+        const userId = res.locals.userId
+        const name = req.params.name
         try {
-            if (oldName !== newName) await updateRoutineName(userId, oldName, newName)
-            await updateRoutineLightsColor(userId, newName, color)
-            await updateRoutineTemperature(userId, newName, temperature)
-            await updateRoutineMusic(userId, newName, musicToAdd, musicToRemove)
+            await deleteRoutine(userId, name)
+            return res.sendStatus(204)
         } catch(err) {
             return res.status(err.statusCode).json({
                 timestamp: toUnixSeconds(new Date()),

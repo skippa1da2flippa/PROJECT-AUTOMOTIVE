@@ -27,19 +27,19 @@ export interface RoutineSubDocument extends Routine, Types.Subdocument {}
 export const RoutineSchema = new Schema<RoutineSubDocument>(
     {
         name: {
-            type: SchemaTypes.String,
+            type: String,
             required: true, 
             unique: true
         }, 
         temperature: {
-            type: SchemaTypes.Number,
+            type: Number,
         }, 
         lightsColor: {
-            type: SchemaTypes.String,
+            type: String,
             default: "#FFFFFF"
         },
         music: {
-            type: [SchemaTypes.String], 
+            type: [String],
             default: ["classical"]
         }, 
         path: {
