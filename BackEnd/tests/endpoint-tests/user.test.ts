@@ -7,7 +7,7 @@ import { JwtData } from "../../src/model/auth/jwt-data";
 import { jsonWebToken} from "../../src/routes/auth-routes";
 import { generateAccessToken } from "../../src/routes/auth-routes";
 import { insertManyVehicles } from "../utils/my-vehicle-helper";
-import {ProjectVehicleDocument} from "../../src/model/database/my-vehicle";
+import {projectVehicle, ProjectVehicleDocument} from "../../src/model/database/my-vehicle";
 
 
 
@@ -21,12 +21,12 @@ interface UserResponse {
 
 interface UserMyVehiclesResponse {
     userId: string,
-    myVehicles: ProjectVehicleDocument[]
+    myVehicles: projectVehicle[]
 }
 
 interface UserEnjoyedVehiclesResponse {
     userId: string,
-    enjoyedVehicles: ProjectVehicleDocument[]
+    enjoyedVehicles: projectVehicle[]
 }
 
 export interface ErrResponse {
@@ -97,6 +97,68 @@ describe("Test: GET /users/@meh", () => {
     // wrong userId
     test("It should have response 404", async () => {
         const requestPath: string = baseUrl + "/api/users/@meh"
+        const header = {
+            "authorization" : setUpHeader("AYO")
+        }
+        try {
+            await axios.get<ErrResponse>(requestPath, {
+                headers: header
+            });
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
+    });
+
+});
+
+describe("Test: GET /users/@meh/friends", () => {
+
+    let mongoDbApi: MongoDbApi
+    let user: User
+    let data: MongoDbSingleInsertResponse
+
+    beforeEach(async () => {
+        mongoDbApi = new MongoDbApi(apiCredentials)
+        user = getUserData()
+        data = await mongoDbApi.insertUser(user)
+    }),
+
+        afterEach(async () => {
+            await mongoDbApi.deleteUser(data.insertedId)
+        }),
+
+
+        test("It should response the GET method", async () => {
+            const requestPath: string = baseUrl + "/api/users/@meh/friends"
+            let response
+            const header = {
+                "authorization" : setUpHeader(data.insertedId.toString())
+            }
+
+            response = await axios.get(requestPath, {
+                headers: header
+            });
+
+            expect(response.status).toBe(201);
+            const userRes: { friends: User[] } = response.data
+            expect(userRes).toEqual(
+                expect.objectContaining<{ friends: User[] }>({
+                    friends: expect.any(Array<User>)
+                })
+            )
+        });
+
+    // wrong userId
+    test("It should have response 404", async () => {
+        const requestPath: string = baseUrl + "/api/users/@meh/friends"
         const header = {
             "authorization" : setUpHeader("AYO")
         }
@@ -231,11 +293,11 @@ describe("Test: GET /api/users/@meh/enjoyedVehicles", () => {
         udata = await mongoDbApi.insertUser(user)
     }),
 
-        afterEach(async () => {
-            await mongoDbApi.deleteUser(udata.insertedId)
-            await mongoDbApi.deleteMultipleVehicles(vehiclesIds)
-            vehiclesIds = []
-        }),
+    afterEach(async () => {
+        await mongoDbApi.deleteUser(udata.insertedId)
+        await mongoDbApi.deleteMultipleVehicles(vehiclesIds)
+        vehiclesIds = []
+    }),
 
     test("It should response the GET method", async () => {
         const requestPath: string = baseUrl + "/api/users/@meh/enjoyedVehicles"

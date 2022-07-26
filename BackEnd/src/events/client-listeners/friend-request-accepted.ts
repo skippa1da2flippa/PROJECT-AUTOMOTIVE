@@ -4,7 +4,7 @@ import chalk from 'chalk';
 
 import { FriendStatusChangedEmitter } from '../emitters/friend-status-changed';
 import { FriendStatusChangedData } from '../../model/events/friend-status-changed-data';
-import { getUserById, UserDocument, UserStatus } from '../../model/database/user';
+import {addFriendship, getUserById, removeNotification, UserDocument, UserStatus} from '../../model/database/user';
 import { NotTypes } from '../../model/database/notification';
 import { ClientListenerNotifier } from './base/client-listener-notifier';
 import { RequestAcceptedData } from '../../model/events/request-accepted-data';
@@ -67,8 +67,7 @@ export class FriendRequestAcceptedListener extends ClientListenerNotifier<Reques
      * @private
      */
     private static async createNewRelationship(eventData: RequestAcceptedData): Promise<void> {
-        const sender: UserDocument = await getUserById(new Types.ObjectId(eventData.senderId));
-        //await sender.addRelationshipSymmetrically(new Types.ObjectId(eventData.receiverId));  TO DO
+        await addFriendship(new Types.ObjectId(eventData.senderId), new Types.ObjectId(eventData.receiverId));
     }
 
     /**
@@ -82,7 +81,7 @@ export class FriendRequestAcceptedListener extends ClientListenerNotifier<Reques
 
         // Friend from the perspective of the notified user
         const senderId: Types.ObjectId = new Types.ObjectId(eventData.senderId);
-        //await notifiedUser.removeNotification(NotTypes.FriendRequest, senderId); TO DO
+        await removeNotification(senderId, NotTypes.friendRequest);
     }
 
     /**

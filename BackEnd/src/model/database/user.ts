@@ -54,6 +54,7 @@ export interface User {
     surname: string;
     nickname: string;
     email: string;
+    friends: Types.ObjectId[]
     roles: string[];
     enjoyedVehicles: Types.ObjectId[];
     pwd_hash: string;
@@ -194,6 +195,11 @@ export const UserSchema = new Schema<UserDocument>(
             unique: true
         }, 
 
+        friends: {
+            type: [SchemaTypes.ObjectId],
+            default: []
+        },
+
         enjoyedVehicles: {
             type: [SchemaTypes.ObjectId],
             default: []
@@ -256,11 +262,11 @@ export async function addNotification(_id: Types.ObjectId, not: Notification) {
         : Promise.reject(new ServerError("No user with that identifier"))
 }
 
-export async function removeNotification(_id: Types.ObjectId, not: Notification) {
+// TO DO TEST
+export async function removeNotification(_id: Types.ObjectId, type: NotTypes) {
 
-    const notification = new NotificationModel(not)
     let result = await UserModel.findOneAndUpdate({ _id }, {
-        $pull: { notifications: notification }
+        $pull: { notifications: { type } }
     }).catch((err) => {
         return Promise.reject(new ServerError("Internal server error"));
     });
@@ -445,12 +451,59 @@ export async function getUserByEmail(email: string): Promise<UserDocument> {
         : Promise.resolve(userdata);
 }
 
+export async function addFriendship(userId: Types.ObjectId, friendId: Types.ObjectId) {
+    let result1, result2
+
+    result1 = await UserModel.findByIdAndUpdate(userId, {
+        $push: { friends: friendId}
+    }).catch((err) =>
+        Promise.reject(new ServerError('Internal server error'))
+    );
+
+    result2 = await UserModel.findByIdAndUpdate(friendId, {
+        $push: { friends: userId}
+    }).catch((err) =>
+        Promise.reject(new ServerError('Internal server error'))
+    );
+
+    if (result1 && result2) return Promise.resolve()
+    else {
+        await removeFriendship(userId, friendId, true)
+        return Promise.reject(new ServerError("One of them doesn't exists on the database, operation negated"))
+    }
+}
+
+export async function removeFriendship(userId: Types.ObjectId, friendId: Types.ObjectId, autoCatch: boolean = false) {
+    let result1, result2
+    result1 = await UserModel.findByIdAndUpdate(userId, {
+        $pull: { friends: friendId}
+    }).catch((err) =>
+        Promise.reject(new ServerError('Internal server error'))
+    );
+
+    result2 = await UserModel.findByIdAndUpdate(friendId, {
+        $pull: { friends: userId}
+    }).catch((err) =>
+        Promise.reject(new ServerError('Internal server error'))
+    );
+
+    return ((result1 && result2) || autoCatch)
+        ? Promise.resolve()
+        : Promise.reject(new ServerError("One of them doesn't exists on the database"))
+}
+
 export async function createUser(data: AnyKeys<UserDocument>): Promise<UserDocument> {
     const user: UserDocument = new UserModel(data);
     return user.save()
 }
 
 export async function deleteUser(filter: FilterQuery<UserDocument>): Promise<void> {
+    let user: UserDocument = await getUserById(filter._id)
+
+    for (let idx in user.friends) {
+        await removeFriendship(user.friends[idx], filter._id)
+    }
+
     const obj: { deletedCount?: number } = await UserModel.deleteOne(filter).catch((err) =>
         Promise.reject(new ServerError('Internal server error'))
     );
@@ -498,23 +551,22 @@ export async function getUserStats(_id: Types.ObjectId): Promise<UserStats> {
  export async function updateUserStats(
     userId: Types.ObjectId,
     updatedStats: UserStats
-): Promise<UserDocument> {
-    try {
-        const user: UserDocument = await getUserById(userId);
-        user.stats.thropies = updatedStats.thropies;
-        user.stats.sauce = updatedStats.sauce;
-        return user.save();
-    } catch (err) {
-        return Promise.reject(err);
-    }
+): Promise<void> {
+    let result = await UserModel.findByIdAndUpdate(userId, {
+        stats: updatedStats
+    }).catch((err) => {
+        return Promise.reject(new ServerError("Internal server error"));
+    });
+
+    return result
+        ? Promise.resolve()
+        : Promise.reject(new ServerError("No user with that identifier"))
 }
 
 export async function updateTheme(userId: Types.ObjectId, theme: string) : Promise<void> {
     let result = await UserModel.findByIdAndUpdate(userId, {
         "setting.theme": theme
-    }).catch((err) => {
-        return Promise.reject(new ServerError("Internal server error"));
-    });
+    }).catch((err) => Promise.reject(new ServerError("Internal server error")));
 
     return result
         ? Promise.resolve()

@@ -52,9 +52,9 @@ router.get(
                     };
                 }
             );
-            return res.status(200).json({ notifications: responseData });
+            return res.status(201).json({ notifications: responseData });
         } catch (err) {
-            return res.status(404).json({
+            return res.status(err.statusCode).json({
                 timestamp: toUnixSeconds(new Date()),
                 errorMessage: err.message,
                 requestPath: req.path,
@@ -71,35 +71,42 @@ router.post(
     authenticateToken,
     retrieveUserId,
     async (req: NotificationRequest, res: UserEndpointResponse) => {
-        try {
-            const typeBodyParam: string = req.body.type as string;
-            const reqType: NotTypes = NotTypes[typeBodyParam as keyof typeof NotTypes];
-            const senderId: Types.ObjectId = res.locals.userId;
-            const receiverId = new Types.ObjectId(req.body.receiver)
+        const typeBodyParam: string = req.body.type as string;
+        const reqType: NotTypes = NotTypes[typeBodyParam as keyof typeof NotTypes];
+        const senderId: Types.ObjectId = res.locals.userId;
+        const receiverId = new Types.ObjectId(req.body.receiver)
+        if (reqType && receiverId){
+            try {
+                const not: Notification = {
+                    type: reqType,
+                    sender: senderId
+                }
 
-            const not: Notification = {
-                type: reqType,
-                sender: senderId
+                await addNotification(receiverId, not);
+
+                // Notify the user of the new notification
+                const notifier = new NotificationReceivedEmitter(ioServer, receiverId);
+
+                const notificationData: NotificationData = {
+                    type: reqType,
+                    sender: senderId.toString(),
+                };
+                notifier.emit(notificationData);
+
+                return res.status(201).json(notificationData);
+            } catch (err) {
+                return res.status(err.statusCode).json({
+                    timestamp: toUnixSeconds(new Date()),
+                    errorMessage: err.message,
+                    requestPath: req.path,
+                });
             }
-
-            await addNotification(receiverId, not);
-
-            // Notify the user of the new notification
-            const notifier = new NotificationReceivedEmitter(ioServer, receiverId);
-
-            const notificationData: NotificationData = {
-                type: reqType,
-                sender: senderId.toString(),
-            };
-            notifier.emit(notificationData);
-
-            return res.status(201).json(notificationData);
-        } catch (err) {
-            return res.status(err.statusCode).json({
+        } else {
+            return res.status(400).json({
                 timestamp: toUnixSeconds(new Date()),
-                errorMessage: err.message,
+                errorMessage: "notification type or receiverId are undefined or both",
                 requestPath: req.path,
-            });
+            })
         }
     }
 );
@@ -107,7 +114,7 @@ router.post(
 
 
 router.post(
-    '/api/myVehicle/@it/notifications',
+    '/myVehicle/@it/user/notifications',
     authenticateToken,
     retrieveVehicleId,
     async (req: NotificationRequest, res: VehicleEndpointResponse) => {
@@ -118,7 +125,7 @@ router.post(
 
             const reqType: NotTypes = NotTypes[typeBodyParam as keyof typeof NotTypes];
             const receiverId = new Types.ObjectId(req.body.receiver)
-            const senderId: Types.ObjectId = res.locals.vehicleId
+            const senderId: Types.ObjectId = vehicleId
 
             const not: Notification = {
                 type: reqType,
@@ -154,26 +161,18 @@ router.post(
  *   Query params: type, sender
  */
 router.delete(
-    '/users/@meh/notifications',
+    '/users/@meh/notifications/:type',
     authenticateToken,
     retrieveUserId,
-    async (req: NotificationRequest, res: Response) => {
+    async (req: AuthenticatedRequest, res: Response) => {
         const userId: Types.ObjectId = res.locals.userId;
 
         try {
-            const typeQParam: string = req.query.type as string;
-            const senderQParam: string = req.query.sender as string;
+            const typeQParam: string = req.params.type as string;
 
             const reqType: NotTypes = NotTypes[typeQParam as keyof typeof NotTypes];
-            const senderObjId: Types.ObjectId = retrieveId(senderQParam);
 
-
-            const notification = {
-                type: reqType,
-                sender: senderObjId
-            }
-
-            await removeNotification(userId, notification);
+            await removeNotification(userId, reqType);
 
             return res.status(204).json();
         } catch (err) {

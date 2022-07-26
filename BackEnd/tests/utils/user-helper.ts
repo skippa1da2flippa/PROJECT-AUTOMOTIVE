@@ -1,11 +1,7 @@
-import { User, UserRoles, UserStatus } from '../../src/model/database/user';
-import {
-    apiCredentials,
-    DocId,
-    MongoDbApi,
-    MongoDbSingleInsertResponse,
-    MongoDpApiCredentials,
-} from './mongodb-api';
+import {User, UserRoles, UserStatus} from '../../src/model/database/user';
+import {apiCredentials, DocId, MongoDbApi, MongoDbSingleInsertResponse,} from './mongodb-api';
+import {NotTypes} from "../../src/model/database/notification";
+import {Types} from "mongoose";
 
 
 export const knownBcryptDigest = {
@@ -26,6 +22,7 @@ export const getUserData = (enjoyedVehicles = []): User => {
         name: `name-${random}-${date}`, 
         surname: `surname-${random}-${date}`,
         nickname: `nickname-${random}-${date}`,
+        friends: [],
         email: `email-${random}-${date}@project.com`,
         pwd_hash: knownBcryptDigest.pwdHash,
         salt: knownBcryptDigest.pwdSalt,
@@ -33,7 +30,7 @@ export const getUserData = (enjoyedVehicles = []): User => {
         status: UserStatus.Online,
         stats: {
             sauce: 0,
-            thropies: 0
+            trophies: 0
         },
         enjoyedVehicles: enjoyedVehicles,
         docs: [],
@@ -50,7 +47,10 @@ export const getUserData = (enjoyedVehicles = []): User => {
             music: ["punk"],
             path: "AYO"
         }],
-        notifications: [],
+        notifications: [{
+            type: NotTypes.friendRequest,
+            sender: new Types.ObjectId()
+        }],
     };
 };
 

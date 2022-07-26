@@ -8,7 +8,7 @@ import { Schema, SchemaTypes, Types} from 'mongoose';
  */
 export interface UserStats {
     sauce: number;
-    thropies: number; // create a thropies collection representing what to do to win it and its rules, and its state for unlocking it
+    trophies: number; // create a thropies collection representing what to do to win it and its rules, and its state for unlocking it
     //many others 
 }
 
@@ -24,7 +24,7 @@ export const StatsSchema = new Schema<UserStatsSubDocument>(
             default: 0,
             index: true,
         },
-        thropies: { 
+        trophies: {
             type: SchemaTypes.Number,
             default: 0,
         },

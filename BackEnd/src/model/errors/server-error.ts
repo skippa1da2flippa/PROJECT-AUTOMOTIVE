@@ -6,7 +6,8 @@ const msgs404: string[] = [
     "No vehicles related to the user",
     "No enjoyed vehicles related to this user",
     "No user routine found matching the id",
-    "No user/notification with that identifier"
+    "No user/notification with that identifier",
+    "One of them doesn't exists on the database, operation negated"
 ]
 
 const msgs400: string[] = [

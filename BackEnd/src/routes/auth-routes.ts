@@ -50,11 +50,10 @@ export const authenticateToken = async function (
     const refreshToken = authHeaders && authHeaders.split(',')[0];
     const accessToken = authHeaders && authHeaders.split(',')[1];
 
-    /**
+    /** TO DO
      * console.log("sono nel middleware di authentication")
      *     if (refreshToken == null || accessToken == null) {
      *         if (refreshToken) await BanListPool.insertElem(refreshToken)
-     *         else if (accessToken) await BanListPool.insertElem(refreshToken)
      *         return res.sendStatus(403);
      *     }
      * */
@@ -72,8 +71,7 @@ export const authenticateToken = async function (
                         errorMessage: err.message,
                         requestPath: req.path,
                     });
-                }
-                else{
+                } else {
                     let accessToken = generateAccessToken(content.Id);
                     res.locals.newAccessToken = accessToken;
 
@@ -97,7 +95,7 @@ export const authenticateToken = async function (
 
         next();
     });
-};
+}
 
 /**
  *  Function provided to passport middleware which verifies user credentials

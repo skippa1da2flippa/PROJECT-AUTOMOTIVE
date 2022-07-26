@@ -2,7 +2,8 @@
 
 - /api/users/@meh                                           GET user
 - /api/users/@meh/myVehicles                                GET user vehicles   
-- /api/users/@meh/enjoyedVehicle                            GET user enjoyed vehicle      
+- /api/users/@meh/enjoyedVehicle                            GET user enjoyed vehicle
+- /api/users/@meh/friends                                   GET user friends
 
 - /api/users/@meh                                           DELETE user
 
@@ -42,6 +43,15 @@
 - /api/myVehicle/vehicleId/owner                             PUT vehicle owner update
 
 
+# NOTIFICATION ENDPOINTS
+- /users/@meh/notifications                         GET user notifications
+
+- /users/@meh/notifications                         POST user notifications insert one (by a user)
+- /api/myVehicle/@it/user/notifications             POST user notifications insert one (by a vehicle)
+
+- /users/@meh/notifications/:type                   DELETE user notification
+
+
 # ROUTINE ENDPOINTS
 
 - /api/users/@meh/routines                 GET user routines
@@ -66,10 +76,6 @@
 - /api/users/@meh/setting/gamification              PATCH user gamification update  
 
 
-# NOTIFICATION ENDPOINTS
-poi adda hai fatto una get una post e una delete
-
-
 # STATS ENDPOINTS
 
 - /api/users/@meh/stats                     GET user stats
@@ -79,7 +85,7 @@ poi adda hai fatto una get una post e una delete
 
 
 
-
+POST TESI
 # DOCUMENT ENDPOINTS do when it's needed
 
 - /api/users/@meh/documents                GET user documents [get preview documents]

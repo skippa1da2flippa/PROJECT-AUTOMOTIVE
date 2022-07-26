@@ -11,6 +11,7 @@ export enum NotTypes {
     carOccupied = 'carOccupied',
     destReached = 'destReached', // pop up not a real not
     fuelAlmostOut = 'fuelAlmostOut', // pop up not a real not
+    friendRequest = 'friendRequest',
     // many others
 }
 
@@ -58,7 +59,7 @@ export interface Notification {
         type: {
             type: SchemaTypes.String,
             required: true,
-            enum: [NotTypes.carOccupied.valueOf(), NotTypes.destReached.valueOf()],
+            enum: [NotTypes.carOccupied.valueOf(), NotTypes.friendRequest.valueOf()],
         },
         sender: {
             type: SchemaTypes.ObjectId,

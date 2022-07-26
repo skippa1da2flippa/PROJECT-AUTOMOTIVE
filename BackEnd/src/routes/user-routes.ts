@@ -11,7 +11,7 @@ import {
     getVehicleById
 } from '../model/database/my-vehicle'
 import {ServerError} from "../model/errors/server-error";
-import {updatePsw} from "../model/database/user";
+import {getUserById, updatePsw, UserDocument} from "../model/database/user";
 
 
 
@@ -111,15 +111,60 @@ router.get(
     }
 );
 
+
+router.get(
+    '/users/@meh/friends',
+    authenticateToken,
+    retrieveUserId,
+    async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
+        let user: usr.UserDocument;
+        const userId: Types.ObjectId = res.locals.userId;
+        let friends = []
+        try {
+            user = await usr.getUserById(userId);
+            for (let idx in user.friends) {
+                let tempUser = await getUserById(user.friends[idx])
+                friends.push({
+                    id: tempUser._id,
+                    name: tempUser.name,
+                    surname: tempUser.surname,
+                    nickname: tempUser.nickname,
+                    email: tempUser.email,
+                    // status: tempUser.status TO DO
+                })
+            }
+            return res.status(201).json({
+                friends
+            });
+        } catch (err) {
+            return res.status(err.statusCode).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: err.message,
+                requestPath: req.path,
+            });
+        }
+    }
+);
+
 router.get(
     '/users/@meh/myVehicles',
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
-        let vehicles: ProjectVehicleDocument[]
+        let vehicles
         const userId: Types.ObjectId = res.locals.userId;
         try {
-            vehicles = await getVehiclesByUserId(userId)
+            vehicles = (await getVehiclesByUserId(userId)).map(elem => {
+                return {
+                    id: elem._id,
+                    owner: elem.owner,
+                    status: elem.status,
+                    legalInfos: elem.legalInfos,
+                    enjoyers: elem.enjoyers,
+                    type: elem.type
+                }
+            })
+
             return res.status(201).json({
                 userId: userId,
                 myVehicles: vehicles
@@ -142,13 +187,23 @@ router.get(
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
         let user: usr.UserDocument;
         const userId: Types.ObjectId = res.locals.userId;
-        let enjoyedVehicles: ProjectVehicleDocument[] = []
+        let enjoyedVehicles = []
         try {
             user = await usr.getUserById(userId);
             if (!(user.enjoyedVehicles.length)) throw new ServerError( "No enjoyed vehicles related to this user")
             // TO DO possiamo migliorare i tempi d'attesa embeddando gli enjoyed vehicle in user
             for (const idx in user.enjoyedVehicles) {
-                enjoyedVehicles.push(await getVehicleById(user.enjoyedVehicles[idx]))
+                let vehicle = await getVehicleById(user.enjoyedVehicles[idx])
+                enjoyedVehicles.push(
+                    {
+                        Id: vehicle._id,
+                        owner: vehicle.owner,
+                        status: vehicle.status,
+                        legalInfos: vehicle.legalInfos,
+                        enjoyers: vehicle.enjoyers,
+                        type: vehicle.type
+                    }
+                )
             }
             return res.status(201).json({
                 userId: user._id,
