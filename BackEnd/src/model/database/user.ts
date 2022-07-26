@@ -751,7 +751,7 @@ export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId
 
 
 export async function deleteRoutine(userId: Types.ObjectId, name: string): Promise<void> {
-    name = name + "/" + name
+    name = name + "/" + userId.toString()
 
     const result = await RoutineModel.findOneAndDelete({ name })
         .catch(err => Promise.reject(new ServerError("Internal server error")))

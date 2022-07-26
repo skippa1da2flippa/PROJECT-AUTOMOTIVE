@@ -131,30 +131,30 @@ describe("Test: GET /users/@meh/friends", () => {
         data = await mongoDbApi.insertUser(user)
     }),
 
-        afterEach(async () => {
-            await mongoDbApi.deleteUser(data.insertedId)
-        }),
+    afterEach(async () => {
+        await mongoDbApi.deleteUser(data.insertedId)
+    }),
 
 
-        test("It should response the GET method", async () => {
-            const requestPath: string = baseUrl + "/api/users/@meh/friends"
-            let response
-            const header = {
-                "authorization" : setUpHeader(data.insertedId.toString())
-            }
+    test("It should response the GET method", async () => {
+        const requestPath: string = baseUrl + "/api/users/@meh/friends"
+        let response
+        const header = {
+            "authorization" : setUpHeader(data.insertedId.toString())
+        }
 
-            response = await axios.get(requestPath, {
-                headers: header
-            });
-
-            expect(response.status).toBe(201);
-            const userRes: { friends: User[] } = response.data
-            expect(userRes).toEqual(
-                expect.objectContaining<{ friends: User[] }>({
-                    friends: expect.any(Array<User>)
-                })
-            )
+        response = await axios.get(requestPath, {
+            headers: header
         });
+
+        expect(response.status).toBe(201);
+        const userRes: { friends: User[] } = response.data
+        expect(userRes).toEqual(
+            expect.objectContaining<{ friends: User[] }>({
+                friends: expect.any(Array<User>)
+            })
+        )
+    });
 
     // wrong userId
     test("It should have response 404", async () => {

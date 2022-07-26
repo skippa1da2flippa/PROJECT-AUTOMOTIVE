@@ -33,7 +33,7 @@ interface RoutineUpdateRequest extends AuthenticatedRequest {
 
 
 router.get(
-    "/api/users/@meh/routines",
+    "/users/@meh/routines",
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
@@ -55,7 +55,7 @@ router.get(
 )
 
 router.get(
-    "/api/users/@meh/routines/:name",
+    "/users/@meh/routines/:name",
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
@@ -84,7 +84,7 @@ router.get(
 )
 
 router.put(
-    "/api/users/@meh/routines/:name",
+    "/users/@meh/routines/:name",
     authenticateToken,
     retrieveUserId,
     async (req: RoutineUpdateRequest, res: UserEndpointResponse) => {
@@ -120,7 +120,7 @@ router.put(
 )
 
 router.delete(
-    "/api/users/@meh/routines/:name",
+    "/users/@meh/routines/:name",
     authenticateToken,
     retrieveUserId,
     async (req: RoutineUpdateRequest, res: UserEndpointResponse) => {

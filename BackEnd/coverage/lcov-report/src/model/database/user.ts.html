@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.59% </span>
+                <span class="strong">22.96% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>61/270</span>
+                <span class='fraction'>62/270</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">6.52% </span>
+                <span class="strong">5.43% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/92</span>
+                <span class='fraction'>5/92</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.81% </span>
+                <span class="strong">27.27% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>59/220</span>
+                <span class='fraction'>60/220</span>
             </div>
         
             
@@ -1378,21 +1378,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1402,9 +1392,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1437,6 +1425,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1577,12 +1577,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import * as mongoose from 'mongoose';
@@ -2135,19 +2135,19 @@ export async function <span class="fstat-no" title="function not covered" >getUs
  * @param userId id of the user to update
  * @param updatedStats object containing the updated stats of the user
  */
- export async function updateUserStats(
+ export async function <span class="fstat-no" title="function not covered" >updateUserStats(</span>
     userId: Types.ObjectId,
     updatedStats: UserStats
 ): Promise&lt;void&gt; {
-    let result = await UserModel.findByIdAndUpdate(userId, {
+    let <span class="cstat-no" title="statement not covered" >result = <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >await UserModel.findByIdAndUpdate(userId, {</span></span></span>
         stats: updatedStats
     }).catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {
 <span class="cstat-no" title="statement not covered" >        return Promise.reject(new ServerError("Internal server error"));</span>
     });
 &nbsp;
-    return result
+<span class="cstat-no" title="statement not covered" >    return result</span>
         ? Promise.resolve()
-        : <span class="branch-1 cbranch-no" title="branch not covered" >Promise.reject(new ServerError("No user with that identifier"))</span>
+        : Promise.reject(new ServerError("No user with that identifier"))
 }
 &nbsp;
 export async function <span class="fstat-no" title="function not covered" >updateTheme(</span>userId: Types.ObjectId, theme: string) : Promise&lt;void&gt; {
@@ -2337,14 +2337,14 @@ export async function <span class="fstat-no" title="function not covered" >remov
 }
 &nbsp;
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >deleteRoutine(</span>userId: Types.ObjectId, name: string): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >    name = name + "/" + name</span>
+export async function deleteRoutine(userId: Types.ObjectId, name: string): Promise&lt;void&gt; {
+    name = name + "/" + userId.toString()
 &nbsp;
-    const <span class="cstat-no" title="statement not covered" >result = <span class="cstat-no" title="statement not covered" >await RoutineModel.findOneAndDelete({ name })</span></span>
+    const result = await RoutineModel.findOneAndDelete({ name })
         .catch(<span class="fstat-no" title="function not covered" >err </span>=&gt; <span class="cstat-no" title="statement not covered" >Promise.reject(new ServerError("Internal server error")))</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return result</span>
-        ? Promise.resolve()
+    return result
+        ? <span class="branch-0 cbranch-no" title="branch not covered" >Promise.resolve()</span>
         : Promise.reject(new ServerError("No user routine found matching the id"))
 }</pre></td></tr></table></pre>
 
@@ -2353,7 +2353,7 @@ export async function <span class="fstat-no" title="function not covered" >delet
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-07-26T17:39:21.940Z
+                at 2022-07-26T22:14:41.887Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

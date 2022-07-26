@@ -49,7 +49,7 @@ interface SettingGamificationRequest extends AuthenticatedRequest {
 export const router = Router()
 
 router.get(
-    "/api/users/@meh/setting",
+    "/users/@meh/setting",
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
@@ -72,7 +72,7 @@ router.get(
 
 
 router.get(
-    "/api/users/@meh/setting/language",
+    "/users/@meh/setting/language",
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
@@ -95,7 +95,7 @@ router.get(
 
 
 router.get(
-    "/api/users/@meh/setting/theme",
+    "/users/@meh/setting/theme",
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
@@ -118,7 +118,7 @@ router.get(
 
 
 router.get(
-    "/api/users/@meh/setting/size",
+    "/users/@meh/setting/size",
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
@@ -140,7 +140,7 @@ router.get(
 )
 
 router.get(
-    "/api/users/@meh/setting/gamification",
+    "/users/@meh/setting/gamification",
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
@@ -163,19 +163,27 @@ router.get(
 
 
 router.patch(
-    "/api/users/@meh/setting/language",
+    "/users/@meh/setting/language",
     authenticateToken,
     retrieveUserId,
     async (req: SettingLanguageRequest, res: UserEndpointResponse) => {
         let userId = res.locals.userId
         let language = req.body.language
-        try {
-            await updateLanguage(userId, language)
-            return res.sendStatus(204)
-        } catch (err) {
-            return res.status(err.statusCode).json({
+        if (language) {
+            try {
+                await updateLanguage(userId, language)
+                return res.sendStatus(204)
+            } catch (err) {
+                return res.status(err.statusCode).json({
+                    timestamp: toUnixSeconds(new Date()),
+                    errorMessage: err.message,
+                    requestPath: req.path,
+                })
+            }
+        } else {
+            return res.status(400).json({
                 timestamp: toUnixSeconds(new Date()),
-                errorMessage: err.message,
+                errorMessage: "language inside the body request is undefined",
                 requestPath: req.path,
             })
         }
@@ -183,19 +191,27 @@ router.patch(
 )
 
 router.patch(
-    "/api/users/@meh/setting/theme",
+    "/users/@meh/setting/theme",
     authenticateToken,
     retrieveUserId,
     async (req: SettingThemeRequest, res: UserEndpointResponse) => {
         let userId = res.locals.userId
         let theme  = req.body.theme
-        try {
-            await updateTheme(userId, theme)
-            return res.sendStatus(204)
-        } catch (err) {
-            return res.status(err.statusCode).json({
+        if (theme) {
+            try {
+                await updateTheme(userId, theme)
+                return res.sendStatus(204)
+            } catch (err) {
+                return res.status(err.statusCode).json({
+                    timestamp: toUnixSeconds(new Date()),
+                    errorMessage: err.message,
+                    requestPath: req.path,
+                })
+            }
+        } else {
+            return res.status(400).json({
                 timestamp: toUnixSeconds(new Date()),
-                errorMessage: err.message,
+                errorMessage: "theme inside the body request is undefined",
                 requestPath: req.path,
             })
         }
@@ -203,19 +219,27 @@ router.patch(
 )
 
 router.patch(
-    "/api/users/@meh/setting/size",
+    "/users/@meh/setting/size",
     authenticateToken,
     retrieveUserId,
     async (req: SettingSizeRequest, res: UserEndpointResponse) => {
         let userId = res.locals.userId
         let size  = req.body.size
-        try {
-            await updateSize(userId, size)
-            return res.sendStatus(204)
-        } catch (err) {
-            return res.status(err.statusCode).json({
+        if (size) {
+            try {
+                await updateSize(userId, size)
+                return res.sendStatus(204)
+            } catch (err) {
+                return res.status(err.statusCode).json({
+                    timestamp: toUnixSeconds(new Date()),
+                    errorMessage: err.message,
+                    requestPath: req.path,
+                })
+            }
+        } else {
+            return res.status(400).json({
                 timestamp: toUnixSeconds(new Date()),
-                errorMessage: err.message,
+                errorMessage: "size inside the body request is undefined",
                 requestPath: req.path,
             })
         }
@@ -223,19 +247,27 @@ router.patch(
 )
 
 router.patch(
-    "/api/users/@meh/setting/gamification",
+    "/users/@meh/setting/gamification",
     authenticateToken,
     retrieveUserId,
     async (req: SettingGamificationRequest, res: UserEndpointResponse) => {
         let userId = res.locals.userId
         let gamification  = req.body.gamification
-        try {
-            await updateGamification(userId, gamification)
-            return res.sendStatus(204)
-        } catch (err) {
-            return res.status(err.statusCode).json({
+        if (gamification) {
+            try {
+                await updateGamification(userId, gamification)
+                return res.sendStatus(204)
+            } catch (err) {
+                return res.status(err.statusCode).json({
+                    timestamp: toUnixSeconds(new Date()),
+                    errorMessage: err.message,
+                    requestPath: req.path,
+                })
+            }
+        } else {
+            return res.status(400).json({
                 timestamp: toUnixSeconds(new Date()),
-                errorMessage: err.message,
+                errorMessage: "gamification inside the body request is undefined",
                 requestPath: req.path,
             })
         }

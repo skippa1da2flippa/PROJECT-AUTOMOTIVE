@@ -25,30 +25,30 @@ describe("Test: GET /users/@meh/routines", () => {
         data = await mongoDbApi.insertUser(user)
     }),
 
-        afterEach(async () => {
-            await mongoDbApi.deleteUser(data.insertedId)
-        }),
+    afterEach(async () => {
+        await mongoDbApi.deleteUser(data.insertedId)
+    }),
 
 
-        test("It should response the GET method", async () => {
-            const requestPath: string = baseUrl + "/api/users/@meh/routines"
-            let response
-            const header = {
-                "authorization" : setUpHeader(data.insertedId.toString())
-            }
+    test("It should response the GET method", async () => {
+        const requestPath: string = baseUrl + "/api/users/@meh/routines"
+        let response
+        const header = {
+            "authorization" : setUpHeader(data.insertedId.toString())
+        }
 
-            response = await axios.get<UserRoutines>(requestPath, {
-                headers: header
-            });
-
-            expect(response.status).toBe(201);
-            const userRes: UserRoutines = response.data
-            expect(userRes).toEqual(
-                expect.objectContaining<UserRoutines>({
-                    routines: expect.any(Array<Routine>),
-                })
-            )
+        response = await axios.get<UserRoutines>(requestPath, {
+            headers: header
         });
+
+        expect(response.status).toBe(201);
+        const userRes: UserRoutines = response.data
+        expect(userRes).toEqual(
+            expect.objectContaining<UserRoutines>({
+                routines: expect.any(Array<Routine>),
+            })
+        )
+    });
 
     // wrong userId
     test("It should have response 404", async () => {
@@ -86,11 +86,11 @@ describe("Test: GET /users/@meh/routines/:name", () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
         user = getUserData()
         data = await mongoDbApi.insertUser(user)
-    }),
+    })
 
     afterEach(async () => {
         await mongoDbApi.deleteUser(data.insertedId)
-    }),
+    })
 
 
     test("It should response the GET method", async () => {
@@ -115,7 +115,7 @@ describe("Test: GET /users/@meh/routines/:name", () => {
 
     // wrong userId
     test("It should have response 404 (wrong id)", async () => {
-        const requestPath: string = baseUrl + "/api/users/@meh/routines" + user.routines[0].name
+        const requestPath: string = baseUrl + "/api/users/@meh/routines/" + user.routines[0].name
         const header = {
             "authorization" : setUpHeader("AYO")
         }
@@ -160,7 +160,7 @@ describe("Test: GET /users/@meh/routines/:name", () => {
 
 });
 
-describe("Test: GET /users/@meh/routines/:name", () => {
+describe("Test: DELETE /users/@meh/routines/:name", () => {
 
     let mongoDbApi: MongoDbApi
     let user: User
@@ -193,7 +193,7 @@ describe("Test: GET /users/@meh/routines/:name", () => {
 
     // wrong userId
     test("It should have response 404 (wrong id)", async () => {
-        const requestPath: string = baseUrl + "/api/users/@meh/routines" + user.routines[0].name
+        const requestPath: string = baseUrl + "/api/users/@meh/routines/" + user.routines[0].name
         const header = {
             "authorization" : setUpHeader("AYO")
         }
@@ -279,7 +279,7 @@ describe("Test: PUT /users/@meh/routines/:name", () => {
 
     // wrong userId
     test("It should have response 404 (wrong id)", async () => {
-        const requestPath: string = baseUrl + "/api/users/@meh/routines" + user.routines[0].name
+        const requestPath: string = baseUrl + "/api/users/@meh/routines/" + user.routines[0].name
         const header = {
             "authorization" : setUpHeader("AYO")
         }
