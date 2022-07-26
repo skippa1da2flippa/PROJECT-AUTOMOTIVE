@@ -22,7 +22,7 @@ import {
     NotTypes,
     Notification,
     NotificationSchema,
-    NotificationSubDocument
+    NotificationSubDocument, NotificationModel
 } from './notification'
 import {
     Setting,
@@ -40,7 +40,7 @@ export enum UserRoles {
 export enum UserStatus {
     Offline = 'Offline',
     Online = 'Online',
-    InTheCar = 'In The car'
+    InTheCar = 'Swerving'
 }
 
 interface PswData {
@@ -168,6 +168,7 @@ export interface UserDocument extends User, Document {
     removeRoutine(name: string): Promise<void>;
 }
 
+// TO DO add friendIds
 
 export const UserSchema = new Schema<UserDocument>(
     {
@@ -241,15 +242,33 @@ export const UserSchema = new Schema<UserDocument>(
     }
 )
 
-// TO DO metti apposto routine names in routine route togliendo /userid
+export async function addNotification(_id: Types.ObjectId, not: Notification) {
 
-UserSchema.methods.addNotification = async function (
-    reqType: NotTypes,
-): Promise<UserDocument> {
-    const toInsert: Notification = { type: reqType };
-    this.notifications.push(toInsert);
-    return this.save();
-};
+    const notification = new NotificationModel(not)
+    let result = await UserModel.findOneAndUpdate({ _id }, {
+        $push: { notifications: notification }
+    }).catch((err) => {
+        return Promise.reject(new ServerError("Internal server error"));
+    });
+
+    return result
+        ? Promise.resolve()
+        : Promise.reject(new ServerError("No user with that identifier"))
+}
+
+export async function removeNotification(_id: Types.ObjectId, not: Notification) {
+
+    const notification = new NotificationModel(not)
+    let result = await UserModel.findOneAndUpdate({ _id }, {
+        $pull: { notifications: notification }
+    }).catch((err) => {
+        return Promise.reject(new ServerError("Internal server error"));
+    });
+
+    return result
+        ? Promise.resolve()
+        : Promise.reject(new ServerError("No user/notification with that identifier"))
+}
 
 
 // pop one notification with the same type as the one recieved as input
@@ -442,11 +461,13 @@ export async function deleteUser(filter: FilterQuery<UserDocument>): Promise<voi
 }
 
 export async function updateNickName(_id: Types.ObjectId, nickname: string): Promise<void> {
-    await UserModel.updateOne({ _id }, { nickname }).catch((err) => {
+    let result = await UserModel.findOneAndUpdate({ _id }, { nickname }).catch((err) => {
         return Promise.reject(new ServerError("Internal server error"));
     });
 
-    return Promise.resolve();
+    return result
+        ? Promise.resolve()
+        : Promise.reject(new ServerError("No user with that identifier"))
 }
 
 export async function updatePassword(_id: Types.ObjectId, password: string): Promise<void> {
@@ -526,7 +547,7 @@ export async function updateLanguage(userId: Types.ObjectId, lan: string) : Prom
 
 export async function updateGamification(userId: Types.ObjectId, swt: boolean) : Promise<void> {
     let result = await UserModel.findByIdAndUpdate(userId, {
-        "setting.gamificationHide": swt
+        "setting.gamificationHide": !swt
     }).catch((err) => {
         return Promise.reject(new ServerError("Internal server error"));
     });

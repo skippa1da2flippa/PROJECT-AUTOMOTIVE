@@ -52,22 +52,9 @@
 - /api/users/@meh/routines/name            DELETE user routine  
 
 
-# LEGAL INFOS ENDPOINTS
-
-- /api/myVeichle/vehicleId/legalInfos       PATCH retrieve vehicle legal infos   
-
-- /api/myVeichle/vehicleId/legalInfos       PUT vehicle legal infos update
-
-
-# DOCUMENT ENDPOINTS
-
-- /api/users/@meh/documents                GET user documents [get preview documents]
-- /api/users/@meh/documents/:docId         GET user document [get whole document]
-
-- /api/users/@meh/documents/:docId         DELETE user document
-
 # SETTING ENDPOINTS
 
+- /api/users/@meh/setting                           GET user setting
 - /api/users/@meh/setting/language                  GET user language 
 - /api/users/@meh/setting/size                      GET user text size 
 - /api/users/@meh/setting/theme                     GET user theme 
@@ -78,11 +65,31 @@
 - /api/users/@meh/setting/theme                     PATCH user theme update
 - /api/users/@meh/setting/gamification              PATCH user gamification update  
 
-# STATS ENDPOINTS 
+
+# NOTIFICATION ENDPOINTS
+poi adda hai fatto una get una post e una delete
+
+
+# STATS ENDPOINTS
 
 - /api/users/@meh/stats                     GET user stats
 
 - /api/users/@meh/stats                     PUT user stats update
 
-# NOTIFICATION ENDPOINTS
-DA VEDERE SE SERVE
+
+
+
+
+# DOCUMENT ENDPOINTS do when it's needed
+
+- /api/users/@meh/documents                GET user documents [get preview documents]
+- /api/users/@meh/documents/:docId         GET user document [get whole document]
+
+- /api/users/@meh/documents/:docId         DELETE user document
+
+
+# LEGAL INFOS ENDPOINTS do when it's needed
+
+- /api/myVeichle/vehicleId/legalInfos       PATCH retrieve vehicle legal infos
+
+- /api/myVeichle/vehicleId/legalInfos       PUT vehicle legal infos update

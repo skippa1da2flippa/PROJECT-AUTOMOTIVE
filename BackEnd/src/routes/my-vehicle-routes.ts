@@ -27,7 +27,7 @@ interface  VehicleEndpointLocals {
     vehicleId: Types.ObjectId
 }
 
-interface VehicleEndpointResponse extends Response {
+export interface VehicleEndpointResponse extends Response {
     locals: VehicleEndpointLocals
 }
 

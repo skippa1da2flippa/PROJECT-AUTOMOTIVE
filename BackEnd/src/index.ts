@@ -13,6 +13,7 @@ import chalk from 'chalk';
 import { ServerJoinedListener } from "./events/client-listeners/server-joined"
 import { OwnerResponseListener } from "./events/client-listeners/owner-response-listener"
 import { TedisPool } from "tedis";
+import {FriendRequestAcceptedListener} from "./events/client-listeners/friend-request-accepted";
 
 
 // Remember that the runtime working dir is <root>/dist/src
@@ -117,6 +118,9 @@ ioServer.on('connection', async function (client: io.Socket) {
 
     const ownerCarControl: OwnerResponseListener =  new OwnerResponseListener(client)
     ownerCarControl.listen()
+
+    const friendRequestAccepted: FriendRequestAcceptedListener = new FriendRequestAcceptedListener(client, ioServer)
+    friendRequestAccepted.listen()
 
     client.on('disconnect', function () {
         console.log(chalk.bgRed(`socket.io client ${client.id} disconnected`));

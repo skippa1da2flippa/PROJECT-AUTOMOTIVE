@@ -1,4 +1,6 @@
 import { Schema, SchemaTypes, Types } from 'mongoose';
+import {UserDocument, UserModel, UserSchema} from "./user";
+import mongoose from "mongoose";
 
 // deletable
 
@@ -22,6 +24,11 @@ export interface Notification {
      * Type of the notification
      */
     type: NotTypes;
+
+    /**
+     * Id of the user that sent the notification
+     */
+    sender: Types.ObjectId;
 
     /**
      * Date that the notification was created at.
@@ -52,7 +59,25 @@ export interface Notification {
             type: SchemaTypes.String,
             required: true,
             enum: [NotTypes.carOccupied.valueOf(), NotTypes.destReached.valueOf()],
-        }
+        },
+        sender: {
+            type: SchemaTypes.ObjectId,
+            required: true,
+        },
     },
     { timestamps: true }
 );
+
+export const NotificationModel = mongoose.model('Notification', NotificationSchema, 'Notification');
+/**
+ * Returns the most recent notifications of the user, ordered by most recent.
+ * @param userId id of the user to retrieve the notifications of
+ */
+export async function getMostRecentNotifications(
+    userId: Types.ObjectId
+): Promise<NotificationSubDocument[]> {
+    const not: UserDocument = await UserModel.findOne({ _id: userId }, { notifications: 1 }).sort({
+        createdAt: -1,
+    });
+    return not.notifications;
+}

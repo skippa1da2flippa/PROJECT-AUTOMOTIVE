@@ -82,4 +82,12 @@ export const retrieveVehicleId = function (req:  AuthenticatedRequest, res: Resp
     }
 };
 
+export const retrieveId = function (s_id: string) {
+    try {
+        return new Types.ObjectId(s_id);
+    } catch (err) {
+        throw new Error('No user with that identifier');
+    }
+};
+
 

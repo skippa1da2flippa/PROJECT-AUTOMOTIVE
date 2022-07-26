@@ -22,8 +22,7 @@ export interface Routine {
 export interface RoutineSubDocument extends Routine, Types.Subdocument {}
 
 
-// TO DO since the name is unique we'll add routine name with this pattern: routine_name/userID, thanks to this we'll be able to make name unique just for the single user
-
+// TO DO when testing is done replace normal tye with SchemaTypes.type
 export const RoutineSchema = new Schema<RoutineSubDocument>(
     {
         name: {
