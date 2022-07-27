@@ -130,6 +130,11 @@ export const myVehicleSchema = new Schema<ProjectVehicleDocument>(
         enjoyers: {
             type: [SchemaTypes.ObjectId],
             default: []
+        },
+
+        status: {
+            type: SchemaTypes.String,
+            default: VehicleStatus.Offline
         }
     }, 
     {timestamps: true}
@@ -241,6 +246,7 @@ export const setVehicleStatus = async (
 ): Promise<ProjectVehicleDocument> => {
     let vehicle: ProjectVehicleDocument = await getVehicleById(vehicleId);
     vehicle.status = newStatus;
+    // TO DO emit to the owner when the vehicle change status
     return  vehicle.save();
 };
 

@@ -94,6 +94,12 @@ export interface UserDocument extends User, Document {
     docs: Types.DocumentArray<ODocSubDocument>
 
     /**
+     * Return true if the given id is inside the friends collection
+     * @param friendId represents the user who's supposed to be friend
+     * */
+    isFriend(friendId: Types.ObjectId): boolean;
+
+    /**
      * Adds the provided role to this instance.
      * If the user already has the role, it is not added a second time.
      *
@@ -244,6 +250,12 @@ export const UserSchema = new Schema<UserDocument>(
         setting: {
             type: SettingSchema,
             //default: () => ({})
+        },
+
+        status: {
+            type: SchemaTypes.String,
+            enum: UserStatus,
+            default: UserStatus.Offline
         }
     }
 )
@@ -289,6 +301,10 @@ UserSchema.methods.removeNotification = async function (
 
     return Promise.reject(new ServerError('Notification not found'));
 };
+
+UserSchema.methods.isFriend = function(friendId: Types.ObjectId) : boolean {
+    return this.friends.includes(friendId)
+}
 
 UserSchema.methods.addDocument = async function (doc: ODocument) : Promise<void> {
     this.documents.push(doc)
@@ -449,6 +465,8 @@ export async function getUserByEmail(email: string): Promise<UserDocument> {
         ? Promise.reject(new ServerError('No user with that identifier'))
         : Promise.resolve(userdata);
 }
+
+
 
 export async function addFriendship(userId: Types.ObjectId, friendId: Types.ObjectId) {
     let result1, result2
