@@ -702,54 +702,25 @@ describe("Test: PATCH /api/users/@meh/enjoyedVehicles", () => {
         await insertManyVehicles(new Types.ObjectId(), 2, vehiclesIds)
         user = getUserData(vehiclesIds)
         udata = await mongoDbApi.insertUser(user)
-    }),
+    })
 
     afterEach(async () => {
         await mongoDbApi.deleteUser(udata.insertedId)
         await mongoDbApi.deleteMultipleVehicles(vehiclesIds)
         vehiclesIds = []
-    }),
-
-    // ?action=add
-    test("It should response the PATCH method ?action=add", async () => {
-        const requestPath: string = baseUrl + "/api/users/@meh/enjoyedVehicles"
-        const header = {
-            "authorization" : setUpHeader(udata.insertedId.toString())
-        }
-        const param = {
-            action: "add"
-        }
-
-        const response = await axios.patch(requestPath, {
-            enjoyedVehicle:  vehiclesIds[0]
-        },{
-            headers: header,
-            params: param
-        });
-        expect(response.status).toBe(200);
-        const userRes = response.data
-        expect(userRes).toEqual(
-            expect.objectContaining<{added: string}>({
-                added: expect.any(String),
-            })
-        )
-    });
+    })
 
     // ?action=remove
     test("It should response the PATCH method ?action=remove", async () => {
-        const requestPath: string = baseUrl + "/api/users/@meh/enjoyedVehicles"
+        const requestPath: string = baseUrl + "/api/users/@meh/enjoyedVehicles/remove"
         const header = {
             "authorization" : setUpHeader(udata.insertedId.toString())
-        }
-        const param = {
-            action: "remove"
         }
 
         const response = await axios.patch(requestPath, {
             enjoyedVehicle:  vehiclesIds[0]
         },{
             headers: header,
-            params: param
         });
         expect(response.status).toBe(200);
         const userRes = response.data
@@ -760,10 +731,8 @@ describe("Test: PATCH /api/users/@meh/enjoyedVehicles", () => {
         )
     });
 
-
-
     test("It should have response 404 (wrong userId)", async () => {
-        const requestPath: string = baseUrl + "/api/users/@meh/enjoyedVehicles"
+        const requestPath: string = baseUrl + "/api/users/@meh/enjoyedVehicles/remove"
         const header = {
             "authorization" : setUpHeader("AYO")
         }

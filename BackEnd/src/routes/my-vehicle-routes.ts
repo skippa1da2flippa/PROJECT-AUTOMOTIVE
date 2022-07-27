@@ -23,6 +23,15 @@ import {UpdatePasswordRequest, UserEndpointResponse} from "./user-routes";
 import {ServerError} from "../model/errors/server-error";
 
 
+interface UserVehicle {
+    name: string,
+    surname: string,
+    id: string,
+    email: string,
+    nickname: string
+}
+
+
 interface  VehicleEndpointLocals {
     vehicleId: Types.ObjectId
 }
@@ -113,10 +122,16 @@ router.get(
     async (req: AuthenticatedRequest, res: VehicleEndpointResponse) => {
         let vehicle: ProjectVehicleDocument;
         const vehicleId: Types.ObjectId = res.locals.vehicleId;
+        let user: UserDocument
         try {
             vehicle = await getVehicleById(vehicleId);
+            user = await getUserById(vehicle.owner)
             return res.status(201).json({
-                owner: vehicle.owner
+                name: user.name,
+                surname:user.surname,
+                id: user._id,
+                email: user.email,
+                nickname: user.nickname
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -135,10 +150,21 @@ router.get(
     async (req: AuthenticatedRequest, res: VehicleEndpointResponse) => {
         let vehicle: ProjectVehicleDocument;
         const vehicleId: Types.ObjectId = res.locals.vehicleId;
+        let users: UserVehicle[] = []
         try {
             vehicle = await getVehicleById(vehicleId);
+            for(let idx in vehicle.enjoyers){
+                let user = await getUserById(vehicle.enjoyers[idx])
+                users.push({
+                    name: user.name,
+                    surname:user.surname,
+                    id: user._id,
+                    email: user.email,
+                    nickname: user.nickname
+                })
+            }
             return res.status(201).json({
-                enjoyers: vehicle.enjoyers
+                enjoyers: users
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -207,13 +233,34 @@ router.patch(
     async (req: BaseVehicleRequest, res: Response) => {
         let vehicle: ProjectVehicleDocument
         let vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
+        let user: UserDocument
+        let owner: UserVehicle
+        let enjoyers: UserVehicle[] = []
         try {
             vehicle = await getVehicleById(vehicleId)
+            user = await getUserById(vehicle.owner)
+            owner = {
+                name: user.name,
+                surname:user.surname,
+                id: user._id,
+                email: user.email,
+                nickname: user.nickname
+            }
+            for(let idx in vehicle.enjoyers){
+                let enjoyer = await getUserById(vehicle.enjoyers[idx])
+                enjoyers.push({
+                    name: enjoyer.name,
+                    surname:enjoyer.surname,
+                    id: enjoyer._id,
+                    email: enjoyer.email,
+                    nickname: enjoyer.nickname
+                })
+            }
             return res.status(201).json({
                 vehicleId: vehicle._id,
                 type: vehicle.type,
-                owner: vehicle.owner,
-                enjoyers: vehicle.enjoyers,
+                owner: owner,
+                enjoyers: enjoyers,
                 legalInfos: vehicle.legalInfos
             });
         } catch (err) {
@@ -226,16 +273,23 @@ router.patch(
     }
 );
 
+
 router.patch(
     '/myVehicle/vehicleId/owner',
     authenticateToken,
     async (req: BaseVehicleRequest, res: Response) => {
         let vehicle: ProjectVehicleDocument
         let vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
+        let user: UserDocument
         try {
             vehicle = await getVehicleById(vehicleId)
+            user = await getUserById(vehicle.owner)
             return res.status(201).json({
-                owner: vehicle.owner
+                name: user.name,
+                surname:user.surname,
+                id: user._id,
+                email: user.email,
+                nickname: user.nickname
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -254,10 +308,21 @@ router.patch(
     async (req: BaseVehicleRequest, res: Response) => {
         let vehicle: ProjectVehicleDocument
         let vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
+        let enjoyers: UserVehicle[] = []
         try {
             vehicle = await getVehicleById(vehicleId)
+            for(let idx in vehicle.enjoyers){
+                let user = await getUserById(vehicle.enjoyers[idx])
+                enjoyers.push({
+                    name: user.name,
+                    surname:user.surname,
+                    id: user._id,
+                    email: user.email,
+                    nickname: user.nickname
+                })
+            }
             return res.status(201).json({
-                enjoyers: vehicle.enjoyers
+                enjoyers
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -322,7 +387,6 @@ router.put(
     authenticateToken,
     async (req: UpdateEnjoyerRequest, res: Response) => {
         const { vehicleId, enjoyerId, enjoyerName, enjoyerSurname } = req.body;
-        let vehicle: ProjectVehicleDocument
         if (enjoyerId) {
             try {
                 if (req.query.action === "add") {
@@ -371,7 +435,7 @@ router.put(
 
 router.put(
     "/myVehicle/vehicleId/owner",
-    // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per creare una car,
+    // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per cambiare owner car,
     async (req: OwnerUpdateRequest, res:Response) => {
         const vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
         const ownerId: Types.ObjectId = new Types.ObjectId(req.body.newOwner)

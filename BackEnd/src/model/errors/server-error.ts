@@ -15,7 +15,8 @@ const msgs400: string[] = [
     "There shouldn't be more than one client vehicle listening to a specific vehicle room",
     "Users already inside the enjoyers",
     "User already owner of the car",
-    "Routine name already with that value"
+    "Routine name already with that value",
+    "Vehicle already inside the collection"
 ]
 
 const msgs500: string[] = [

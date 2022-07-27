@@ -42,7 +42,7 @@ describe("Test: POST /auth/signin ", () => {
         const requestPath: string = baseUrl + "/api/auth/signin"
         let response
         const header = {
-            "authorization": "       "
+            "authorization": ""
         }
 
         response = await axios.post<UserLogIn>(requestPath, {

@@ -262,7 +262,6 @@ export async function addNotification(_id: Types.ObjectId, not: Notification) {
         : Promise.reject(new ServerError("No user with that identifier"))
 }
 
-// TO DO TEST
 export async function removeNotification(_id: Types.ObjectId, type: NotTypes) {
 
     let result = await UserModel.findOneAndUpdate({ _id }, {
@@ -623,8 +622,12 @@ export async function updateRoutineName(userId: Types.ObjectId, oldName: string,
     let user: UserDocument
     oldName = oldName + "/" + userId.toString()
     newName = newName + "/" + userId.toString()
-    let result = await RoutineModel.findOneAndUpdate({ name: oldName }, {
-        name: newName
+
+    let result = await UserModel.findOneAndUpdate({
+        _id: userId,
+        "routines.name": oldName
+    }, {
+        $set: { "routines.$.name": newName }
     }).catch(err => Promise.reject(new ServerError('Internal server error')))
 
     return result
@@ -635,8 +638,12 @@ export async function updateRoutineName(userId: Types.ObjectId, oldName: string,
 export async function updateRoutineTemperature(userId: Types.ObjectId, routineName: string, temp: number): Promise<void> {
     let user: UserDocument
     routineName = routineName + "/" + userId.toString()
-    let result = await RoutineModel.findOneAndUpdate({ name: routineName }, {
-        temperature: temp
+
+    let result = await UserModel.findOneAndUpdate({
+        _id: userId,
+        "routines.name": routineName
+    }, {
+        $set: { "routines.$.temperature": temp }
     }).catch(err => Promise.reject(new ServerError('Internal server error')))
 
     return result
@@ -649,8 +656,11 @@ export async function updateRoutineLightsColor(userId: Types.ObjectId, routineNa
     let user: UserDocument
     routineName = routineName + "/" + userId.toString()
 
-    let result = await RoutineModel.findOneAndUpdate({ name: routineName }, {
-        lightsColor: color
+    let result = await UserModel.findOneAndUpdate({
+        _id: userId,
+        "routines.name": routineName
+    }, {
+        $set: { "routines.$.lightsColor": color }
     }).catch(err => Promise.reject(new ServerError('Internal server error')))
 
     return result
@@ -667,27 +677,29 @@ export async function updateRoutineMusic(
 ): Promise<void> {
     let user: UserDocument
     let result
+    let music: string[]
+
     routineName = routineName + "/" + userId.toString()
-    if (musicToRemove.length && musicToAdd.length) {
+    user = await getUserById(userId)
 
-        result = await RoutineModel.findOneAndUpdate({name: routineName}, {
-            $pullAll: { musics: musicToRemove },
-            $pushAll: { music: musicToAdd }
-        }).catch(err => Promise.reject(new ServerError('Internal server error')))
-
-    } else if (musicToRemove.length) {
-
-        result = await RoutineModel.findOneAndUpdate({name: routineName}, {
-            $pullAll: { musics: musicToRemove },
-        }).catch(err => Promise.reject(new ServerError('Internal server error')))
-
-    } else {
-
-        result = await RoutineModel.findOneAndUpdate({name: routineName}, {
-            $pushAll: { musics: musicToAdd },
-        }).catch(err => Promise.reject(new ServerError('Internal server error')))
-
+    //remove the music
+    for (let idx in user.routines) {
+        if (user.routines[idx].name === routineName){
+            music = user.routines[idx].music.filter(elem => !musicToRemove.includes(elem))
+        }
     }
+
+    // add the new one
+    music.push(...musicToAdd)
+
+     result = await UserModel.findOneAndUpdate({
+        _id: userId,
+        "routines.name": routineName
+    }, {
+        $set: {
+            "routines.$.music": music,
+        },
+    }).catch(err => Promise.reject(new ServerError('Internal server error')))
 
     return result
         ? Promise.resolve()
@@ -712,7 +724,17 @@ export const setUserStatus = async (
 };
 
 export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
+    let user: UserDocument
+    let flag: boolean = false
     try {
+        user = await getUserById(userId)
+
+        for (let idx in user.enjoyedVehicles) {
+            if (user.enjoyedVehicles[idx].toString() === vehicleId.toString()) flag = true
+        }
+
+        if (flag) return Promise.reject(new ServerError("Vehicle already inside the collection"))
+
         let result = await UserModel.findByIdAndUpdate(userId, {
             $push: { enjoyedVehicles: vehicleId }
         }).catch(err => Promise.reject(new ServerError("Internal server error")))
@@ -728,7 +750,7 @@ export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId
 // TO DO dovrei chiamare la vehicleRemoveEnjoyer o lo fa il client
 export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {
     let user: UserDocument
-    let flag: boolean
+    let flag: boolean = false
     try {
         user = await getUserById(userId)
 
@@ -736,10 +758,10 @@ export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId
             if (user.enjoyedVehicles[idx].toString() === vehicleId.toString()) flag = true
         }
 
-        if (flag) return Promise.reject(new ServerError("No enjoyed vehicles related to this user"))
+        if (!flag) return Promise.reject(new ServerError("No enjoyed vehicles related to this user"))
 
         let result = await UserModel.findByIdAndUpdate(userId, {
-            $push: { enjoyedVehicles: vehicleId }
+            $pull: { enjoyedVehicles: vehicleId }
         }).catch(err => Promise.reject(new ServerError("Internal server error")))
 
         if (!result) return Promise.reject(new ServerError("No user with that identifier"))
@@ -753,10 +775,24 @@ export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId
 export async function deleteRoutine(userId: Types.ObjectId, name: string): Promise<void> {
     name = name + "/" + userId.toString()
 
-    const result = await RoutineModel.findOneAndDelete({ name })
-        .catch(err => Promise.reject(new ServerError("Internal server error")))
+    console.log(name)
+
+    const result = await UserModel.findByIdAndUpdate(userId, {
+        $pull: {routines: {name}}
+    }).catch(err => Promise.reject(new ServerError("Internal server error")))
 
     return result
         ? Promise.resolve()
         : Promise.reject(new ServerError("No user routine found matching the id"))
+}
+
+export async function addRoutine(userId: Types.ObjectId, routine: Routine) {
+    let routineSub: RoutineSubDocument = new RoutineModel(routine)
+    let result = UserModel.findByIdAndUpdate(userId, {
+        $push: {routines: routineSub}
+    }).catch(err => Promise.reject(new ServerError("Internal server error")))
+
+    return result
+        ? Promise.resolve()
+        : Promise.reject(new ServerError("No user with that identifier"))
 }

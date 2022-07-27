@@ -5,10 +5,10 @@ import { AuthenticatedRequest } from './utils/authenticated-request';
 import { toUnixSeconds } from './utils/date-utils';
 import { retrieveUserId, skipLimitChecker } from './utils/param-checking';
 import { authenticateToken } from './auth-routes';
-import { 
+import {
     ProjectVehicleDocument,
-    getVehiclesByUserId, 
-    getVehicleById
+    getVehiclesByUserId,
+    getVehicleById, removeEnjoyer
 } from '../model/database/my-vehicle'
 import {ServerError} from "../model/errors/server-error";
 import {getUserById, updatePsw, UserDocument} from "../model/database/user";
@@ -145,6 +145,7 @@ router.get(
         }
     }
 );
+
 
 router.get(
     '/users/@meh/myVehicles',
@@ -329,7 +330,7 @@ router.patch(
 
 
 router.patch(
-    '/users/@meh/enjoyedVehicles',
+    '/users/@meh/enjoyedVehicles/remove',
     authenticateToken,
     retrieveUserId,
     async (req: UpdateEnjoyedRequest, res: UserEndpointResponse) => {
@@ -337,18 +338,10 @@ router.patch(
         const userId: Types.ObjectId = res.locals.userId;
         if (enjoyedVehicle) {
             try {
-                if (req.query.action === "add") {
-                    await usr.updateUserEnjoyedVehicle(userId, new Types.ObjectId(enjoyedVehicle));
-                    return res.status(200).json({
-                        added: enjoyedVehicle
-                    });
-                }
-                else {
-                    await usr.removeUserEnjoyedVehicle(userId, new Types.ObjectId(enjoyedVehicle));
-                    return res.status(200).json({
-                        removed: enjoyedVehicle
-                    });
-                }
+                await removeEnjoyer(new Types.ObjectId(enjoyedVehicle), userId);
+                return res.status(200).json({
+                    removed: enjoyedVehicle
+                });
             } catch (err) {
                 return res.status(err.statusCode).json({
                     timestamp: toUnixSeconds(new Date()),

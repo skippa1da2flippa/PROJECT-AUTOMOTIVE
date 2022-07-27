@@ -13,9 +13,17 @@ interface BaseVehicleResponse {
 }
 
 interface GetVehicleResponse extends BaseVehicleResponse {
-    owner: string
-    enjoyers: string[]
+    owner: UserVehicle
+    enjoyers: UserVehicle[]
     legalInfos: Object
+}
+
+interface UserVehicle {
+    name: string
+    surname: string
+    id: string
+    email: string
+    nickname: string
 }
 
 describe("Test: GET /myVehicle/@it", () => {
@@ -82,15 +90,20 @@ describe("Test: GET /myVehicle/@it/owner", () => {
     let mongoDbApi: MongoDbApi
     let vehicle: projectVehicle
     let data: MongoDbSingleInsertResponse
+    let udata: MongoDbSingleInsertResponse
 
     beforeEach(async () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
-        vehicle = getVehicleData(new Types.ObjectId())
+        udata = await mongoDbApi.insertUser(getUserData())
+        vehicle = getVehicleData(
+            new Types.ObjectId(udata.insertedId)
+        )
         data = await mongoDbApi.insertVehicle(vehicle)
     })
 
     afterEach(async () => {
         await mongoDbApi.deleteVehicle(data.insertedId)
+        await mongoDbApi.deleteUser(udata.insertedId)
     })
 
     test("It should respond to the GET method", async () => {
@@ -104,10 +117,14 @@ describe("Test: GET /myVehicle/@it/owner", () => {
         });
 
         expect(response.status).toBe(201);
-        const vehicleRes: { owner: string } = response.data
+        const vehicleRes: UserVehicle = response.data
         expect(vehicleRes).toEqual(
-            expect.objectContaining<{ owner: string }>({
-                owner: expect.any(String),
+            expect.objectContaining<UserVehicle>({
+                name: expect.any(String),
+                surname: expect.any(String),
+                id: expect.any(String),
+                email: expect.any(String),
+                nickname: expect.any(String)
             })
         )
     })
@@ -141,15 +158,21 @@ describe("Test: GET /myVehicle/@it/enjoyers", () => {
     let mongoDbApi: MongoDbApi
     let vehicle: projectVehicle
     let data: MongoDbSingleInsertResponse
+    let udata: MongoDbSingleInsertResponse
 
     beforeEach(async () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
-        vehicle = getVehicleData(new Types.ObjectId(), new Types.ObjectId())
+        udata = await mongoDbApi.insertUser(getUserData())
+        vehicle = getVehicleData(
+            new Types.ObjectId(udata.insertedId),
+            new Types.ObjectId(udata.insertedId)
+        )
         data = await mongoDbApi.insertVehicle(vehicle)
     })
 
     afterEach(async () => {
         await mongoDbApi.deleteVehicle(data.insertedId)
+        await mongoDbApi.deleteUser(udata.insertedId)
     })
 
     test("It should respond to the GET method", async () => {
@@ -163,10 +186,10 @@ describe("Test: GET /myVehicle/@it/enjoyers", () => {
         });
 
         expect(response.status).toBe(201);
-        const vehicleRes: { enjoyers: string[] } = response.data
+        const vehicleRes: {enjoyers:UserVehicle[]} = response.data
         expect(vehicleRes).toEqual(
-            expect.objectContaining<{ enjoyers: string[] }>({
-                enjoyers: expect.any(Array),
+            expect.objectContaining<{enjoyers:UserVehicle[]}>({
+                enjoyers: expect.any(Array<UserVehicle>),
             })
         )
     })
@@ -302,6 +325,7 @@ describe("Test: PATCH /myVehicle/@it/saucer/routines", () => {
 
     afterEach(async () => {
         await mongoDbApi.deleteVehicle(data.insertedId)
+        await mongoDbApi.deleteUser(udata.insertedId)
     })
 
     test("It should respond to the PATCH method", async () => {
@@ -325,7 +349,7 @@ describe("Test: PATCH /myVehicle/@it/saucer/routines", () => {
     test("It should return 404 (wrong user)", async () => {
         const requestPath: string = baseUrl + "/api/myVehicle/@it/saucer/routines"
         const header = {
-            "authorization" : setUpHeader(data.insertedId.toString())
+            "authorization" : setUpHeader("AYO")
         }
 
         try {
@@ -365,7 +389,7 @@ describe("Test: PATCH /myVehicle/vehicleId", () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
         user = getUserData()
         data = await mongoDbApi.insertUser(user)
-        vehicle = getVehicleData(new Types.ObjectId())
+        vehicle = getVehicleData(new Types.ObjectId(data.insertedId))
         vdata = await mongoDbApi.insertVehicle(vehicle)
     }),
 
@@ -394,8 +418,8 @@ describe("Test: PATCH /myVehicle/vehicleId", () => {
             expect.objectContaining<GetVehicleResponse>({
                 vehicleId: expect.any(String),
                 type: expect.any(String),
-                owner: expect.any(String),
-                enjoyers: expect.any(Array<string>),
+                owner: expect.any(Object),
+                enjoyers: expect.any(Array<UserVehicle>),
                 legalInfos: expect.any(Object)
             })
         )
@@ -464,37 +488,41 @@ describe("Test: PATCH /myVehicle/vehicleId/owner", () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
         user = getUserData()
         data = await mongoDbApi.insertUser(user)
-        vehicle = getVehicleData(new Types.ObjectId())
+        vehicle = getVehicleData(new Types.ObjectId(data.insertedId))
         vdata = await mongoDbApi.insertVehicle(vehicle)
     }),
 
-        afterEach(async () => {
-            await mongoDbApi.deleteUser(data.insertedId)
-            await mongoDbApi.deleteVehicle(vdata.insertedId)
-        }),
+    afterEach(async () => {
+        await mongoDbApi.deleteUser(data.insertedId)
+        await mongoDbApi.deleteVehicle(vdata.insertedId)
+    }),
 
 
-        test("It should response the PATCH method", async () => {
-            const requestPath: string = baseUrl + "/api/myVehicle/vehicleId/owner"
-            let response
-            const header = {
-                "authorization" : setUpHeader(data.insertedId.toString())
-            }
+    test("It should response the PATCH method", async () => {
+        const requestPath: string = baseUrl + "/api/myVehicle/vehicleId/owner"
+        let response
+        const header = {
+            "authorization" : setUpHeader(data.insertedId.toString())
+        }
 
-            response = await axios.patch(requestPath, {
-                vehicleId: vdata.insertedId
-            },{
-                headers: header
-            });
-
-            expect(response.status).toBe(201);
-            const userRes: { owner: string } = response.data
-            expect(userRes).toEqual(
-                expect.objectContaining<{ owner: string }>({
-                    owner: expect.any(String)
-                })
-            )
+        response = await axios.patch(requestPath, {
+            vehicleId: vdata.insertedId
+        },{
+            headers: header
         });
+
+        expect(response.status).toBe(201);
+        const userRes: UserVehicle = response.data
+        expect(userRes).toEqual(
+            expect.objectContaining<UserVehicle>({
+                name: expect.any(String),
+                surname: expect.any(String),
+                id: expect.any(String),
+                email: expect.any(String),
+                nickname: expect.any(String)
+            })
+        )
+    });
 
     // wrong userId
     test("It should have response 404 (wrong userId )", async () => {
@@ -560,7 +588,7 @@ describe("Test: PATCH /myVehicle/vehicleId/enjoyers", () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
         user = getUserData()
         data = await mongoDbApi.insertUser(user)
-        vehicle = getVehicleData(new Types.ObjectId())
+        vehicle = getVehicleData(new Types.ObjectId(), new Types.ObjectId(data.insertedId))
         vdata = await mongoDbApi.insertVehicle(vehicle)
     }),
 
@@ -585,9 +613,10 @@ describe("Test: PATCH /myVehicle/vehicleId/enjoyers", () => {
 
         expect(response.status).toBe(201);
         const userRes: { enjoyers: string[] } = response.data
-        expect(userRes).toEqual(
-            expect.objectContaining<{enjoyers: string[]}>({
-                enjoyers: expect.any(Array<string>)
+        const vehicleRes: {enjoyers:UserVehicle[]} = response.data
+        expect(vehicleRes).toEqual(
+            expect.objectContaining<{enjoyers:UserVehicle[]}>({
+                enjoyers: expect.any(Array<UserVehicle>),
             })
         )
     });

@@ -357,7 +357,7 @@ export async function removeEnjoyer(vehicleId: Types.ObjectId, enjoyerId: Types.
     }).catch(err => Promise.reject(new ServerError("Internal server error")))
 
     if (!result) return Promise.reject(new ServerError("No user with that identifier"))
-    await removeUserEnjoyedVehicle(enjoyerId, this._id)
+    await removeUserEnjoyedVehicle(enjoyerId, vehicleId)
     return Promise.resolve()
 }
 

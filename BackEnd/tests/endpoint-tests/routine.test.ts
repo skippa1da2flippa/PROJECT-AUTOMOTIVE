@@ -75,6 +75,74 @@ describe("Test: GET /users/@meh/routines", () => {
 
 });
 
+describe("Test: POST /users/@meh/routines", () => {
+
+    let mongoDbApi: MongoDbApi
+    let user: User
+    let data: MongoDbSingleInsertResponse
+
+    beforeEach(async () => {
+        mongoDbApi = new MongoDbApi(apiCredentials)
+        user = getUserData()
+        data = await mongoDbApi.insertUser(user)
+    }),
+
+    afterEach(async () => {
+        await mongoDbApi.deleteUser(data.insertedId)
+    }),
+
+
+    test("It should response the POST method", async () => {
+        const requestPath: string = baseUrl + "/api/users/@meh/routines"
+        let response
+        const header = {
+            "authorization" : setUpHeader(data.insertedId.toString())
+        }
+
+        response = await axios.post<UserRoutines>(requestPath, {
+            name: "routine",
+            temperature: 10,
+            lightsColor: "white",
+            music: ["carti"],
+            path: "vamp anthem"
+        }, {
+            headers: header
+        });
+
+        expect(response.status).toBe(204);
+    });
+
+    // wrong userId
+    test("It should have response 404", async () => {
+        const requestPath: string = baseUrl + "/api/users/@meh/routines"
+        const header = {
+            "authorization" : setUpHeader("AYO")
+        }
+        try {
+            await axios.post<UserRoutines>(requestPath, {
+                name: "routine",
+                temperature: 10,
+                lightsColor: "white",
+                music: ["carti"],
+                path: "vamp anthem"
+            }, {
+                headers: header
+            });
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
+    });
+
+});
+
 
 describe("Test: GET /users/@meh/routines/:name", () => {
 
@@ -178,17 +246,27 @@ describe("Test: DELETE /users/@meh/routines/:name", () => {
 
 
     test("It should response the DELETE method", async () => {
-        const requestPath: string = baseUrl + "/api/users/@meh/routines/" + user.routines[0].name
+        const requestPath: string = baseUrl + "/api/users/@meh/routines/" + "routine"
         let response
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
 
+        await axios.post<UserRoutines>(baseUrl +"/api/users/@meh/routines", {
+            name: "routine",
+            temperature: 10,
+            lightsColor: "white",
+            music: ["carti"],
+            path: "vamp anthem"
+        }, {
+            headers: header
+        });
+
         response = await axios.delete(requestPath, {
             headers: header
         });
 
-        expect(response.status).toBe(201);
+        expect(response.status).toBe(204);
     });
 
     // wrong userId
@@ -250,6 +328,17 @@ describe("Test: PUT /users/@meh/routines/:name", () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
         user = getUserData()
         data = await mongoDbApi.insertUser(user)
+        await axios.post<UserRoutines>(baseUrl +"/api/users/@meh/routines", {
+            name: "routine",
+            temperature: 10,
+            lightsColor: "white",
+            music: ["carti"],
+            path: "vamp anthem"
+        }, {
+            headers: {
+                "authorization" : setUpHeader(data.insertedId.toString())
+            }
+        });
     }),
 
     afterEach(async () => {
@@ -258,7 +347,7 @@ describe("Test: PUT /users/@meh/routines/:name", () => {
 
 
     test("It should response the PUT method", async () => {
-        const requestPath: string = baseUrl + "/api/users/@meh/routines/" + user.routines[0].name
+        const requestPath: string = baseUrl + "/api/users/@meh/routines/" + "routine"
         let response
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
@@ -269,7 +358,7 @@ describe("Test: PUT /users/@meh/routines/:name", () => {
             temperature: 5,
             lights: "#FFFFQQ",
             musicToAdd: ["rap"],
-            musicToRemove: ["punk"]
+            musicToRemove: ["carti"]
         },{
             headers: header
         });
@@ -279,12 +368,18 @@ describe("Test: PUT /users/@meh/routines/:name", () => {
 
     // wrong userId
     test("It should have response 404 (wrong id)", async () => {
-        const requestPath: string = baseUrl + "/api/users/@meh/routines/" + user.routines[0].name
+        const requestPath: string = baseUrl + "/api/users/@meh/routines/" + "routine"
         const header = {
             "authorization" : setUpHeader("AYO")
         }
         try {
-            await axios.put<ErrResponse>(requestPath, {
+            await axios.put<UserRoutine>(requestPath, {
+                newName: "AYO",
+                temperature: 5,
+                lights: "#FFFFQQ",
+                musicToAdd: ["rap"],
+                musicToRemove: ["carti"]
+            },{
                 headers: header
             });
         } catch(err) {
@@ -306,7 +401,13 @@ describe("Test: PUT /users/@meh/routines/:name", () => {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
         try {
-            await axios.put<ErrResponse>(requestPath, {
+            await axios.put<UserRoutine>(requestPath, {
+                newName: "AYO",
+                temperature: 5,
+                lights: "#FFFFQQ",
+                musicToAdd: ["rap"],
+                musicToRemove: ["carti"]
+            },{
                 headers: header
             });
         } catch(err) {
@@ -324,22 +425,31 @@ describe("Test: PUT /users/@meh/routines/:name", () => {
 
 
     test("It should have response 400 (wrong param)", async () => {
-        const requestPath: string = baseUrl + "/api/users/@meh/routines/" + user.routines[0].name
-        let response
+        const requestPath: string = baseUrl + "/api/users/@meh/routines/" + "routine"
+
         const header = {
             "authorization" : setUpHeader(data.insertedId.toString())
         }
-
-        response = await axios.put<UserRoutine>(requestPath, {
-            newName: "AYO",
-            temperature: undefined,
-            lights: "#FFFFQQ",
-            musicToAdd: ["rap"],
-            musicToRemove: ["punk"]
-        },{
-            headers: header
-        });
-
-        expect(response.status).toBe(204);
+        try {
+            await axios.put<UserRoutine>(requestPath, {
+                newName: "AYO",
+                temperature: undefined,
+                lights: "#FFFFQQ",
+                musicToAdd: ["rap"],
+                musicToRemove: ["carti"]
+            },{
+                headers: header
+            });
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(400);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
     });
 });

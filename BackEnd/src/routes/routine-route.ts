@@ -4,6 +4,7 @@ import {retrieveUserId} from "./utils/param-checking";
 import {AuthenticatedRequest} from "./utils/authenticated-request";
 import {UserEndpointResponse} from "./user-routes";
 import {
+    addRoutine,
     deleteRoutine,
     getUserById,
     updateRoutineLightsColor,
@@ -12,7 +13,7 @@ import {
     UserDocument
 } from "../model/database/user";
 import {toUnixSeconds} from "./utils/date-utils";
-import {RoutineSubDocument} from "../model/database/routine";
+import {Routine, RoutineSubDocument} from "../model/database/routine";
 import {ServerError} from "../model/errors/server-error";
 import {use} from "passport";
 
@@ -31,6 +32,18 @@ interface RoutineUpdateRequest extends AuthenticatedRequest {
     body: RoutineUpdateBody
 }
 
+interface RoutineCreationBody {
+    name: string,
+    temperature: number,
+    lightsColor: string,
+    music: string[],
+    path: string
+}
+
+interface RoutineCreationRequest extends AuthenticatedRequest {
+    body: RoutineCreationBody
+}
+
 
 router.get(
     "/users/@meh/routines",
@@ -44,6 +57,33 @@ router.get(
             return res.status(201).json({
                 routines: user.routines
             })
+        } catch (err) {
+            return res.status(err.statusCode).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: err.message,
+                requestPath: req.path,
+            })
+        }
+    }
+)
+
+router.post(
+    "/users/@meh/routines",
+    authenticateToken,
+    retrieveUserId,
+    async (req: RoutineCreationRequest, res: UserEndpointResponse) => {
+        let userId = res.locals.userId
+        let user: UserDocument
+        try {
+            const routine: Routine = {
+                name: req.body.name + "/" + userId,
+                temperature: req.body.temperature,
+                path: req.body.path,
+                lightsColor: req.body.lightsColor,
+                music: req.body.music
+            }
+            await addRoutine(userId, routine)
+            return res.status(204).json()
         } catch (err) {
             return res.status(err.statusCode).json({
                 timestamp: toUnixSeconds(new Date()),
@@ -82,6 +122,7 @@ router.get(
         }
     }
 )
+
 
 router.put(
     "/users/@meh/routines/:name",

@@ -10,7 +10,7 @@
 - /api/users/@meh/nickName                                  PATCH nickname update
 - /api/users/@meh/email                                     PATCH email update 
 - /api/users/@meh/password                                  PATCH user psw update
-- /api/users/@meh/enjoyedVehicle?action=<action>            PATCH user enjoyed Vehicle
+- /api/users/@meh/enjoyedVehicle/remove                     PATCH user enjoyed Vehicle remove
 
 
 # AUTH ENDPOINTS
@@ -57,7 +57,9 @@
 - /api/users/@meh/routines                 GET user routines
 - /api/users/@meh/routines/name            GET user routine
 
-- /api/users/@meh/routines/name            PUT user routine update   
+- /api/users/@meh/routines/name            PUT user routine update 
+
+- /users/@meh/routines                     POST user new routine
 
 - /api/users/@meh/routines/name            DELETE user routine  
 
