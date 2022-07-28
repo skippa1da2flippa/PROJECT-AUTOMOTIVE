@@ -1,32 +1,25 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import {NextFunction, Request, Response, Router} from 'express';
 import passport from 'passport';
 import jsonwebtoken from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
-import { Strategy } from 'passport-local';
+import {Strategy} from 'passport-local';
 
 import {
     createUser,
-    UserDocument,
+    getSaltNdHash,
+    getUserByEmail,
     setUserStatus,
-    UserStatus,
-    getUserByEmail, getSaltNdHash
+    UserDocument,
+    UserStatus
 } from '../model/database/user';
-import { AnyKeys, Types } from 'mongoose';
-import { ioServer } from '../index';
-import { JwtData } from '../model/auth/jwt-data';
-import { AuthenticatedRequest } from './utils/authenticated-request';
-import { toUnixSeconds } from './utils/date-utils';
-import { Socket } from 'socket.io';
+import {AnyKeys, Types} from 'mongoose';
+import {ioServer} from '../index';
+import {JwtData} from '../model/auth/jwt-data';
+import {AuthenticatedRequest} from './utils/authenticated-request';
+import {toUnixSeconds} from './utils/date-utils';
+import {Socket} from 'socket.io';
 import chalk from 'chalk';
-import {BanListPool} from "../model/ban-list/ban-list-pool";
-import {
-    getVehicleById,
-    ModelTypes,
-    ProjectVehicleDocument,
-    setVehicleStatus,
-    VehicleStatus
-} from "../model/database/my-vehicle";
-import {LegalInfos} from "../model/database/legalInfos";
+import {getVehicleById, ProjectVehicleDocument, setVehicleStatus, VehicleStatus} from "../model/database/my-vehicle";
 import {ServerError} from "../model/errors/server-error";
 
 export const router = Router();
@@ -220,7 +213,7 @@ router.post(
             });
         }
 
-    
+        await setUserStatus(req.user._id, UserStatus.Online)
         // Return the token along with the id of the authenticated user
         return res.status(200).json({
             userId: req.user._id,

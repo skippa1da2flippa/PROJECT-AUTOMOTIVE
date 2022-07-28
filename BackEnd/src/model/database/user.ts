@@ -735,10 +735,14 @@ export async function updateRoutineMusic(
 export const setUserStatus = async (
     userId: Types.ObjectId,
     newStatus: UserStatus
-): Promise<UserDocument> => {
-    let user: UserDocument = await getUserById(userId);
-    user.status = newStatus;
-    return  user.save();
+): Promise<void> => {
+    let result = UserModel.findByIdAndUpdate(userId, {
+        status: newStatus
+    }).catch(err => Promise.reject(new ServerError('Internal server error')))
+
+    return result
+        ? Promise.resolve()
+        : Promise.reject(new ServerError("No user with that identifier"))
 };
 
 export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise<void> {

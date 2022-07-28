@@ -243,11 +243,15 @@ export async function updatePassword(_id: Types.ObjectId, password: string): Pro
 export const setVehicleStatus = async (
     vehicleId: Types.ObjectId,
     newStatus: VehicleStatus
-): Promise<ProjectVehicleDocument> => {
-    let vehicle: ProjectVehicleDocument = await getVehicleById(vehicleId);
-    vehicle.status = newStatus;
-    // TO DO emit to the owner when the vehicle change status
-    return  vehicle.save();
+): Promise<void> => {
+    // TO DO emit to the owner when the vehicle change status ?
+    let result = VehicleModel.findByIdAndUpdate(vehicleId, {
+        status: newStatus
+    }).catch(err => Promise.reject(new ServerError('Internal server error')))
+
+    return result
+        ? Promise.resolve()
+        : Promise.reject(new ServerError('No vehicle with that identifier'))
 };
 
 /**
