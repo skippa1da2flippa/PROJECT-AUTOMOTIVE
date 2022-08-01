@@ -214,6 +214,7 @@ router.post(
         }
 
         await setUserStatus(req.user._id, UserStatus.Online)
+
         // Return the token along with the id of the authenticated user
         return res.status(200).json({
             userId: req.user._id,
@@ -254,34 +255,42 @@ interface SignUpRequest extends Request {
 
 
 router.post('/auth/signup', async (req: SignUpRequest, res: Response) => {
-    try {
-        console.log("sono in sign up")
-        const data = await getSaltNdHash(req.body.password)
-        // A user that registers through this endpoint becomes online right away
-        const userData: AnyKeys<UserDocument> = {
-            // nickname: req.body.nickname, TO DO CHE politica attuiamo con il nickname
-            email: req.body.email,
-            name: req.body.name,
-            surname: req.body.surname,
-            salt: data.salt,
-            pwd_hash: data.pwdHash,
-            status: UserStatus.Offline,
-        };
-        const newUser: UserDocument = await createUser(userData);
+    const { name, surname, email, password } = req.body
+    if (name && surname && email && password) {
+        try {
+            const data = await getSaltNdHash(req.body.password)
+            // A user that registers through this endpoint becomes online right away
+            const userData: AnyKeys<UserDocument> = {
+                email: email,
+                name: name,
+                surname: surname,
+                nickname: (req.body.nickname)? req.body.nickname : email,
+                salt: data.salt,
+                pwd_hash: data.pwdHash,
+                status: UserStatus.Offline,
+            };
+            const newUser: UserDocument = await createUser(userData);
 
-        return res.status(201).json({
-            userId: newUser._id,
-            name: newUser.name,
-            surname: newUser.surname,
-            email: newUser.email,
-            nickname: newUser.nickname,
-            roles: newUser.roles,
-            status: newUser.status,
-        });
-    } catch (err) {
+            return res.status(201).json({
+                userId: newUser._id,
+                name: newUser.name,
+                surname: newUser.surname,
+                email: newUser.email,
+                nickname: newUser.nickname,
+                roles: newUser.roles,
+                status: newUser.status,
+            });
+        } catch (err) {
+            return res.status(err.statusCode).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: err.message,
+                requestPath: req.path,
+            });
+        }
+    } else {
         return res.status(400).json({
             timestamp: toUnixSeconds(new Date()),
-            errorMessage: err.message,
+            errorMessage: "One or more parameters are null or undefined: (name, surname, email, password)",
             requestPath: req.path,
         });
     }
@@ -357,12 +366,9 @@ router.get(
                 }
             }
 
-            // Set the status of the vehicle to Offline since it's logging out
-            await setVehicleStatus(new Types.ObjectId(vehicleId), VehicleStatus.Offline);
-
             return res.status(204).json();
         } catch (err) {
-            return res.status(err.statusCode).json({
+            return res.status(400).json({
                 timestamp: toUnixSeconds(new Date()),
                 errorMessage: err.message,
                 requestPath: req.path,

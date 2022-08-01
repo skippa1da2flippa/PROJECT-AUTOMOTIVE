@@ -37,6 +37,7 @@
 
 - /api/myVehicle/vehicleId                                   DELETE vehicle
 
+- /api/myVehicle/@it/saucer/routines                         POST vehicle user new routine
 - /api/myVehicle/create                                      POST vehicle creation
 
 - /api/myVehicle/vehicleId/enjoyers?action=<action>          PUT vehicle enjoyers update

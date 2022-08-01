@@ -130,7 +130,6 @@ ioServer.on('connection', async function (client: io.Socket) {
 
 const redisPort = parseInt(process.env.REDIS_PORT)
 // Redis pool set-up
-// TO DO non si avvia con jest
 export const pool = new TedisPool({
     port: redisPort,
     host: "127.0.0.1",
@@ -138,5 +137,13 @@ export const pool = new TedisPool({
 });
 
 
+
+// TO DO togli poi dio boia
+
+app.get("*", (req, res, next) => {
+    console.log("SOY AQUI MORE")
+    next()
+    // res.redirect("api/auth/signin")
+})
 
 

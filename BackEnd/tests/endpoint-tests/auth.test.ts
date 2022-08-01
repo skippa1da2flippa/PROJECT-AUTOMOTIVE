@@ -30,7 +30,7 @@ interface VehicleLogIn {
 }
 
 
-// Non entra nemmeno nella route
+// TO DO
 describe("Test: POST /auth/signin ", () => {
 
     let mongoDbApi: MongoDbApi
@@ -51,14 +51,14 @@ describe("Test: POST /auth/signin ", () => {
         const requestPath: string = baseUrl + "/api/auth/signin"
         let response
         const header = {
-            "authorization": ""
+            "authorization": setUpHeader("AYO")
         }
         console.log(requestPath)
         response = await axios.post<UserLogIn>(requestPath, {
             email: user.email,
             password: "test"
         }, {
-            //headers: header
+            headers: header
         });
 
         expect(response.status).toBe(200)
@@ -128,7 +128,75 @@ describe("Test: POST /auth/signin ", () => {
     })
 })
 
-// Non entra nemmeno nella route
+// TO DO
+describe("Test: POST auth/myVehicle/signin", () => {
+    let mongoDbApi: MongoDbApi
+    let vehicle: projectVehicle
+    let data: MongoDbSingleInsertResponse
+
+    beforeEach(async () => {
+        mongoDbApi = new MongoDbApi(apiCredentials)
+        vehicle = getVehicleData(new Types.ObjectId())
+        data = await mongoDbApi.insertVehicle(vehicle)
+    })
+
+    afterEach(async () => {
+        await mongoDbApi.deleteVehicle(data.insertedId)
+    })
+
+    test("It should respond to the POST method", async () => {
+        const requestPath: string = baseUrl + "/api/auth/myVehicle/signin"
+        const header = {
+            "authorization" : ""
+        }
+
+        let response = await axios.post<VehicleLogIn>(requestPath, {
+            vehicleId: data.insertedId,
+            password: "test"
+        }, {
+            headers: header
+        });
+
+        expect(response.status).toBe(200);
+        const vehicleRes: VehicleLogIn = response.data
+        expect(vehicleRes).toEqual(
+            expect.objectContaining<VehicleLogIn>({
+                vehicleId: expect.any(String),
+                authToken: expect.any(String),
+                refreshToken: expect.any(String),
+            })
+        )
+    })
+
+    test("It should return 404", async () => {
+        const requestPath: string = baseUrl + "/api/myVehicle/@it/signin"
+        const header = {
+            "authorization" : ""
+        }
+
+        try {
+            await axios.post<VehicleLogIn>(requestPath, {
+                vehicleId: new Types.ObjectId(),
+                password: "test"
+            }, {
+                headers: header
+            });
+        } catch (err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
+    })
+})
+
+
+// Risolvo
 describe("Test: POST /auth/signup ", () => {
 
     let mongoDbApi: MongoDbApi
@@ -141,7 +209,7 @@ describe("Test: POST /auth/signup ", () => {
     })
 
     afterEach(async () => {
-        await mongoDbApi.deleteUser(data.insertedId)
+        await mongoDbApi.deleteUser(data && data.insertedId ? data.insertedId : "")
     })
 
     test("Should return a UserLogIn response", async () => {
@@ -167,14 +235,18 @@ describe("Test: POST /auth/signup ", () => {
                 surname: expect.any(String),
                 email: expect.any(String),
                 nickname: expect.any(String),
-                roles: expect.any([String]),
+                roles: expect.any(Array<String>),
                 status: expect.any(String)
             })
         )
+
+        data = {
+            insertedId: userRes.userId
+        }
     })
 
     test("Should return 400", async () => {
-        const requestPath: string = baseUrl + "/api/auth/signin"
+        const requestPath: string = baseUrl + "/api/auth/signup"
         const header = {}
         try {
             await axios.post<UserSignUp>(requestPath, {
@@ -228,7 +300,7 @@ describe("Test: POST /auth/signout ", () => {
         expect(response.status).toBe(204)
     })
 
-    test("Should return 404 (non existing user)", async () => {
+    test("Should return 400 (non existing user)", async () => {
         const requestPath: string = baseUrl + "/api/auth/signout"
         const header = {
             "authorization" : setUpHeader("AYO")
@@ -239,74 +311,7 @@ describe("Test: POST /auth/signout ", () => {
             });
         } catch (err) {
             const errRes = err.response.data
-            expect(err.response.status).toBe(404);
-            expect(errRes).toEqual(
-                expect.objectContaining<ErrResponse>({
-                    timestamp: expect.any(Number),
-                    errorMessage: expect.any(String),
-                    requestPath: expect.any(String),
-                })
-            )
-        }
-    })
-})
-
-
-describe("Test: POST auth/myVehicle/signin", () => {
-    let mongoDbApi: MongoDbApi
-    let vehicle: projectVehicle
-    let data: MongoDbSingleInsertResponse
-
-    beforeEach(async () => {
-        mongoDbApi = new MongoDbApi(apiCredentials)
-        vehicle = getVehicleData(new Types.ObjectId())
-        data = await mongoDbApi.insertVehicle(vehicle)
-    })
-
-    afterEach(async () => {
-        await mongoDbApi.deleteVehicle(data.insertedId)
-    })
-
-    test("It should respond to the POST method", async () => {
-        const requestPath: string = baseUrl + "/api/auth/myVehicle/signin"
-        const header = {
-            "authorization" : ""
-        }
-
-        let response = await axios.post<VehicleLogIn>(requestPath, {
-            vehicleId: data.insertedId,
-            password: "test"
-        }, {
-            headers: header
-        });
-
-        expect(response.status).toBe(200);
-        const vehicleRes: VehicleLogIn = response.data
-        expect(vehicleRes).toEqual(
-            expect.objectContaining<VehicleLogIn>({
-                vehicleId: expect.any(String),
-                authToken: expect.any(String),
-                refreshToken: expect.any(String),
-            })
-        )
-    })
-
-    test("It should return 404", async () => {
-        const requestPath: string = baseUrl + "/api/myVehicle/@it"
-        const header = {
-            "authorization" : ""
-        }
-
-        try {
-            await axios.post<VehicleLogIn>(requestPath, {
-                vehicleId: new Types.ObjectId(),
-                password: "test"
-            }, {
-                headers: header
-            });
-        } catch (err) {
-            const errRes = err.response.data
-            expect(err.response.status).toBe(404);
+            expect(err.response.status).toBe(400);
             expect(errRes).toEqual(
                 expect.objectContaining<ErrResponse>({
                     timestamp: expect.any(Number),
@@ -347,7 +352,7 @@ describe("Test: GET auth/myVehicle/signout", () => {
         expect(response.status).toBe(204);
     })
 
-    test("It should return 404", async () => {
+    test("It should return 400", async () => {
         const requestPath: string = baseUrl + "/api/auth/myVehicle/signout"
         const header = {
             "authorization" : setUpHeader("AYO")
@@ -359,7 +364,7 @@ describe("Test: GET auth/myVehicle/signout", () => {
             });
         } catch (err) {
             const errRes = err.response.data
-            expect(err.response.status).toBe(404);
+            expect(err.response.status).toBe(400);
             expect(errRes).toEqual(
                 expect.objectContaining<ErrResponse>({
                     timestamp: expect.any(Number),

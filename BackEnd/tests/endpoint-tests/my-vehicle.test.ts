@@ -378,6 +378,83 @@ describe("Test: PATCH /myVehicle/@it/saucer/routines", () => {
 
 })
 
+describe("Test: POST /myVehicle/@it/saucer/routines", () => {
+    let mongoDbApi: MongoDbApi
+    let vehicle: projectVehicle
+    let data: MongoDbSingleInsertResponse
+    let udata: MongoDbSingleInsertResponse
+
+    beforeEach(async () => {
+        mongoDbApi = new MongoDbApi(apiCredentials)
+        vehicle = getVehicleData(new Types.ObjectId())
+        data = await mongoDbApi.insertVehicle(vehicle)
+        udata = await mongoDbApi.insertUser(getUserData())
+    })
+
+    afterEach(async () => {
+        await mongoDbApi.deleteVehicle(data.insertedId)
+        await mongoDbApi.deleteUser(udata.insertedId)
+    })
+
+    test("It should respond to the PATCH method", async () => {
+        const requestPath: string = baseUrl + "/api/myVehicle/@it/saucer/routines"
+        const header = {
+            "authorization" : setUpHeader(data.insertedId.toString())
+        }
+
+        const response = await axios.post(
+            requestPath,
+            {
+                saucerId: udata.insertedId,
+                name: "routine",
+                temperature: 10,
+                lightsColor: "white",
+                music: ["carti"],
+                path: "vamp anthem"
+            },
+            {
+                headers: header
+            }
+        );
+        expect(response.status).toBe(204);
+    })
+
+    test("It should return 404 (wrong user)", async () => {
+        const requestPath: string = baseUrl + "/api/myVehicle/@it/saucer/routines"
+        const header = {
+            "authorization" : setUpHeader("AYO")
+        }
+
+        try {
+            await axios.post(
+                requestPath,
+                {
+                    saucerId: udata.insertedId,
+                    name: "routine",
+                    temperature: 10,
+                    lightsColor: "white",
+                    music: ["carti"],
+                    path: "vamp anthem"
+                },
+                {
+                    headers: header
+                }
+            );
+        } catch (err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(404);
+            expect(errRes).toEqual(
+                expect.objectContaining<ErrResponse>({
+                    timestamp: expect.any(Number),
+                    errorMessage: expect.any(String),
+                    requestPath: expect.any(String),
+                })
+            )
+        }
+    })
+
+})
+
 describe("Test: PATCH /myVehicle/vehicleId", () => {
 
     let mongoDbApi: MongoDbApi

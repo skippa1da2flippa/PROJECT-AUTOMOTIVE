@@ -1,6 +1,5 @@
 import { Types } from 'mongoose';
 import {Router, Response, Request} from 'express';
-import * as usr from '../model/database/user';
 import { AuthenticatedRequest } from './utils/authenticated-request';
 import { toUnixSeconds } from './utils/date-utils';
 import {retrieveUserId, retrieveVehicleId, skipLimitChecker} from './utils/param-checking';
@@ -18,9 +17,11 @@ import {
 } from '../model/database/my-vehicle'
 import {LegalInfos} from "../model/database/legalInfos";
 import {ioServer} from "../index";
-import {getSaltNdHash, getUserById, updatePsw, UserDocument} from "../model/database/user";
-import {UpdatePasswordRequest, UserEndpointResponse} from "./user-routes";
-import {ServerError} from "../model/errors/server-error";
+import {addRoutine, getSaltNdHash, getUserById, updatePsw, UserDocument} from "../model/database/user";
+import {UpdatePasswordRequest} from "./user-routes";
+import {Routine} from "../model/database/routine";
+
+
 
 
 interface UserVehicle {
@@ -87,6 +88,18 @@ interface UserRoutineRequest extends AuthenticatedRequest {
     body: UserRoutineBody
 }
 
+interface RoutineCreationBody {
+    saucerId: string,
+    name: string,
+    temperature: number,
+    lightsColor: string,
+    music: string[],
+    path: string
+}
+
+export interface UserRoutineCreationRequest extends AuthenticatedRequest {
+    body: RoutineCreationBody
+}
 
 
 export const router = Router();
@@ -188,6 +201,34 @@ router.patch(
             return res.status(201).json({
                 routines: user.routines
             })
+        } catch (err) {
+            return res.status(err.statusCode).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: err.message,
+                requestPath: req.path,
+            });
+        }
+    }
+)
+
+router.post(
+    '/myVehicle/@it/saucer/routines',
+    authenticateToken,
+    retrieveVehicleId,
+    async (req: UserRoutineCreationRequest, res: VehicleEndpointResponse) => {
+        let userId = new Types.ObjectId(req.body.saucerId)
+        let user: UserDocument
+        try {
+            user = await getUserById(userId)
+            const routine: Routine = {
+                name: req.body.name + "/" + userId,
+                temperature: req.body.temperature,
+                path: req.body.path,
+                lightsColor: req.body.lightsColor,
+                music: req.body.music
+            }
+            await addRoutine(userId, routine)
+            return res.status(204).json()
         } catch (err) {
             return res.status(err.statusCode).json({
                 timestamp: toUnixSeconds(new Date()),

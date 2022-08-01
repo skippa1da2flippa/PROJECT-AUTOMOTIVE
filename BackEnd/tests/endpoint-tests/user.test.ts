@@ -63,11 +63,11 @@ describe("Test: GET /users/@meh", () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
         user = getUserData()
         data = await mongoDbApi.insertUser(user)
-    }), 
+    })
 
     afterEach(async () => {
         await mongoDbApi.deleteUser(data.insertedId)
-    }), 
+    })
 
 
     test("It should response the GET method", async () => {

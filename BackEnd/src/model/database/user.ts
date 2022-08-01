@@ -511,7 +511,9 @@ export async function removeFriendship(userId: Types.ObjectId, friendId: Types.O
 
 export async function createUser(data: AnyKeys<UserDocument>): Promise<UserDocument> {
     const user: UserDocument = new UserModel(data);
-    return user.save()
+    return user.save().catch((err) =>
+        Promise.reject(new ServerError('Internal server error'))
+    );
 }
 
 export async function deleteUser(filter: FilterQuery<UserDocument>): Promise<void> {
