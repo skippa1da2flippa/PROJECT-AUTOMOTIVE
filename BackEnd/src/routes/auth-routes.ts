@@ -44,15 +44,14 @@ export const authenticateToken = async function (
     const refreshToken = authHeaders && authHeaders.split(',')[0];
     const accessToken = authHeaders && authHeaders.split(',')[1];
 
-    /**
-     *  if (refreshToken == null || accessToken == null) {
-     *         if (refreshToken) await BanListPool.insertElem(refreshToken)
-     *         return res.sendStatus(403);
-     *     }
-     * */
+    // salvo nella ban-pool se manca un token
+    if (refreshToken == null || accessToken == null) {
+        if (refreshToken) await BanListPool.insertElem(refreshToken)
+        return res.sendStatus(403);
+    }
 
     // controllo se il token è bannato
-    //if (await BanListPool.isBanned(refreshToken)) return res.sendStatus(403);
+    if (await BanListPool.isBanned(refreshToken)) return res.sendStatus(403);
 
     jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET, (err: any, content: JwtData) => {
         if (err){

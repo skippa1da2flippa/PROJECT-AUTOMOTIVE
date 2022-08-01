@@ -831,7 +831,6 @@ describe("Test: POST /myVehicle/create", () => {
 });
 
 
-// TO DO il primo test non passa perche dice che inviamo una response più di una volta
 describe("Test: PUT /myVehicle/vehicleId/enjoyers", () => {
 
     let mongoDbApi: MongoDbApi

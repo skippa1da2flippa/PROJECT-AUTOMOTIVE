@@ -30,7 +30,7 @@ export class BanListPool {
         await tedis.set(bannedToken.toString(), toUnixSeconds(new Date()).toString())
 
         // delete expired tokens
-        this.deleteExpired(tedis)
+        await this.deleteExpired(tedis)
 
         // gives back the connection
         pool.putTedis(tedis)
@@ -57,7 +57,7 @@ export class BanListPool {
 
         pool.putTedis(tedis)
 
-        return Promise.resolve(value !== undefined)
+        return Promise.resolve(value !== null)
     }
 }
 

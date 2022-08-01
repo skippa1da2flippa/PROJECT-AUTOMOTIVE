@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.05% </span>
+                <span class="strong">25.26% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>60/285</span>
+                <span class='fraction'>72/285</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">4.34% </span>
+                <span class="strong">6.52% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/92</span>
+                <span class='fraction'>6/92</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">2.46% </span>
+                <span class="strong">4.93% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/81</span>
+                <span class='fraction'>4/81</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25.32% </span>
+                <span class="strong">29.18% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>59/233</span>
+                <span class='fraction'>68/233</span>
             </div>
         
             
@@ -1321,11 +1321,11 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1631,22 +1631,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2139,13 +2139,13 @@ UserSchema.methods.setRole = <span class="fstat-no" title="function not covered"
 // Create "Users" collection
 export const UserModel: Model&lt;UserDocument&gt; = mongoose.model('User', UserSchema, 'Users');
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >getUserById(</span>userId: Types.ObjectId): Promise&lt;UserDocument&gt; {
-    const <span class="cstat-no" title="statement not covered" >userDoc = <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >await UserModel.findOne({ _id: userId }).catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt;</span></span></span>
+export async function getUserById(userId: Types.ObjectId): Promise&lt;UserDocument&gt; {
+    const userDoc = await UserModel.findOne({ _id: userId }).catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt;
 <span class="cstat-no" title="statement not covered" >        Promise.reject(new ServerError('Internal server error'))</span>
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return !userDoc</span>
-        ? Promise.reject(new ServerError('No user with that identifier'))
+    return !userDoc
+        ? <span class="branch-0 cbranch-no" title="branch not covered" >Promise.reject(new ServerError('No user with that identifier'))</span>
         : Promise.resolve(userDoc);
 }
 &nbsp;
@@ -2448,24 +2448,24 @@ export const setUserStatus = <span class="fstat-no" title="function not covered"
         : Promise.reject(new ServerError("No user with that identifier"))
 };
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >updateUserEnjoyedVehicle(</span>userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise&lt;void&gt; {
+export async function updateUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId: Types.ObjectId): Promise&lt;void&gt; {
     let user: UserDocument
-    let <span class="cstat-no" title="statement not covered" >flag: boolean = false</span>
+    let flag: boolean = false
     try {
-<span class="cstat-no" title="statement not covered" >        user = <span class="cstat-no" title="statement not covered" >await getUserById(userId)</span></span>
+        user = await getUserById(userId)
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        for (let idx in user.enjoyedVehicles) {</span>
+        for (let idx in user.enjoyedVehicles) {
 <span class="cstat-no" title="statement not covered" >            <span class="missing-if-branch" title="if path not taken" >I</span>if (user.enjoyedVehicles[idx].toString() === vehicleId.toString()) <span class="cstat-no" title="statement not covered" >flag = true</span></span>
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (flag) <span class="cstat-no" title="statement not covered" >return Promise.reject(new ServerError("Vehicle already inside the collection"))</span></span>
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (flag) <span class="cstat-no" title="statement not covered" >return Promise.reject(new ServerError("Vehicle already inside the collection"))</span>
 &nbsp;
-        let <span class="cstat-no" title="statement not covered" >result = <span class="cstat-no" title="statement not covered" >await UserModel.findByIdAndUpdate(userId, {</span></span>
+        let result = await UserModel.findByIdAndUpdate(userId, {
             $push: { enjoyedVehicles: vehicleId }
         }).catch(<span class="fstat-no" title="function not covered" >err </span>=&gt; <span class="cstat-no" title="statement not covered" >Promise.reject(new ServerError("Internal server error")))</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (!result) <span class="cstat-no" title="statement not covered" >return Promise.reject(new ServerError("No user with that identifier"))</span></span>
-<span class="cstat-no" title="statement not covered" >        return Promise.resolve()</span>
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (!result) <span class="cstat-no" title="statement not covered" >return Promise.reject(new ServerError("No user with that identifier"))</span>
+        return Promise.resolve()
     } catch(err) {
 <span class="cstat-no" title="statement not covered" >        return Promise.reject(err)</span>
     }
@@ -2527,7 +2527,7 @@ export async function <span class="fstat-no" title="function not covered" >addRo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-08-01T16:21:04.475Z
+                at 2022-08-01T18:43:17.798Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

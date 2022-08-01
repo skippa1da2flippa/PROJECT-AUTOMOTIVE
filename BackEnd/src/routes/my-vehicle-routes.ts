@@ -392,7 +392,7 @@ router.put(
                 if (req.query.action === "add") {
                     const onComplete = (result: string) => {
                         if (result === "false") return res.sendStatus(403).json();
-                        else return res.sendStatus(204).json()
+                        else return res.sendStatus(204)
                     }
                     return await addEnjoyer(
                         new Types.ObjectId(vehicleId),

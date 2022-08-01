@@ -281,10 +281,12 @@ export async function addEnjoyer(
     const enjoyerReqEmitter: EnjoyerRequestEmitter = new EnjoyerRequestEmitter(ioServer, vehicle.owner)
 
 
-    for (let idx in vehicle.enjoyers) {
-        if (vehicle.enjoyers[idx].toString() === enjoyerId.toString())
-            return Promise.reject(new ServerError("Users already inside the enjoyers"))
-    }
+    /**
+     * for (let idx in vehicle.enjoyers) {
+     *         if (vehicle.enjoyers[idx].toString() === enjoyerId.toString())
+     *             return Promise.reject(new ServerError("Users already inside the enjoyers"))
+     *     }
+     * */
 
     enjoyerReqEmitter.emit({
         enjoyerId: enjoyerId.toString(),
