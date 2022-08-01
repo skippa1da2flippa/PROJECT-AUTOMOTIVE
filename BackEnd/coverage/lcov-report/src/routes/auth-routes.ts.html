@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.47% </span>
+                <span class="strong">23.07% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>27/115</span>
+                <span class='fraction'>27/117</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">24.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>25/100</span>
+                <span class='fraction'>25/102</span>
             </div>
         
             
@@ -436,19 +436,14 @@
 <a name='L371'></a><a href='#L371'>371</a>
 <a name='L372'></a><a href='#L372'>372</a>
 <a name='L373'></a><a href='#L373'>373</a>
-<a name='L374'></a><a href='#L374'>374</a>
-<a name='L375'></a><a href='#L375'>375</a>
-<a name='L376'></a><a href='#L376'>376</a>
-<a name='L377'></a><a href='#L377'>377</a>
-<a name='L378'></a><a href='#L378'>378</a>
-<a name='L379'></a><a href='#L379'>379</a>
-<a name='L380'></a><a href='#L380'>380</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L374'></a><a href='#L374'>374</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -462,16 +457,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -493,7 +481,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -548,6 +535,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -664,7 +652,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -821,36 +809,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { NextFunction, Request, Response, Router } from 'express';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {NextFunction, Request, Response, Router} from 'express';
 import passport from 'passport';
 import jsonwebtoken from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
-import { Strategy } from 'passport-local';
+import {Strategy} from 'passport-local';
 &nbsp;
 import {
     createUser,
-    UserDocument,
+    getSaltNdHash,
+    getUserByEmail,
     setUserStatus,
-    UserStatus,
-    getUserByEmail, getSaltNdHash
+    UserDocument,
+    UserStatus
 } from '../model/database/user';
-import { AnyKeys, Types } from 'mongoose';
-import { ioServer } from '../index';
-import { JwtData } from '../model/auth/jwt-data';
-import { AuthenticatedRequest } from './utils/authenticated-request';
-import { toUnixSeconds } from './utils/date-utils';
-import { Socket } from 'socket.io';
+import {AnyKeys, Types} from 'mongoose';
+import {ioServer} from '../index';
+import {JwtData} from '../model/auth/jwt-data';
+import {AuthenticatedRequest} from './utils/authenticated-request';
+import {toUnixSeconds} from './utils/date-utils';
+import {Socket} from 'socket.io';
 import chalk from 'chalk';
-import {BanListPool} from "../model/ban-list/ban-list-pool";
-import {
-    getVehicleById,
-    ModelTypes,
-    ProjectVehicleDocument,
-    setVehicleStatus,
-    VehicleStatus
-} from "../model/database/my-vehicle";
-import {LegalInfos} from "../model/database/legalInfos";
+import {getVehicleById, ProjectVehicleDocument, setVehicleStatus, VehicleStatus} from "../model/database/my-vehicle";
 import {ServerError} from "../model/errors/server-error";
+import {BanListPool} from "../model/ban-list/ban-list-pool";
 &nbsp;
 export const router = Router();
 export const jsonWebToken = jsonwebtoken
@@ -873,9 +855,8 @@ export const authenticateToken = <span class="fstat-no" title="function not cove
     const <span class="cstat-no" title="statement not covered" >refreshToken = authHeaders &amp;&amp; authHeaders.split(',')[0];</span>
     const <span class="cstat-no" title="statement not covered" >accessToken = authHeaders &amp;&amp; authHeaders.split(',')[1];</span>
 &nbsp;
-    /** TO DO
-     * console.log("sono nel middleware di authentication")
-     *     if (refreshToken == null || accessToken == null) {
+    /**
+     *  if (refreshToken == null || accessToken == null) {
      *         if (refreshToken) await BanListPool.insertElem(refreshToken)
      *         return res.sendStatus(403);
      *     }
@@ -927,7 +908,8 @@ export const authenticateToken = <span class="fstat-no" title="function not cove
 const localAuth = <span class="fstat-no" title="function not covered" >async function (e</span>mail: string, password: string, done: Function) {
     let user: UserDocument | void
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    user = <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >await getUserByEmail(email).catch(<span class="fstat-no" title="function not covered" >(e</span>rr: Error) =&gt; {</span></span></span>
+<span class="cstat-no" title="statement not covered" >    console.log("Sono dentro il controllo dei parametri")</span>
+<span class="cstat-no" title="statement not covered" >    user = <span class="cstat-no" title="statement not covered" >await getUserByEmail(email).catch(<span class="fstat-no" title="function not covered" >(e</span>rr: Error) =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >        return done(err);</span>
     });
 &nbsp;
@@ -1043,7 +1025,7 @@ router.post(
             });
         }
 &nbsp;
-    
+<span class="cstat-no" title="statement not covered" >        await setUserStatus(req.user._id, UserStatus.Online)</span>
         // Return the token along with the id of the authenticated user
 <span class="cstat-no" title="statement not covered" >        return res.status(200).json({</span>
             userId: req.user._id,
@@ -1207,7 +1189,7 @@ router.get(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-07-27T19:40:36.505Z
+                at 2022-08-01T16:21:04.475Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

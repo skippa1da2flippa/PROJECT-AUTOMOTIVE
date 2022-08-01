@@ -1,11 +1,12 @@
 import {apiCredentials, MongoDbApi, MongoDbSingleInsertResponse} from "../utils/mongodb-api";
-import {ModelTypes, projectVehicle} from "../../src/model/database/my-vehicle";
+import {ModelTypes, projectVehicle, VehicleModel} from "../../src/model/database/my-vehicle";
 import {getVehicleData, insertManyVehicles} from "../utils/my-vehicle-helper";
 import mongoose, { Types } from "mongoose";
 import {baseUrl, ErrResponse, setUpHeader} from "./user.test";
 import axios from "axios";
-import {User} from "../../src/model/database/user";
+import {User, UserModel} from "../../src/model/database/user";
 import {getUserData} from "../utils/user-helper";
+import {pool} from "../../src";
 
 interface BaseVehicleResponse {
     vehicleId: string
@@ -829,7 +830,8 @@ describe("Test: POST /myVehicle/create", () => {
     });
 });
 
-// TO DO finchè non fai qualcosa per i test di socket i primi due test non vanno
+
+// TO DO il primo test non passa perche dice che inviamo una response più di una volta
 describe("Test: PUT /myVehicle/vehicleId/enjoyers", () => {
 
     let mongoDbApi: MongoDbApi
@@ -837,23 +839,27 @@ describe("Test: PUT /myVehicle/vehicleId/enjoyers", () => {
     let vdata: MongoDbSingleInsertResponse
     let udata: MongoDbSingleInsertResponse
     let user: User
+    let ownerId: Types.ObjectId
     let enjoyerId: Types.ObjectId
 
     beforeEach(async () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
-        enjoyerId = new Types.ObjectId()
-        vehicle = getVehicleData(new Types.ObjectId(), enjoyerId)
         user = getUserData()
+        udata = await mongoDbApi.insertUser(user)
+        ownerId = new Types.ObjectId()
+        vehicle = getVehicleData(ownerId, new Types.ObjectId(udata.insertedId))
         vdata = await mongoDbApi.insertVehicle(vehicle)
-        udata = await mongoDbApi.insertUser(getUserData())
-    }),
+        await UserModel.findByIdAndUpdate(new Types.ObjectId(udata.insertedId), {
+            $push: {  enjoyedVehicles: new Types.ObjectId(vdata.insertedId) }
+        })
+    })
 
     afterEach(async () => {
         await mongoDbApi.deleteVehicle(vdata.insertedId)
         await mongoDbApi.deleteUser(udata.insertedId)
     })
 
-    // ?action=add
+    // ?action=add, this mock test add on redis the owner response
     test("It should response the PUT method ?action=add", async () => {
         const requestPath: string = baseUrl + "/api/myVehicle/vehicleId/enjoyers"
         const header = {
@@ -862,6 +868,20 @@ describe("Test: PUT /myVehicle/vehicleId/enjoyers", () => {
         const param = {
             action: "add"
         }
+
+        await VehicleModel.findByIdAndUpdate(vdata.insertedId, {
+            $pull: { enjoyers: udata.insertedId }
+        })
+
+        await UserModel.findByIdAndUpdate(udata.insertedId, {
+            $pull: { enjoyedVehicles: vdata.insertedId }
+        })
+
+        let tedis = await pool.getTedis()
+
+        await tedis.set(ownerId.toString(), "true")
+
+        pool.putTedis(tedis)
 
         const response = await axios.put(requestPath, {
             vehicleId: vdata.insertedId,
@@ -872,13 +892,7 @@ describe("Test: PUT /myVehicle/vehicleId/enjoyers", () => {
             headers: header,
             params: param
         });
-        expect(response.status).toBe(200);
-        const vehicleRes = response.data
-        expect(vehicleRes).toEqual(
-            expect.objectContaining<{added: string}>({
-                added: expect.any(String),
-            })
-        )
+        expect(response.status).toBe(204);
     });
 
     // ?action=remove
@@ -893,7 +907,7 @@ describe("Test: PUT /myVehicle/vehicleId/enjoyers", () => {
 
         const response = await axios.put(requestPath, {
             vehicleId: vdata.insertedId,
-            enjoyerId: enjoyerId,
+            enjoyerId: udata.insertedId,
             enjoyerName: "name",
             enjoyerSurname: "surname"
         },{
@@ -1004,6 +1018,42 @@ describe("Test: PUT /myVehicle/vehicleId/enjoyers", () => {
                     requestPath: expect.any(String),
                 })
             )
+        }
+    });
+
+    // ?action=add, this mock test add on redis the owner response
+    test("It should response 403 (false response)", async () => {
+        const requestPath: string = baseUrl + "/api/myVehicle/vehicleId/enjoyers"
+        const header = {
+            "authorization" : setUpHeader(udata.insertedId.toString())
+        }
+        const param = {
+            action: "add"
+        }
+
+        await VehicleModel.findByIdAndUpdate(vdata.insertedId, {
+            $pull: {enjoyers: udata.insertedId}
+        })
+
+        let tedis = await pool.getTedis()
+
+        await tedis.set(ownerId.toString(), "false")
+
+        pool.putTedis(tedis)
+
+        try {
+            await axios.put(requestPath, {
+                vehicleId: vdata.insertedId,
+                enjoyerId: udata.insertedId,
+                enjoyerName: user.name,
+                enjoyerSurname: user.surname
+            },{
+                headers: header,
+                params: param
+            });
+        } catch(err) {
+            const errRes = err.response.data
+            expect(err.response.status).toBe(403);
         }
     });
 

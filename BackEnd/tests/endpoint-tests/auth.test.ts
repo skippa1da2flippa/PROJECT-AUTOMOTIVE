@@ -53,12 +53,12 @@ describe("Test: POST /auth/signin ", () => {
         const header = {
             "authorization": ""
         }
-
+        console.log(requestPath)
         response = await axios.post<UserLogIn>(requestPath, {
             email: user.email,
             password: "test"
         }, {
-            headers: header
+            //headers: header
         });
 
         expect(response.status).toBe(200)

@@ -21,6 +21,7 @@ import {Socket} from 'socket.io';
 import chalk from 'chalk';
 import {getVehicleById, ProjectVehicleDocument, setVehicleStatus, VehicleStatus} from "../model/database/my-vehicle";
 import {ServerError} from "../model/errors/server-error";
+import {BanListPool} from "../model/ban-list/ban-list-pool";
 
 export const router = Router();
 export const jsonWebToken = jsonwebtoken
@@ -43,9 +44,8 @@ export const authenticateToken = async function (
     const refreshToken = authHeaders && authHeaders.split(',')[0];
     const accessToken = authHeaders && authHeaders.split(',')[1];
 
-    /** TO DO
-     * console.log("sono nel middleware di authentication")
-     *     if (refreshToken == null || accessToken == null) {
+    /**
+     *  if (refreshToken == null || accessToken == null) {
      *         if (refreshToken) await BanListPool.insertElem(refreshToken)
      *         return res.sendStatus(403);
      *     }
@@ -97,6 +97,7 @@ export const authenticateToken = async function (
 const localAuth = async function (email: string, password: string, done: Function) {
     let user: UserDocument | void
 
+    console.log("Sono dentro il controllo dei parametri")
     user = await getUserByEmail(email).catch((err: Error) => {
         return done(err);
     });

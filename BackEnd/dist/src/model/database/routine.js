@@ -1,27 +1,51 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RoutineSchema = void 0;
-var mongoose_1 = require("mongoose");
-// TO DO since the name is unique we'll add routine name with this pattern: routine_name/userID, thanks to this we'll be able to make name unique just for the single user
+exports.RoutineModel = exports.RoutineSchema = void 0;
+var mongoose_1 = __importStar(require("mongoose"));
+// TO DO when testing is done replace normal tye with SchemaTypes.type
 exports.RoutineSchema = new mongoose_1.Schema({
     name: {
-        type: mongoose_1.SchemaTypes.String,
+        type: String,
         required: true,
         unique: true
     },
     temperature: {
-        type: mongoose_1.SchemaTypes.Number,
+        type: Number,
     },
     lightsColor: {
-        type: mongoose_1.SchemaTypes.String,
+        type: String,
         default: "#FFFFFF"
     },
     music: {
-        type: [mongoose_1.SchemaTypes.String],
+        type: [String],
         default: ["classical"]
     },
     path: {
     // needed data to work with google api
     }
 });
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicm91dGluZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uL3NyYy9tb2RlbC9kYXRhYmFzZS9yb3V0aW5lLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFBLHFDQUFzRDtBQXdCdEQsMEtBQTBLO0FBRTdKLFFBQUEsYUFBYSxHQUFHLElBQUksaUJBQU0sQ0FDbkM7SUFDSSxJQUFJLEVBQUU7UUFDRixJQUFJLEVBQUUsc0JBQVcsQ0FBQyxNQUFNO1FBQ3hCLFFBQVEsRUFBRSxJQUFJO1FBQ2QsTUFBTSxFQUFFLElBQUk7S0FDZjtJQUNELFdBQVcsRUFBRTtRQUNULElBQUksRUFBRSxzQkFBVyxDQUFDLE1BQU07S0FDM0I7SUFDRCxXQUFXLEVBQUU7UUFDVCxJQUFJLEVBQUUsc0JBQVcsQ0FBQyxNQUFNO1FBQ3hCLE9BQU8sRUFBRSxTQUFTO0tBQ3JCO0lBQ0QsS0FBSyxFQUFFO1FBQ0gsSUFBSSxFQUFFLENBQUMsc0JBQVcsQ0FBQyxNQUFNLENBQUM7UUFDMUIsT0FBTyxFQUFFLENBQUMsV0FBVyxDQUFDO0tBQ3pCO0lBQ0QsSUFBSSxFQUFFO0lBQ0Ysc0NBQXNDO0tBQ3pDO0NBQ0osQ0FDSixDQUFBIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgU2NoZW1hLCBTY2hlbWFUeXBlcywgVHlwZXMgfSBmcm9tICdtb25nb29zZSc7XHJcblxyXG5cclxuZXhwb3J0IGludGVyZmFjZSBSb3V0aW5lIHtcclxuXHJcbiAgICAvL3JvdXRpbmUgbmFtZVxyXG4gICAgbmFtZTogc3RyaW5nXHJcblxyXG4gICAgLy9BQyB0ZW1wZXJhdHVyZVxyXG4gICAgdGVtcGVyYXR1cmU6IG51bWJlcixcclxuXHJcbiAgICAvL3RoaXMgbWF5IG5lZWQgdG8gYmUgcmVwcmVzZW50ZWQgYXMgYSB3aG9sZSBjb2xsZWN0aW9uIGlmIGl0J3MgbW9yZSB0aGFuIGp1c3Qgb25lIHNldCBvZiBsaWdodHNcclxuICAgIGxpZ2h0c0NvbG9yOiBzdHJpbmcsXHJcblxyXG4gICAgLy9yZXByZXNlbnQgd2hpY2ggZ2VucmUgaXMgcmVsYXRlZCB0byBhIGNlcnRhaW4gcm91dGluZVxyXG4gICAgbXVzaWM6IHN0cmluZ1tdXHJcblxyXG4gICAgLy9jb3JyZWN0IHRoZSB0eXBlXHJcbiAgICBwYXRoOiBhbnlcclxufVxyXG5cclxuZXhwb3J0IGludGVyZmFjZSBSb3V0aW5lU3ViRG9jdW1lbnQgZXh0ZW5kcyBSb3V0aW5lLCBUeXBlcy5TdWJkb2N1bWVudCB7fVxyXG5cclxuXHJcbi8vIFRPIERPIHNpbmNlIHRoZSBuYW1lIGlzIHVuaXF1ZSB3ZSdsbCBhZGQgcm91dGluZSBuYW1lIHdpdGggdGhpcyBwYXR0ZXJuOiByb3V0aW5lX25hbWUvdXNlcklELCB0aGFua3MgdG8gdGhpcyB3ZSdsbCBiZSBhYmxlIHRvIG1ha2UgbmFtZSB1bmlxdWUganVzdCBmb3IgdGhlIHNpbmdsZSB1c2VyXHJcblxyXG5leHBvcnQgY29uc3QgUm91dGluZVNjaGVtYSA9IG5ldyBTY2hlbWE8Um91dGluZVN1YkRvY3VtZW50PihcclxuICAgIHtcclxuICAgICAgICBuYW1lOiB7XHJcbiAgICAgICAgICAgIHR5cGU6IFNjaGVtYVR5cGVzLlN0cmluZyxcclxuICAgICAgICAgICAgcmVxdWlyZWQ6IHRydWUsIFxyXG4gICAgICAgICAgICB1bmlxdWU6IHRydWVcclxuICAgICAgICB9LCBcclxuICAgICAgICB0ZW1wZXJhdHVyZToge1xyXG4gICAgICAgICAgICB0eXBlOiBTY2hlbWFUeXBlcy5OdW1iZXIsXHJcbiAgICAgICAgfSwgXHJcbiAgICAgICAgbGlnaHRzQ29sb3I6IHtcclxuICAgICAgICAgICAgdHlwZTogU2NoZW1hVHlwZXMuU3RyaW5nLFxyXG4gICAgICAgICAgICBkZWZhdWx0OiBcIiNGRkZGRkZcIlxyXG4gICAgICAgIH0sXHJcbiAgICAgICAgbXVzaWM6IHtcclxuICAgICAgICAgICAgdHlwZTogW1NjaGVtYVR5cGVzLlN0cmluZ10sIFxyXG4gICAgICAgICAgICBkZWZhdWx0OiBbXCJjbGFzc2ljYWxcIl1cclxuICAgICAgICB9LCBcclxuICAgICAgICBwYXRoOiB7XHJcbiAgICAgICAgICAgIC8vIG5lZWRlZCBkYXRhIHRvIHdvcmsgd2l0aCBnb29nbGUgYXBpXHJcbiAgICAgICAgfVxyXG4gICAgfVxyXG4pIl19
+exports.RoutineModel = mongoose_1.default.model("Routine", exports.RoutineSchema, "Routines");
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicm91dGluZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uL3NyYy9tb2RlbC9kYXRhYmFzZS9yb3V0aW5lLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsbURBQXFFO0FBd0JyRSxzRUFBc0U7QUFDekQsUUFBQSxhQUFhLEdBQUcsSUFBSSxpQkFBTSxDQUNuQztJQUNJLElBQUksRUFBRTtRQUNGLElBQUksRUFBRSxNQUFNO1FBQ1osUUFBUSxFQUFFLElBQUk7UUFDZCxNQUFNLEVBQUUsSUFBSTtLQUNmO0lBQ0QsV0FBVyxFQUFFO1FBQ1QsSUFBSSxFQUFFLE1BQU07S0FDZjtJQUNELFdBQVcsRUFBRTtRQUNULElBQUksRUFBRSxNQUFNO1FBQ1osT0FBTyxFQUFFLFNBQVM7S0FDckI7SUFDRCxLQUFLLEVBQUU7UUFDSCxJQUFJLEVBQUUsQ0FBQyxNQUFNLENBQUM7UUFDZCxPQUFPLEVBQUUsQ0FBQyxXQUFXLENBQUM7S0FDekI7SUFDRCxJQUFJLEVBQUU7SUFDRixzQ0FBc0M7S0FDekM7Q0FDSixDQUNKLENBQUE7QUFFWSxRQUFBLFlBQVksR0FBOEIsa0JBQVEsQ0FBQyxLQUFLLENBQUMsU0FBUyxFQUFFLHFCQUFhLEVBQUUsVUFBVSxDQUFDLENBQUEiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgbW9uZ29vc2UsIHtNb2RlbCwgU2NoZW1hLCBTY2hlbWFUeXBlcywgVHlwZXN9IGZyb20gJ21vbmdvb3NlJztcclxuXHJcblxyXG5leHBvcnQgaW50ZXJmYWNlIFJvdXRpbmUge1xyXG5cclxuICAgIC8vcm91dGluZSBuYW1lXHJcbiAgICBuYW1lOiBzdHJpbmdcclxuXHJcbiAgICAvL0FDIHRlbXBlcmF0dXJlXHJcbiAgICB0ZW1wZXJhdHVyZTogbnVtYmVyLFxyXG5cclxuICAgIC8vdGhpcyBtYXkgbmVlZCB0byBiZSByZXByZXNlbnRlZCBhcyBhIHdob2xlIGNvbGxlY3Rpb24gaWYgaXQncyBtb3JlIHRoYW4ganVzdCBvbmUgc2V0IG9mIGxpZ2h0c1xyXG4gICAgbGlnaHRzQ29sb3I6IHN0cmluZyxcclxuXHJcbiAgICAvL3JlcHJlc2VudCB3aGljaCBnZW5yZSBpcyByZWxhdGVkIHRvIGEgY2VydGFpbiByb3V0aW5lXHJcbiAgICBtdXNpYzogc3RyaW5nW11cclxuXHJcbiAgICAvL2NvcnJlY3QgdGhlIHR5cGVcclxuICAgIHBhdGg6IGFueVxyXG59XHJcblxyXG5leHBvcnQgaW50ZXJmYWNlIFJvdXRpbmVTdWJEb2N1bWVudCBleHRlbmRzIFJvdXRpbmUsIFR5cGVzLlN1YmRvY3VtZW50IHt9XHJcblxyXG5cclxuLy8gVE8gRE8gd2hlbiB0ZXN0aW5nIGlzIGRvbmUgcmVwbGFjZSBub3JtYWwgdHllIHdpdGggU2NoZW1hVHlwZXMudHlwZVxyXG5leHBvcnQgY29uc3QgUm91dGluZVNjaGVtYSA9IG5ldyBTY2hlbWE8Um91dGluZVN1YkRvY3VtZW50PihcclxuICAgIHtcclxuICAgICAgICBuYW1lOiB7XHJcbiAgICAgICAgICAgIHR5cGU6IFN0cmluZyxcclxuICAgICAgICAgICAgcmVxdWlyZWQ6IHRydWUsIFxyXG4gICAgICAgICAgICB1bmlxdWU6IHRydWVcclxuICAgICAgICB9LCBcclxuICAgICAgICB0ZW1wZXJhdHVyZToge1xyXG4gICAgICAgICAgICB0eXBlOiBOdW1iZXIsXHJcbiAgICAgICAgfSwgXHJcbiAgICAgICAgbGlnaHRzQ29sb3I6IHtcclxuICAgICAgICAgICAgdHlwZTogU3RyaW5nLFxyXG4gICAgICAgICAgICBkZWZhdWx0OiBcIiNGRkZGRkZcIlxyXG4gICAgICAgIH0sXHJcbiAgICAgICAgbXVzaWM6IHtcclxuICAgICAgICAgICAgdHlwZTogW1N0cmluZ10sXHJcbiAgICAgICAgICAgIGRlZmF1bHQ6IFtcImNsYXNzaWNhbFwiXVxyXG4gICAgICAgIH0sIFxyXG4gICAgICAgIHBhdGg6IHtcclxuICAgICAgICAgICAgLy8gbmVlZGVkIGRhdGEgdG8gd29yayB3aXRoIGdvb2dsZSBhcGlcclxuICAgICAgICB9XHJcbiAgICB9XHJcbilcclxuXHJcbmV4cG9ydCBjb25zdCBSb3V0aW5lTW9kZWw6IE1vZGVsPFJvdXRpbmVTdWJEb2N1bWVudD4gPSBtb25nb29zZS5tb2RlbChcIlJvdXRpbmVcIiwgUm91dGluZVNjaGVtYSwgXCJSb3V0aW5lc1wiKVxyXG5cclxuIl19

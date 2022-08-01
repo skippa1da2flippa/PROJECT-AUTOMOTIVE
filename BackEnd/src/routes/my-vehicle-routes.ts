@@ -391,10 +391,10 @@ router.put(
             try {
                 if (req.query.action === "add") {
                     const onComplete = (result: string) => {
-                        if (result === "false") return res.send(403).json();
-                        else return res.send(204).json()
+                        if (result === "false") return res.sendStatus(403).json();
+                        else return res.sendStatus(204).json()
                     }
-                    await addEnjoyer(
+                    return await addEnjoyer(
                         new Types.ObjectId(vehicleId),
                         new Types.ObjectId(enjoyerId),
                         enjoyerName,
@@ -402,10 +402,6 @@ router.put(
                         ioServer,
                         onComplete
                     );
-
-                    return res.status(200).json({
-                        added: enjoyerId
-                    });
                 }
                 else {
                     await removeEnjoyer(

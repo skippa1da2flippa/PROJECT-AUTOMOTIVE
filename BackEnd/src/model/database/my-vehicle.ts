@@ -274,6 +274,7 @@ export async function addEnjoyer(
     let vehicle: ProjectVehicleDocument
     let res: string = ""
     let temp: any
+    let flag: boolean = false
 
     vehicle = await getVehicleById(vehicleId)
 
@@ -299,15 +300,21 @@ export async function addEnjoyer(
 
     // TO DO to check
     let interval = setInterval(async () => {
-        res = !(temp = await tedis.get(vehicle.owner.toString())) ? "" : temp as string
-        if (res === "true") {
-            await VehicleModel.findByIdAndUpdate(vehicleId, {
-                $push: { enjoyers: enjoyerId }
-            }).catch(err => Promise.reject(new ServerError("Internal server error")))
-            await updateUserEnjoyedVehicle(enjoyerId, vehicleId)
-            onComplete(res)
+        if (!flag) {
+            res = !(temp = await tedis.get(vehicle.owner.toString())) ? "" : temp as string
+            if (res === "true") {
+                await VehicleModel.findByIdAndUpdate(vehicleId, {
+                    $push: { enjoyers: enjoyerId }
+                }).catch(err => Promise.reject(new ServerError("Internal server error")))
+                await updateUserEnjoyedVehicle(enjoyerId, vehicleId)
+                onComplete(res)
+                flag = true
+            }
+            else if (res === "false") {
+                onComplete(res)
+                flag = true
+            }
         }
-        else if (res === "false") onComplete(res)
     }, 5000)
 
     setTimeout(async () => {
@@ -351,7 +358,7 @@ export async function changeOwner(vehicleId: Types.ObjectId, ownerId: Types.Obje
          owner: ownerId
     }).catch(err => Promise.reject(new ServerError("Internal server error")))
 
-    if (!result) return Promise.reject(new ServerError("No user with that identifier"))
+    if (!result) return Promise.reject(new ServerError("No vehicle with that identifier"))
 
     if (result.owner === ownerId) return Promise.reject(new ServerError("User already owner of the car"))
 
@@ -360,13 +367,12 @@ export async function changeOwner(vehicleId: Types.ObjectId, ownerId: Types.Obje
 
 
 export async function removeEnjoyer(vehicleId: Types.ObjectId, enjoyerId: Types.ObjectId) : Promise<void> {
-    let vehicle: ProjectVehicleDocument = await getVehicleById(new Types.ObjectId(vehicleId))
 
     let result = await VehicleModel.findByIdAndUpdate(vehicleId, {
         $pull: { enjoyers: enjoyerId }
     }).catch(err => Promise.reject(new ServerError("Internal server error")))
 
-    if (!result) return Promise.reject(new ServerError("No user with that identifier"))
+    if (!result) return Promise.reject(new ServerError("No vehicle with that identifier"))
     await removeUserEnjoyedVehicle(enjoyerId, vehicleId)
     return Promise.resolve()
 }
