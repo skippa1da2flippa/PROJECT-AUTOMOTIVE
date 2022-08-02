@@ -280,13 +280,10 @@ export async function addEnjoyer(
 
     const enjoyerReqEmitter: EnjoyerRequestEmitter = new EnjoyerRequestEmitter(ioServer, vehicle.owner)
 
-
-    /**
-     * for (let idx in vehicle.enjoyers) {
-     *         if (vehicle.enjoyers[idx].toString() === enjoyerId.toString())
-     *             return Promise.reject(new ServerError("Users already inside the enjoyers"))
-     *     }
-     * */
+    for (let idx in vehicle.enjoyers) {
+        if (vehicle.enjoyers[idx].toString() === enjoyerId.toString())
+            return Promise.reject(new ServerError("Users already inside the enjoyers"))
+    }
 
     enjoyerReqEmitter.emit({
         enjoyerId: enjoyerId.toString(),
@@ -300,7 +297,6 @@ export async function addEnjoyer(
     // gets a connection from the pool
     let tedis = await pool.getTedis()
 
-    // TO DO to check
     let interval = setInterval(async () => {
         if (!flag) {
             res = !(temp = await tedis.get(vehicle.owner.toString())) ? "" : temp as string
