@@ -27,6 +27,7 @@ import {Routine} from "../model/database/routine";
 interface UserVehicle {
     name: string,
     surname: string,
+    status: string
     id: string,
     email: string,
     nickname: string
@@ -142,6 +143,7 @@ router.get(
             return res.status(201).json({
                 name: user.name,
                 surname:user.surname,
+                status: user.status.valueOf(),
                 id: user._id,
                 email: user.email,
                 nickname: user.nickname
@@ -172,6 +174,7 @@ router.get(
                     name: user.name,
                     surname:user.surname,
                     id: user._id,
+                    status: user.status.valueOf(),
                     email: user.email,
                     nickname: user.nickname
                 })
@@ -282,6 +285,7 @@ router.patch(
             user = await getUserById(vehicle.owner)
             owner = {
                 name: user.name,
+                status: user.status.valueOf(),
                 surname:user.surname,
                 id: user._id,
                 email: user.email,
@@ -292,6 +296,7 @@ router.patch(
                 enjoyers.push({
                     name: enjoyer.name,
                     surname:enjoyer.surname,
+                    status: user.status.valueOf(),
                     id: enjoyer._id,
                     email: enjoyer.email,
                     nickname: enjoyer.nickname
@@ -330,7 +335,8 @@ router.patch(
                 surname:user.surname,
                 id: user._id,
                 email: user.email,
-                nickname: user.nickname
+                nickname: user.nickname,
+                status: user.status.valueOf()
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -357,6 +363,7 @@ router.patch(
                 enjoyers.push({
                     name: user.name,
                     surname:user.surname,
+                    status: user.status.valueOf(),
                     id: user._id,
                     email: user.email,
                     nickname: user.nickname

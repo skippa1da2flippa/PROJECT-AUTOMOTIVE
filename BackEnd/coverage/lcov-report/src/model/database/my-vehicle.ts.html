@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.53% </span>
+                <span class="strong">23.3% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/130</span>
+                <span class='fraction'>31/133</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.9% </span>
+                <span class="strong">18.75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/31</span>
+                <span class='fraction'>6/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">6.25% </span>
+                <span class="strong">9.37% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/32</span>
+                <span class='fraction'>3/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25.96% </span>
+                <span class="strong">27.1% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>27/104</span>
+                <span class='fraction'>29/107</span>
             </div>
         
             
@@ -441,11 +441,7 @@
 <a name='L376'></a><a href='#L376'>376</a>
 <a name='L377'></a><a href='#L377'>377</a>
 <a name='L378'></a><a href='#L378'>378</a>
-<a name='L379'></a><a href='#L379'>379</a>
-<a name='L380'></a><a href='#L380'>380</a>
-<a name='L381'></a><a href='#L381'>381</a>
-<a name='L382'></a><a href='#L382'>382</a>
-<a name='L383'></a><a href='#L383'>383</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L379'></a><a href='#L379'>379</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -622,11 +618,11 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -727,12 +723,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -746,7 +739,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1003,13 +995,13 @@ myVehicleSchema.methods.validatePassword = <span class="fstat-no" title="functio
 &nbsp;
 export const VehicleModel: Model&lt;ProjectVehicleDocument&gt; = mongoose.model('MyVehicle', myVehicleSchema, 'MyVehicles');
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >getVehicleById(</span>vehicleId: Types.ObjectId): Promise&lt;ProjectVehicleDocument&gt; {
-    const <span class="cstat-no" title="statement not covered" >carDoc = <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >await VehicleModel.findOne({ _id: vehicleId }).catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt;</span></span></span>
+export async function getVehicleById(vehicleId: Types.ObjectId): Promise&lt;ProjectVehicleDocument&gt; {
+    const carDoc = await VehicleModel.findOne({ _id: vehicleId }).catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt;
 <span class="cstat-no" title="statement not covered" >        Promise.reject(new ServerError('Internal server error'))</span>
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return !carDoc</span>
-        ? Promise.reject(new ServerError('No vehicle with that identifier'))
+    return !carDoc
+        ? <span class="branch-0 cbranch-no" title="branch not covered" >Promise.reject(new ServerError('No vehicle with that identifier'))</span>
         : Promise.resolve(carDoc);
 }
 &nbsp;
@@ -1109,13 +1101,10 @@ export async function <span class="fstat-no" title="function not covered" >addEn
 &nbsp;
     const <span class="cstat-no" title="statement not covered" >enjoyerReqEmitter: EnjoyerRequestEmitter = new EnjoyerRequestEmitter(ioServer, vehicle.owner)</span>
 &nbsp;
-&nbsp;
-    /**
-     * for (let idx in vehicle.enjoyers) {
-     *         if (vehicle.enjoyers[idx].toString() === enjoyerId.toString())
-     *             return Promise.reject(new ServerError("Users already inside the enjoyers"))
-     *     }
-     * */
+<span class="cstat-no" title="statement not covered" >    for (let idx in vehicle.enjoyers) {</span>
+<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (vehicle.enjoyers[idx].toString() === enjoyerId.toString())</span>
+<span class="cstat-no" title="statement not covered" >            return Promise.reject(new ServerError("Users already inside the enjoyers"))</span>
+    }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    enjoyerReqEmitter.emit({</span>
         enjoyerId: enjoyerId.toString(),
@@ -1129,7 +1118,6 @@ export async function <span class="fstat-no" title="function not covered" >addEn
     // gets a connection from the pool
     let <span class="cstat-no" title="statement not covered" >tedis = <span class="cstat-no" title="statement not covered" >await pool.getTedis()</span></span>
 &nbsp;
-    // TO DO to check
     let <span class="cstat-no" title="statement not covered" >interval = setInterval(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; {</span></span></span>
         if (<span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="if path not taken" >I</span>!f</span>lag) {
 <span class="cstat-no" title="statement not covered" >            res = !(temp = <span class="cstat-no" title="statement not covered" >await tedis.get(vehicle.owner.toString())) </span>? "" : temp as string</span>
@@ -1216,7 +1204,7 @@ export async function <span class="fstat-no" title="function not covered" >remov
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-08-02T16:47:32.159Z
+                at 2022-08-02T19:43:24.074Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
