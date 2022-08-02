@@ -96,10 +96,11 @@ export const authenticateToken = async function (
 const localAuth = async function (email: string, password: string, done: Function) {
     let user: UserDocument | void
 
-    console.log("Sono dentro il controllo dei parametri")
-    user = await getUserByEmail(email).catch((err: Error) => {
-        return done(err);
-    });
+    try {
+        user = await getUserByEmail(email)
+    } catch(err) {
+        return done(err)
+    }
 
     if (user && (await user.validatePassword(password))) {
         return done(null, user);
@@ -111,13 +112,14 @@ const localAuth = async function (email: string, password: string, done: Functio
 /**
  *  Function provided to passport middleware which verifies vehicle credentials
  */
-
 const vehicleAuth = async function (vehicleId: string, password: string, done: Function) {
     let vehicle: ProjectVehicleDocument | void
-
-    vehicle = await getVehicleById(new Types.ObjectId(vehicleId)).catch((err: Error) => {
-        return done(err);
-    });
+    console.log("dentro vehicle auth")
+    try {
+        vehicle = await getVehicleById(new Types.ObjectId(vehicleId))
+    } catch(err) {
+        return done(err)
+    }
 
     if (vehicle && (await vehicle.validatePassword(password))) {
         return done(null, vehicle);
@@ -127,8 +129,15 @@ const vehicleAuth = async function (vehicleId: string, password: string, done: F
 }
 
 
-passport.use(new Strategy(localAuth));
-passport.use("vehicle", new Strategy(vehicleAuth));
+passport.use(new Strategy(
+    {usernameField:"email", passwordField:"password"},
+    localAuth
+));
+
+passport.use("vehicle", new Strategy(
+    {usernameField:"vehicleId", passwordField:"password"},
+    vehicleAuth
+));
 
 interface AuthenticationRequestBody {
     email: string
@@ -159,11 +168,6 @@ interface SignInRequest extends Request {
 
 interface SignInVehicleRequest extends Request {
     body: VehicleRequestBody;
-
-    /**
-     * Field inserted by passport-local authentication middleware
-     */
-    vehicle: ProjectVehicleDocument
 }
 
 
@@ -191,7 +195,6 @@ router.post(
     '/auth/signin',
     passport.authenticate('local', { session: false }),
     async (req: SignInRequest, res: Response) => {
-        console.log("DENTRO SIGN IN")
         const tokensData: JwtData = {
             Id: req.user._id,
         };
@@ -228,9 +231,9 @@ router.post(
     '/auth/myVehicle/signin',
     passport.authenticate('vehicle', { session: false }),
     async (req: SignInVehicleRequest, res: Response) => {
-        console.log("DENTRO SIGN IN")
+
         const tokensData: JwtData = {
-            Id: req.vehicle._id,
+            Id: req.body.vehicleId
         };
         // Refresh token generation with 2 h duration, allow a user to maintain a session and be issued with access tokens
         const refreshToken = jsonwebtoken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
@@ -242,7 +245,7 @@ router.post(
 
         // Return the token along with the id of the authenticated user
         return res.status(200).json({
-            vehicleId: req.vehicle._id,
+            vehicleId: req.body.vehicleId,
             authToken: accessToken,
             refreshToken: refreshToken
         });

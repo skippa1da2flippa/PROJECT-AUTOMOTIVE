@@ -167,8 +167,6 @@ export class MongoDbApi {
     }
 
     public async insertVehicle(vehicleData: projectVehicle): Promise<MongoDbSingleInsertResponse> {
-        console.log("VEHICLE OWNER")
-        console.log(vehicleData.owner)
         return await this.insertDocument<projectVehicle>(vehicleData, dbCollectionNames.myVehicleCollection);
     }
 

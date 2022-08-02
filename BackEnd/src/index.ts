@@ -136,14 +136,3 @@ export const pool = new TedisPool({
     password: process.env.REDIS_PASSWORD as string
 });
 
-
-
-// TO DO togli poi dio boia
-
-app.get("*", (req, res, next) => {
-    console.log("SOY AQUI MORE")
-    next()
-    // res.redirect("api/auth/signin")
-})
-
-

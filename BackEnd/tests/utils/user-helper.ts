@@ -15,7 +15,7 @@ export const knownBcryptDigest = {
  * The username has to be unique to avoid conflicts,
  * the other data does not, so it is static.
  */
-export const getUserData = (enjoyedVehicles = []): User => {
+export const getUserData = (enjoyedVehicles = [], status: UserStatus = UserStatus.Online): User => {
     let random = randomInt(100000, 17)
     let date = Date.now()
     return {
@@ -27,7 +27,7 @@ export const getUserData = (enjoyedVehicles = []): User => {
         pwd_hash: knownBcryptDigest.pwdHash,
         salt: knownBcryptDigest.pwdSalt,
         roles: [UserRoles.Base],
-        status: UserStatus.Online,
+        status: status,
         stats: {
             sauce: 0,
             trophies: 0

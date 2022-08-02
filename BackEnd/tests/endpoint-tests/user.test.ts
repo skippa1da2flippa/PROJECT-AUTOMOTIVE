@@ -8,6 +8,8 @@ import { jsonWebToken} from "../../src/routes/auth-routes";
 import { generateAccessToken } from "../../src/routes/auth-routes";
 import { insertManyVehicles } from "../utils/my-vehicle-helper";
 import {projectVehicle, ProjectVehicleDocument} from "../../src/model/database/my-vehicle";
+import {pool} from "../../src";
+import {toUnixSeconds} from "../../src/routes/utils/date-utils";
 
 
 
@@ -114,6 +116,28 @@ describe("Test: GET /users/@meh", () => {
                     requestPath: expect.any(String),
                 })
             )
+        }
+    });
+
+    // banned token
+    test("It should have response 403", async () => {
+        const requestPath: string = baseUrl + "/api/users/@meh"
+        const header = {
+            "authorization" : setUpHeader(data.insertedId.toString())
+        }
+
+        let tedis = await pool.getTedis()
+
+        await tedis.set(header.authorization.split(",")[0], toUnixSeconds(new Date()).toString())
+
+        pool.putTedis(tedis)
+
+        try {
+            await axios.get<ErrResponse>(requestPath, {
+                headers: header
+            });
+        } catch(err) {
+            expect(err.response.status).toBe(403);
         }
     });
 

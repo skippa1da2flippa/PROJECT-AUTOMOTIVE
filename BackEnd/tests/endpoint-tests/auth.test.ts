@@ -1,6 +1,6 @@
 import {apiCredentials, MongoDbApi, MongoDbSingleInsertResponse} from "../utils/mongodb-api";
 import {getUserData} from "../utils/user-helper";
-import {User} from "../../src/model/database/user";
+import {User, UserStatus} from "../../src/model/database/user";
 import axios from "axios";
 import {baseUrl, ErrResponse, setUpHeader} from "./user.test";
 import {projectVehicle} from "../../src/model/database/my-vehicle";
@@ -30,7 +30,6 @@ interface VehicleLogIn {
 }
 
 
-// TO DO
 describe("Test: POST /auth/signin ", () => {
 
     let mongoDbApi: MongoDbApi
@@ -39,7 +38,7 @@ describe("Test: POST /auth/signin ", () => {
 
     beforeEach(async () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
-        user = getUserData()
+        user = getUserData([], UserStatus.Offline)
         data = await mongoDbApi.insertUser(user)
     })
 
@@ -51,7 +50,7 @@ describe("Test: POST /auth/signin ", () => {
         const requestPath: string = baseUrl + "/api/auth/signin"
         let response
         const header = {
-            "authorization": setUpHeader("AYO")
+            "authorization": ""
         }
         console.log(requestPath)
         response = await axios.post<UserLogIn>(requestPath, {
@@ -83,15 +82,22 @@ describe("Test: POST /auth/signin ", () => {
                 headers: header
             });
         } catch (err) {
-            const errRes = err.response.data
             expect(err.response.status).toBe(404);
-            expect(errRes).toEqual(
-                expect.objectContaining<ErrResponse>({
-                    timestamp: expect.any(Number),
-                    errorMessage: expect.any(String),
-                    requestPath: expect.any(String),
-                })
-            )
+        }
+    })
+
+    test("Should return 401 Unauthorized", async () => {
+        const requestPath: string = baseUrl + "/api/auth/signin"
+        const header = {}
+        try {
+            await axios.post<UserLogIn>(requestPath, {
+                email: user.email,
+                password: "wrong-psw"
+            },{
+                headers: header
+            });
+        } catch (err) {
+            expect(err.response.status).toBe(401);
         }
     })
 
@@ -128,7 +134,7 @@ describe("Test: POST /auth/signin ", () => {
     })
 })
 
-// TO DO
+
 describe("Test: POST auth/myVehicle/signin", () => {
     let mongoDbApi: MongoDbApi
     let vehicle: projectVehicle
@@ -182,15 +188,7 @@ describe("Test: POST auth/myVehicle/signin", () => {
                 headers: header
             });
         } catch (err) {
-            const errRes = err.response.data
             expect(err.response.status).toBe(404);
-            expect(errRes).toEqual(
-                expect.objectContaining<ErrResponse>({
-                    timestamp: expect.any(Number),
-                    errorMessage: expect.any(String),
-                    requestPath: expect.any(String),
-                })
-            )
         }
     })
 })
