@@ -22,6 +22,7 @@ interface GetVehicleResponse extends BaseVehicleResponse {
 interface UserVehicle {
     name: string
     surname: string
+    status: string
     id: string
     email: string
     nickname: string
@@ -123,6 +124,7 @@ describe("Test: GET /myVehicle/@it/owner", () => {
             expect.objectContaining<UserVehicle>({
                 name: expect.any(String),
                 surname: expect.any(String),
+                status: expect.any(String),
                 id: expect.any(String),
                 email: expect.any(String),
                 nickname: expect.any(String)
@@ -595,6 +597,7 @@ describe("Test: PATCH /myVehicle/vehicleId/owner", () => {
             expect.objectContaining<UserVehicle>({
                 name: expect.any(String),
                 surname: expect.any(String),
+                status: expect.any(String),
                 id: expect.any(String),
                 email: expect.any(String),
                 nickname: expect.any(String)
