@@ -16,7 +16,8 @@ interface BaseVehicleResponse {
 interface GetVehicleResponse extends BaseVehicleResponse {
     owner: UserVehicle
     enjoyers: UserVehicle[]
-    legalInfos: Object
+    legalInfos: Object,
+    accessToken: string
 }
 
 interface UserVehicle {
@@ -26,6 +27,7 @@ interface UserVehicle {
     id: string
     email: string
     nickname: string
+    accessToken?: string
 }
 
 describe("Test: GET /myVehicle/@it", () => {
@@ -500,7 +502,8 @@ describe("Test: PATCH /myVehicle/vehicleId", () => {
                 type: expect.any(String),
                 owner: expect.any(Object),
                 enjoyers: expect.any(Array<UserVehicle>),
-                legalInfos: expect.any(Object)
+                legalInfos: expect.any(Object),
+                accessToken: expect.any(String)
             })
         )
     });
@@ -600,7 +603,8 @@ describe("Test: PATCH /myVehicle/vehicleId/owner", () => {
                 status: expect.any(String),
                 id: expect.any(String),
                 email: expect.any(String),
-                nickname: expect.any(String)
+                nickname: expect.any(String),
+                accessToken: expect.any(String)
             })
         )
     });
@@ -693,11 +697,11 @@ describe("Test: PATCH /myVehicle/vehicleId/enjoyers", () => {
         });
 
         expect(response.status).toBe(201);
-        const userRes: { enjoyers: string[] } = response.data
-        const vehicleRes: {enjoyers:UserVehicle[]} = response.data
+        const vehicleRes: {enjoyers:UserVehicle[], accessToken: string} = response.data
         expect(vehicleRes).toEqual(
-            expect.objectContaining<{enjoyers:UserVehicle[]}>({
+            expect.objectContaining<{enjoyers:UserVehicle[], accessToken: string}>({
                 enjoyers: expect.any(Array<UserVehicle>),
+                accessToken: expect.any(String)
             })
         )
     });
@@ -873,10 +877,11 @@ describe("Test: POST /myVehicle/create", () => {
         });
 
         expect(response.status).toBe(200);
-        const userRes: { vehicleId: string } = response.data
+        const userRes: { vehicleId: string, accessToken: string } = response.data
         expect(userRes).toEqual(
-            expect.objectContaining<{ vehicleId: string }>({
-                vehicleId: expect.any(String)
+            expect.objectContaining<{ vehicleId: string, accessToken: string }>({
+                vehicleId: expect.any(String),
+                accessToken: expect.any(String)
             })
         )
     });
@@ -996,8 +1001,9 @@ describe("Test: PUT /myVehicle/vehicleId/enjoyers", () => {
         expect(response.status).toBe(200);
         const vehicleRes = response.data
         expect(vehicleRes).toEqual(
-            expect.objectContaining<{removed: string}>({
+            expect.objectContaining<{removed: string, accessToken: string}>({
                 removed: expect.any(String),
+                accessToken: expect.any(String)
             })
         )
     });

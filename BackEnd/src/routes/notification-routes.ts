@@ -12,11 +12,11 @@ import {
     NotTypes
 } from "../model/database/notification";
 import {Types} from "mongoose";
-import {UserEndpointResponse} from "./user-routes";
+import {MyVehicle, UserEndpointResponse} from "./user-routes";
 import {NotificationReceivedEmitter} from "../events/emitters/notification-received";
 import {NotificationData} from "../model/events/notification-data";
 import {NotificationDeletedEmitter} from "../events/emitters/notification-deleted";
-import {VehicleEndpointResponse} from "./my-vehicle-routes";
+import {UserVehicle, VehicleEndpointResponse} from "./my-vehicle-routes";
 
 export const router = Router();
 
@@ -37,9 +37,8 @@ router.get(
     '/users/@meh/notifications',
     authenticateToken,
     retrieveUserId,
-    async (req: AuthenticatedRequest, res: Response) => {
+    async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
         const userId: Types.ObjectId = res.locals.userId;
-
         try {
             const notifications: NotificationSubDocument[] =
                 await getMostRecentNotifications(userId);
@@ -52,7 +51,11 @@ router.get(
                     };
                 }
             );
-            return res.status(201).json({ notifications: responseData });
+
+            return res.status(201).json({
+                notifications: responseData,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
+            });
         } catch (err) {
             return res.status(err.statusCode).json({
                 timestamp: toUnixSeconds(new Date()),
@@ -93,7 +96,10 @@ router.post(
                 };
                 notifier.emit(notificationData);
 
-                return res.status(201).json(notificationData);
+                return res.status(201).json({
+                    notificationData,
+                    accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
+                });
             } catch (err) {
                 return res.status(err.statusCode).json({
                     timestamp: toUnixSeconds(new Date()),

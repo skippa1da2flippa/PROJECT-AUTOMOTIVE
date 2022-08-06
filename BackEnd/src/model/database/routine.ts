@@ -21,8 +21,8 @@ export interface Routine {
 
 export interface RoutineSubDocument extends Routine, Types.Subdocument {}
 
-
-// TO DO when testing is done replace normal tye with SchemaTypes.type
+//
+// TODO when testing is done replace normal tye with SchemaTypes.type, and id: false
 export const RoutineSchema = new Schema<RoutineSubDocument>(
     {
         name: {

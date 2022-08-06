@@ -39,10 +39,11 @@ describe("Test: GET /users/@meh/notifications", () => {
         });
 
         expect(response.status).toBe(201);
-        const userRes: {notifications:Notification[]} = response.data
+        const userRes: {notifications:Notification[], accessToken: string} = response.data
         expect(userRes).toEqual(
-            expect.objectContaining<{notifications:Notification[]}>({
+            expect.objectContaining<{notifications:Notification[], accessToken: string}>({
                 notifications: expect.any(Array<Notification>),
+                accessToken: expect.any(String)
             })
         )
     });
@@ -105,11 +106,11 @@ describe("Test: POST /users/@meh/notifications", () => {
         });
 
         expect(response.status).toBe(201);
-        const userRes: NotificationData = response.data
+        const userRes = response.data
         expect(userRes).toEqual(
-            expect.objectContaining<NotificationData>({
-                type: expect.any(String),
-                sender: expect.any(String)
+            expect.objectContaining<{ notificationData:NotificationData, accessToken: string }>({
+                notificationData: expect.any(Object),
+                accessToken: expect.any(String)
             })
         )
     });

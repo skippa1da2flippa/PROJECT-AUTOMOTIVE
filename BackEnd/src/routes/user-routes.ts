@@ -8,26 +8,38 @@ import { authenticateToken } from './auth-routes';
 import {
     ProjectVehicleDocument,
     getVehiclesByUserId,
-    getVehicleById, removeEnjoyer
+    getVehicleById, removeEnjoyer, VehicleStatus, ModelTypes, getFullVehicleData
 } from '../model/database/my-vehicle'
 import {ServerError} from "../model/errors/server-error";
-import {getUserById, updatePsw, UserDocument} from "../model/database/user";
+import {getUserById, updatePsw, User, UserDocument, validateEmail} from "../model/database/user";
+import {UserVehicle} from "./my-vehicle-routes";
+import {LegalInfos} from "../model/database/legalInfos";
 
 
+interface SingleFriendRequestBody {
+    friendId: string
+}
+
+interface SingleFriendRequest extends AuthenticatedRequest {
+    body: SingleFriendRequestBody
+}
 
 
 interface UserEndpointLocals {
     userId: Types.ObjectId;
     skip: number;
     limit: number;
+    newAccessToken: string;
 }
 
-// TO DO probabile sarà necessario creare qualche tipo di relationship tra utenti 
-// anche perchè se ci pensi se trovo una macchina di uno sconosciuto e mi voglio connettere
-// per ora posso farlo (almeno richiederlo all'owner) quindi ha senso che io posso richiedere
-// l'accesso all'owner sse sono amico con l'owner
-
-// TO DO capire bene come usare redis nelle route per migliorare le prestazioni
+export interface MyVehicle {
+    id: string,
+    owner: UserVehicle,
+    status: VehicleStatus,
+    legalInfos: LegalInfos,
+    enjoyers: UserVehicle[],
+    type: ModelTypes
+}
 
 /**
  * Interface that models the response of a user endpoint
@@ -100,6 +112,7 @@ router.get(
                 name: user.name,
                 surname: user.surname,
                 email: user.email,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -130,11 +143,12 @@ router.get(
                     surname: tempUser.surname,
                     nickname: tempUser.nickname,
                     email: tempUser.email,
-                    // status: tempUser.status TO DO
+                    status: tempUser.status
                 })
             }
             return res.status(201).json({
-                friends
+                friends,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -152,23 +166,14 @@ router.get(
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
-        let vehicles
+        let vehicles: MyVehicle[]
         const userId: Types.ObjectId = res.locals.userId;
         try {
-            vehicles = (await getVehiclesByUserId(userId)).map(elem => {
-                return {
-                    id: elem._id,
-                    owner: elem.owner,
-                    status: elem.status,
-                    legalInfos: elem.legalInfos,
-                    enjoyers: elem.enjoyers,
-                    type: elem.type
-                }
-            })
-
+            vehicles = await getVehiclesByUserId(userId)
             return res.status(201).json({
                 userId: userId,
-                myVehicles: vehicles
+                myVehicles: vehicles,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -186,29 +191,22 @@ router.get(
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
-        let user: usr.UserDocument;
+        let user: UserDocument;
         const userId: Types.ObjectId = res.locals.userId;
-        let enjoyedVehicles = []
+        let enjoyedVehicles: MyVehicle[] = []
         try {
             user = await usr.getUserById(userId);
             if (!(user.enjoyedVehicles.length)) throw new ServerError( "No enjoyed vehicles related to this user")
             // TO DO possiamo migliorare i tempi d'attesa embeddando gli enjoyed vehicle in user
             for (const idx in user.enjoyedVehicles) {
-                let vehicle = await getVehicleById(user.enjoyedVehicles[idx])
                 enjoyedVehicles.push(
-                    {
-                        Id: vehicle._id,
-                        owner: vehicle.owner,
-                        status: vehicle.status,
-                        legalInfos: vehicle.legalInfos,
-                        enjoyers: vehicle.enjoyers,
-                        type: vehicle.type
-                    }
+                    await getFullVehicleData(user.enjoyedVehicles[idx])
                 )
             }
             return res.status(201).json({
                 userId: user._id,
-                enjoyedVehicles: enjoyedVehicles
+                enjoyedVehicles: enjoyedVehicles,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -243,6 +241,48 @@ router.delete(
 
 
 router.patch(
+    '/users/@meh/friends/friendId',
+    authenticateToken,
+    retrieveUserId,
+    async (req: SingleFriendRequest, res: UserEndpointResponse) => {
+        let user: usr.UserDocument;
+        const userId: Types.ObjectId = res.locals.userId;
+        let tempUser: UserDocument
+        let flag = false
+        try {
+            let friendId = new Types.ObjectId(req.body.friendId)
+            user = await getUserById(userId);
+
+            for(const id of user.friends) {
+                if (id.toString() === friendId.toString())
+                    flag = true
+            }
+
+            if (!flag) throw new ServerError("No friend with that identifier")
+
+            tempUser = await getUserById(friendId)
+
+            return res.status(201).json({
+                id: tempUser._id,
+                name: tempUser.name,
+                surname: tempUser.surname,
+                nickname: tempUser.nickname,
+                email: tempUser.email,
+                status: tempUser.status,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
+            })
+        } catch (err) {
+            return res.status(err.statusCode).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: err.message,
+                requestPath: req.path,
+            });
+        }
+    }
+);
+
+
+router.patch(
     '/users/@meh/nickname',
     authenticateToken,
     retrieveUserId,
@@ -254,7 +294,10 @@ router.patch(
         if (nickname) {
             try {
                 await usr.updateNickName(userId, nickname);
-                return res.status(200).json({ nickname });
+                return res.status(200).json({
+                    nickname,
+                    accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
+                });
             } catch (err) {
                 return res.status(err.statusCode).json({
                     timestamp: toUnixSeconds(new Date()),
@@ -307,10 +350,13 @@ router.patch(
     async (req: UpdateEmailRequest, res: UserEndpointResponse) => {
         const { email } = req.body;
         const userId: Types.ObjectId = res.locals.userId;
-        if (email) {
+        if (email && validateEmail(email)) {
             try {
                 await usr.updateEmail(userId, email);
-                return res.status(200).json({email: email});
+                return res.status(200).json({
+                    email: email,
+                    accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
+                });
             } catch (err) {
                 return res.status(err.statusCode).json({
                     timestamp: toUnixSeconds(new Date()),
@@ -340,7 +386,8 @@ router.patch(
             try {
                 await removeEnjoyer(new Types.ObjectId(enjoyedVehicle), userId);
                 return res.status(200).json({
-                    removed: enjoyedVehicle
+                    removed: enjoyedVehicle,
+                    accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
                 });
             } catch (err) {
                 return res.status(err.statusCode).json({

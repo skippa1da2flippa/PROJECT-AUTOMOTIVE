@@ -19,16 +19,19 @@ interface UserResponse {
     name: string,
     surname: string,
     email: string,
+    accesToken: string
 }
 
 interface UserMyVehiclesResponse {
     userId: string,
     myVehicles: projectVehicle[]
+    accessToken: string
 }
 
 interface UserEnjoyedVehiclesResponse {
     userId: string,
     enjoyedVehicles: projectVehicle[]
+    accessToken: string
 }
 
 export interface ErrResponse {
@@ -92,6 +95,7 @@ describe("Test: GET /users/@meh", () => {
                 name: expect.any(String),
                 surname: expect.any(String),
                 email: expect.any(String),
+                accesToken: expect.any(String)
             })
         )
     });
@@ -172,10 +176,11 @@ describe("Test: GET /users/@meh/friends", () => {
         });
 
         expect(response.status).toBe(201);
-        const userRes: { friends: User[] } = response.data
+        const userRes: { friends: User[], accessToken: string } = response.data
         expect(userRes).toEqual(
-            expect.objectContaining<{ friends: User[] }>({
-                friends: expect.any(Array<User>)
+            expect.objectContaining<{ friends: User[], accessToken: string }>({
+                friends: expect.any(Array<User>),
+                accessToken: expect.any(String)
             })
         )
     });
@@ -207,6 +212,7 @@ describe("Test: GET /users/@meh/friends", () => {
 
 
 
+
 describe("Test: GET /api/users/@meh/myVehicles", () => {
 
     let mongoDbApi: MongoDbApi
@@ -219,12 +225,7 @@ describe("Test: GET /api/users/@meh/myVehicles", () => {
         user = getUserData()
         udata = await mongoDbApi.insertUser(user)
         let userId =  new Types.ObjectId(udata.insertedId)
-
-        console.log("ID PRIMA " + udata.insertedId)
-        console.log("DOPO ID " + userId)
-        console.log("prima insert vehicles, userId " + userId)
         await insertManyVehicles(userId, 2, vehiclesIds)
-        console.log("DOPO LA INSERT VEHICLES")
     }), 
 
     afterEach(async () => {
@@ -246,7 +247,8 @@ describe("Test: GET /api/users/@meh/myVehicles", () => {
         expect(userRes).toEqual(
              expect.objectContaining<UserMyVehiclesResponse>({
                   userId: expect.any(String),
-                  myVehicles: expect.any(Array)
+                  myVehicles: expect.any(Array),
+                 accessToken: expect.any(String)
              })
         )
 
@@ -336,7 +338,8 @@ describe("Test: GET /api/users/@meh/enjoyedVehicles", () => {
         expect(userRes).toEqual(
             expect.objectContaining<UserEnjoyedVehiclesResponse>({
                 enjoyedVehicles: expect.any(Array),
-                userId: expect.any(String)
+                userId: expect.any(String),
+                accessToken: expect.any(String)
             })
         )
     });
@@ -451,10 +454,11 @@ describe("Test: PATCH /api/users/@meh/nickname", () => {
             }
         );
         expect(response.status).toBe(200);
-        const userRes: {nickname: string} = response.data
+        const userRes: {nickname: string, accessToken: string} = response.data
         expect(userRes).toEqual(
-            expect.objectContaining<{nickname: string}>({
+            expect.objectContaining<{nickname: string, accessToken: string}>({
                 nickname: expect.any(String),
+                accessToken: expect.any(String)
             })
         )
     });
@@ -551,10 +555,11 @@ describe("Test: PATCH /api/users/@meh/email", () => {
             }
         );
         expect(response.status).toBe(200);
-        const userRes: {email: string} = response.data
+        const userRes: {email: string, accessToken: string} = response.data
         expect(userRes).toEqual(
-            expect.objectContaining<{email: string}>({
+            expect.objectContaining<{email: string, accessToken: string}>({
                 email: expect.any(String),
+                accessToken: expect.any(String)
             })
         )
     });
@@ -749,8 +754,9 @@ describe("Test: PATCH /api/users/@meh/enjoyedVehicles", () => {
         expect(response.status).toBe(200);
         const userRes = response.data
         expect(userRes).toEqual(
-            expect.objectContaining<{removed: string}>({
+            expect.objectContaining<{removed: string, accessToken: string}>({
                 removed: expect.any(String),
+                accessToken: expect.any(String)
             })
         )
     });

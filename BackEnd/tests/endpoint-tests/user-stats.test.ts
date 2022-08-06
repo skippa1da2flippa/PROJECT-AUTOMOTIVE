@@ -15,32 +15,33 @@ describe("Test: GET /users/@meh/stats", () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
         user = getUserData()
         data = await mongoDbApi.insertUser(user)
-    }),
+    })
 
-        afterEach(async () => {
-            await mongoDbApi.deleteUser(data.insertedId)
-        }),
+    afterEach(async () => {
+        await mongoDbApi.deleteUser(data.insertedId)
+    })
 
 
-        test("It should response the GET method", async () => {
-            const requestPath: string = baseUrl + "/api/users/@meh/stats"
-            let response
-            const header = {
-                "authorization" : setUpHeader(data.insertedId.toString())
-            }
+    test("It should response the GET method", async () => {
+        const requestPath: string = baseUrl + "/api/users/@meh/stats"
+        let response
+        const header = {
+            "authorization" : setUpHeader(data.insertedId.toString())
+        }
 
-            response = await axios.get(requestPath, {
-                headers: header
-            });
-
-            expect(response.status).toBe(201);
-            const userRes: { stats: UserStats } = response.data
-            expect(userRes).toEqual(
-                expect.objectContaining<{ stats: UserStats }>({
-                    stats: expect.any(Object),
-                })
-            )
+        response = await axios.get(requestPath, {
+            headers: header
         });
+
+        expect(response.status).toBe(201);
+        const userRes: { stats: UserStats, accessToken: string } = response.data
+        expect(userRes).toEqual(
+            expect.objectContaining<{ stats: UserStats, accessToken: string }>({
+                stats: expect.any(Object),
+                accessToken: expect.any(String)
+            })
+        )
+    });
 
     // wrong userId
     test("It should have response 404", async () => {

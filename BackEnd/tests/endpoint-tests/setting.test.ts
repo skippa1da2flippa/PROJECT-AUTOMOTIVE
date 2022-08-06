@@ -5,6 +5,25 @@ import axios from "axios";
 import {baseUrl, ErrResponse, setUpHeader} from "./user.test";
 import {Setting} from "../../src/model/database/setting";
 
+interface BaseResponse {
+    accessToken: string
+}
+
+interface SettingResponse extends BaseResponse{
+    setting: Setting
+}
+
+interface LanguageResponse extends BaseResponse {
+    language: string
+}
+
+interface ThemeResponse extends BaseResponse {
+    theme: string
+}
+
+interface GamificationResponse extends BaseResponse {
+    gamificationHide: boolean
+}
 
 describe("Test: GET /users/@meh/setting", () => {
 
@@ -16,11 +35,11 @@ describe("Test: GET /users/@meh/setting", () => {
         mongoDbApi = new MongoDbApi(apiCredentials)
         user = getUserData()
         data = await mongoDbApi.insertUser(user)
-    }),
+    })
 
     afterEach(async () => {
         await mongoDbApi.deleteUser(data.insertedId)
-    }),
+    })
 
 
     test("It should response the GET method", async () => {
@@ -35,9 +54,10 @@ describe("Test: GET /users/@meh/setting", () => {
         });
 
         expect(response.status).toBe(201);
-        const userRes: {setting: Setting} = response.data
+        const userRes = response.data
         expect(userRes).toEqual(
-            expect.objectContaining<{setting: Setting}>({
+            expect.objectContaining<SettingResponse>({
+                accessToken: expect.any(String),
                 setting: expect.objectContaining<Setting>({
                     theme: expect.any(String),
                     size: expect.any(Number),
@@ -102,9 +122,10 @@ describe("Test: GET /users/@meh/setting/language", () => {
         });
 
         expect(response.status).toBe(201);
-        const userRes: {language: string} = response.data
+        const userRes = response.data
         expect(userRes).toEqual(
-            expect.objectContaining<{language: string}>({
+            expect.objectContaining<LanguageResponse>({
+                accessToken: expect.any(String),
                 language: expect.any(String)
             })
         )
@@ -164,9 +185,10 @@ describe("Test: GET /users/@meh/setting/theme", () => {
             });
 
             expect(response.status).toBe(201);
-            const userRes: {theme: string} = response.data
+            const userRes = response.data
             expect(userRes).toEqual(
-                expect.objectContaining<{theme: string}>({
+                expect.objectContaining<ThemeResponse>({
+                    accessToken: expect.any(String),
                     theme: expect.any(String)
                 })
             )
@@ -289,9 +311,10 @@ describe("Test: GET /users/@meh/setting/gamification", () => {
         });
 
         expect(response.status).toBe(201);
-        const userRes: {gamificationHide: boolean} = response.data
+        const userRes = response.data
         expect(userRes).toEqual(
-            expect.objectContaining<{gamificationHide: boolean}>({
+            expect.objectContaining<GamificationResponse>({
+                accessToken: expect.any(String),
                 gamificationHide: expect.any(Boolean)
             })
         )

@@ -19,7 +19,6 @@ interface UserSignUp {
     surname: string
     email: string
     nickname: string
-    roles: string[]
     status: string
 }
 
@@ -194,7 +193,6 @@ describe("Test: POST auth/myVehicle/signin", () => {
 })
 
 
-// Risolvo
 describe("Test: POST /auth/signup ", () => {
 
     let mongoDbApi: MongoDbApi
@@ -233,7 +231,6 @@ describe("Test: POST /auth/signup ", () => {
                 surname: expect.any(String),
                 email: expect.any(String),
                 nickname: expect.any(String),
-                roles: expect.any(Array<String>),
                 status: expect.any(String)
             })
         )

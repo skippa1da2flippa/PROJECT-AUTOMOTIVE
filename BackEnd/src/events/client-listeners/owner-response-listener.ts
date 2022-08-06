@@ -23,6 +23,7 @@ import { pool } from '../..';
             let tedis = await pool.getTedis()
 
             // stores the response
+            // TODO you should store <userId, {vehicleId, response}>
             await tedis.set(data.ownerId, data.res.toString())
 
             // gives back the connection

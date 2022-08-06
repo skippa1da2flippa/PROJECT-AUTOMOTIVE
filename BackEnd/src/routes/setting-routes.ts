@@ -58,7 +58,8 @@ router.get(
         try {
             user = await getUserById(userId)
             return res.status(201).json({
-                setting: user.setting
+                setting: user.setting,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             })
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -81,7 +82,8 @@ router.get(
         try {
             user = await getUserById(userId)
             return res.status(201).json({
-                language: user.setting.language
+                language: user.setting.language,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             })
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -104,7 +106,8 @@ router.get(
         try {
             user = await getUserById(userId)
             return res.status(201).json({
-                theme: user.setting.theme
+                theme: user.setting.theme,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             })
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -149,7 +152,8 @@ router.get(
         try {
             user = await getUserById(userId)
             return res.status(201).json({
-                gamificationHide: user.setting.gamificationHide
+                gamificationHide: user.setting.gamificationHide,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             })
         } catch (err) {
             return res.status(err.statusCode).json({

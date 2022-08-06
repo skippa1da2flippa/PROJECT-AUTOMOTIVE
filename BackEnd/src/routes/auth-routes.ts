@@ -67,7 +67,8 @@ export const authenticateToken = async function (
                     let accessToken = generateAccessToken(content.Id);
                     res.locals.newAccessToken = accessToken;
 
-                    /* TO DO in every route we must remember to check if locals.newAccessToken is true, if so we should send it's value with the response
+                    /* TO DO in every route we must remember to check if locals.newAccessToken is true,
+                    if so we should send it's value with the response
                      *  to let client to properly store the new access token for next requests
                      */    
                     req.jwtContent = content;
@@ -280,7 +281,6 @@ router.post('/auth/signup', async (req: SignUpRequest, res: Response) => {
                 surname: newUser.surname,
                 email: newUser.email,
                 nickname: newUser.nickname,
-                roles: newUser.roles,
                 status: newUser.status,
             });
         } catch (err) {

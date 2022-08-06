@@ -7,6 +7,7 @@
 
 - /api/users/@meh                                           DELETE user
 
+- /api/users/@meh/friends/friendId                          PATCH retrieve one user friend
 - /api/users/@meh/nickName                                  PATCH nickname update
 - /api/users/@meh/email                                     PATCH email update 
 - /api/users/@meh/password                                  PATCH user psw update

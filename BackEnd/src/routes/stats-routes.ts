@@ -6,6 +6,7 @@ import {UserEndpointResponse} from "./user-routes";
 import {getUserById, updateUserStats, UserDocument} from "../model/database/user";
 import {toUnixSeconds} from "./utils/date-utils";
 
+
 interface UpdateStatsBody {
     sauce: number,
     trophies: number
@@ -27,7 +28,8 @@ router.get(
         try {
             user = await getUserById(userId)
             return res.status(201).json({
-                stats: user.stats
+                stats: user.stats,
+                accessToken: res.locals.newAccessToken
             })
         } catch(err) {
             return res.status(err.statusCode).json({

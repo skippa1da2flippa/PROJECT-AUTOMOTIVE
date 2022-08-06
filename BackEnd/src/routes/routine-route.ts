@@ -55,7 +55,8 @@ router.get(
         try {
             user = await getUserById(userId)
             return res.status(201).json({
-                routines: user.routines
+                routines: user.routines,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             })
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -111,7 +112,8 @@ router.get(
             }
             if (!routine) throw new ServerError("No user routine found matching the id")
             return res.status(201).json({
-                routine
+                routine,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             })
         } catch (err) {
             return res.status(err.statusCode).json({

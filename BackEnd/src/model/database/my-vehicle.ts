@@ -14,6 +14,8 @@ import {
     UserStatus
 } from './user';
 import bcrypt from "bcrypt";
+import {UserVehicle} from "../../routes/my-vehicle-routes";
+import {MyVehicle} from "../../routes/user-routes";
 
 /*
     This collection is thought not to be an embedded document due to the fact that many users can use the same Vehicle, setting this schema as 
@@ -210,19 +212,25 @@ export async function deleteVehicle(filter: FilterQuery<ProjectVehicleDocument>)
         : Promise.resolve();
 } 
 
-export async function getVehiclesByUserId(userId: Types.ObjectId): Promise<ProjectVehicleDocument[]> {
+export async function getVehiclesByUserId(userId: Types.ObjectId): Promise<MyVehicle[]> {
     let vehicles: ProjectVehicleDocument[] = []
+    let projectVehicles: MyVehicle[]
     try {
         vehicles = await VehicleModel.find()
+
         // TO DO un giorno forse si mettera meglio
         vehicles = vehicles.filter(elem => elem.owner.toString() === userId.toString())
+
+        for (const vehicle of vehicles) {
+            projectVehicles.push(await getFullVehicleData(vehicle._id))
+        }
 
     } catch(err) {
         return Promise.reject(new ServerError('Internal server error'))
     }
 
-    return vehicles.length
-        ? Promise.resolve(vehicles)
+    return projectVehicles.length
+        ? Promise.resolve(projectVehicles)
         : Promise.reject(new ServerError("No vehicles related to the user"))
 }
 
@@ -376,3 +384,42 @@ export async function removeEnjoyer(vehicleId: Types.ObjectId, enjoyerId: Types.
 }
 
 
+export async function getFullVehicleData(vehicleId: Types.ObjectId): Promise<MyVehicle>{
+    try {
+
+        let enjoyers: UserVehicle[] = []
+        let vehicle: ProjectVehicleDocument = await getVehicleById(vehicleId)
+        let user: UserDocument = await getUserById(vehicle.owner)
+        let owner: UserVehicle = {
+            name: user.name,
+            surname:user.surname,
+            status: user.status,
+            id: user._id,
+            email: user.email,
+            nickname: user.nickname
+        }
+
+        for (let idx in vehicle.enjoyers) {
+            let user = await getUserById(vehicle.enjoyers[idx])
+            enjoyers.push({
+                name: user.name,
+                surname:user.surname,
+                id: user._id,
+                status: user.status,
+                email: user.email,
+                nickname: user.nickname
+            })
+        }
+
+        return {
+            id: vehicle._id,
+            owner: owner,
+            status: vehicle.status,
+            legalInfos: vehicle.legalInfos,
+            enjoyers: enjoyers,
+            type: vehicle.type
+        }
+    } catch(err) {
+        return Promise.reject(err)
+    }
+}

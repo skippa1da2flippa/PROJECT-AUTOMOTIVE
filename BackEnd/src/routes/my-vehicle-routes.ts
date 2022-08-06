@@ -23,8 +23,16 @@ import {Routine} from "../model/database/routine";
 
 
 
+interface UserVehicleEndpointLocals {
+    newAccessToken: string
+}
 
-interface UserVehicle {
+interface UserVehicleEndPointResponse extends Response{
+    locals: UserVehicleEndpointLocals
+}
+
+
+export interface UserVehicle {
     name: string,
     surname: string,
     status: string
@@ -143,7 +151,7 @@ router.get(
             return res.status(201).json({
                 name: user.name,
                 surname:user.surname,
-                status: user.status.valueOf(),
+                status: user.status,
                 id: user._id,
                 email: user.email,
                 nickname: user.nickname
@@ -174,7 +182,7 @@ router.get(
                     name: user.name,
                     surname:user.surname,
                     id: user._id,
-                    status: user.status.valueOf(),
+                    status: user.status,
                     email: user.email,
                     nickname: user.nickname
                 })
@@ -274,7 +282,7 @@ router.patch(
 router.patch(
     '/myVehicle/vehicleId',
     authenticateToken,
-    async (req: BaseVehicleRequest, res: Response) => {
+    async (req: BaseVehicleRequest, res: UserVehicleEndPointResponse) => {
         let vehicle: ProjectVehicleDocument
         let vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
         let user: UserDocument
@@ -285,7 +293,7 @@ router.patch(
             user = await getUserById(vehicle.owner)
             owner = {
                 name: user.name,
-                status: user.status.valueOf(),
+                status: user.status,
                 surname:user.surname,
                 id: user._id,
                 email: user.email,
@@ -296,7 +304,7 @@ router.patch(
                 enjoyers.push({
                     name: enjoyer.name,
                     surname:enjoyer.surname,
-                    status: user.status.valueOf(),
+                    status: user.status,
                     id: enjoyer._id,
                     email: enjoyer.email,
                     nickname: enjoyer.nickname
@@ -307,7 +315,8 @@ router.patch(
                 type: vehicle.type,
                 owner: owner,
                 enjoyers: enjoyers,
-                legalInfos: vehicle.legalInfos
+                legalInfos: vehicle.legalInfos,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -323,7 +332,7 @@ router.patch(
 router.patch(
     '/myVehicle/vehicleId/owner',
     authenticateToken,
-    async (req: BaseVehicleRequest, res: Response) => {
+    async (req: BaseVehicleRequest, res: UserVehicleEndPointResponse) => {
         let vehicle: ProjectVehicleDocument
         let vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
         let user: UserDocument
@@ -336,7 +345,8 @@ router.patch(
                 id: user._id,
                 email: user.email,
                 nickname: user.nickname,
-                status: user.status.valueOf()
+                status: user.status,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -352,7 +362,7 @@ router.patch(
 router.patch(
     '/myVehicle/vehicleId/enjoyers',
     authenticateToken,
-    async (req: BaseVehicleRequest, res: Response) => {
+    async (req: BaseVehicleRequest, res: UserVehicleEndPointResponse) => {
         let vehicle: ProjectVehicleDocument
         let vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
         let enjoyers: UserVehicle[] = []
@@ -363,14 +373,15 @@ router.patch(
                 enjoyers.push({
                     name: user.name,
                     surname:user.surname,
-                    status: user.status.valueOf(),
+                    status: user.status,
                     id: user._id,
                     email: user.email,
                     nickname: user.nickname
                 })
             }
             return res.status(201).json({
-                enjoyers
+                enjoyers,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -386,7 +397,7 @@ router.delete(
     '/myVehicle/:vehicleId',
     authenticateToken,
     // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per deletare una car
-    async (req: BaseVehicleRequest, res: Response) => {
+    async (req: BaseVehicleRequest, res: UserVehicleEndPointResponse) => {
         const vehicleId: Types.ObjectId = new Types.ObjectId(req.params.vehicleId);
         try {
             await deleteVehicle({ _id: vehicleId });
@@ -405,7 +416,7 @@ router.post(
     '/myVehicle/create',
     authenticateToken,
     // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per creare una car
-    async (req: VehicleCreationRequest, res: Response) => {
+    async (req: VehicleCreationRequest, res: UserVehicleEndPointResponse) => {
         try {
             const data = await getSaltNdHash(req.body.password)
             const vehicleData = {
@@ -417,7 +428,8 @@ router.post(
             }
             let vehicleId = await createVehicle(vehicleData);
             return res.status(200).json({
-                vehicleId
+                vehicleId,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             });
         } catch (err) {
             return res.status(err.statusCode).json({
@@ -433,7 +445,7 @@ router.post(
 router.put(
     '/myVehicle/vehicleId/enjoyers',
     authenticateToken,
-    async (req: UpdateEnjoyerRequest, res: Response) => {
+    async (req: UpdateEnjoyerRequest, res: UserVehicleEndPointResponse) => {
         const { vehicleId, enjoyerId, enjoyerName, enjoyerSurname } = req.body;
         if (enjoyerId) {
             try {
@@ -457,7 +469,8 @@ router.put(
                         new Types.ObjectId(enjoyerId)
                     );
                     return res.status(200).json({
-                        removed: enjoyerId
+                        removed: enjoyerId,
+                        accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
                     });
                 }
             } catch (err) {
@@ -480,7 +493,7 @@ router.put(
 router.put(
     "/myVehicle/vehicleId/owner",
     // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per cambiare owner car,
-    async (req: OwnerUpdateRequest, res:Response) => {
+    async (req: OwnerUpdateRequest, res: UserVehicleEndPointResponse) => {
         const vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
         const ownerId: Types.ObjectId = new Types.ObjectId(req.body.newOwner)
         try {

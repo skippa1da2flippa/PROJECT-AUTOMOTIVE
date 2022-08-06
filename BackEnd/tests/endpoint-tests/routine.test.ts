@@ -6,11 +6,13 @@ import {baseUrl, ErrResponse, setUpHeader} from "./user.test";
 import {Routine} from "../../src/model/database/routine";
 
 interface UserRoutines {
-    routines: Routine[]
+    routines: Routine[],
+    accessToken: string
 }
 
 interface UserRoutine {
-    routine: Routine
+    routine: Routine,
+    accessToken: string
 }
 
 describe("Test: GET /users/@meh/routines", () => {
@@ -46,6 +48,7 @@ describe("Test: GET /users/@meh/routines", () => {
         expect(userRes).toEqual(
             expect.objectContaining<UserRoutines>({
                 routines: expect.any(Array<Routine>),
+                accessToken: expect.any(String)
             })
         )
     });
@@ -177,6 +180,7 @@ describe("Test: GET /users/@meh/routines/:name", () => {
         expect(userRes).toEqual(
             expect.objectContaining<UserRoutine>({
                 routine: expect.any(Object),
+                accessToken: expect.any(String)
             })
         )
     });

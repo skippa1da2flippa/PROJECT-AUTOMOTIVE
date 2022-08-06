@@ -175,7 +175,6 @@ export interface UserDocument extends User, Document {
     removeRoutine(name: string): Promise<void>;
 }
 
-// TO DO add friendIds
 
 export const UserSchema = new Schema<UserDocument>(
     {
@@ -206,6 +205,7 @@ export const UserSchema = new Schema<UserDocument>(
             default: []
         },
 
+        // TODO this field needs a role paired with each vehicle id to let us know when it's possible to doc certain action
         enjoyedVehicles: {
             type: [SchemaTypes.ObjectId],
             default: []
@@ -239,12 +239,12 @@ export const UserSchema = new Schema<UserDocument>(
 
         routines: {
             type: [RoutineSchema],
-            //default: () => ({})
+            default: []
         },
 
         docs: {
             types: [DocumentSchema],
-            //default: () => ({})
+            default: []
         },
 
         setting: {
@@ -259,6 +259,16 @@ export const UserSchema = new Schema<UserDocument>(
         }
     }
 )
+
+// TODO add an error whenever a unique constraint gets broken
+
+export const validateEmail = (email) => {
+    return String(email)
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+};
 
 export async function addNotification(_id: Types.ObjectId, not: Notification) {
 
