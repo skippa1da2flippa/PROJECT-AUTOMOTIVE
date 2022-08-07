@@ -1,5 +1,5 @@
 import {BaseData} from "./base-data";
-import {JwtStorage} from "../api/jwt-auth/jwt-storage";
+import {JwtStorage} from "../../api/jwt-auth/jwt-storage";
 
 export class LogInData extends BaseData {
     userId: string
@@ -14,7 +14,7 @@ export class LogInData extends BaseData {
 
 export const tokensStorer = (res: LogInData) => {
     const jwtStorage = new JwtStorage()
-    jwtStorage.store(res.accessToken, res.refreshToken)
+    jwtStorage.store(res.accessToken as string, res.refreshToken)
 }
 
 export const dropTokens = () => {

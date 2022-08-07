@@ -222,7 +222,7 @@ router.post(
         // Return the token along with the id of the authenticated user
         return res.status(200).json({
             userId: req.user._id,
-            authToken: accessToken,
+            accessToken: accessToken,
             refreshToken: refreshToken
         });
     }
@@ -247,7 +247,7 @@ router.post(
         // Return the token along with the id of the authenticated user
         return res.status(200).json({
             vehicleId: req.body.vehicleId,
-            authToken: accessToken,
+            accessToken: accessToken,
             refreshToken: refreshToken
         });
     }

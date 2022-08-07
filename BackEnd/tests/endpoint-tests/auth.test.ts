@@ -9,7 +9,7 @@ import {Types} from "mongoose";
 
 interface UserLogIn {
     userId: string
-    authToken: string
+    accessToken: string
     refreshToken: string
 }
 
@@ -24,7 +24,7 @@ interface UserSignUp {
 
 interface VehicleLogIn {
     vehicleId: string
-    authToken: string
+    accessToken: string
     refreshToken: string
 }
 
@@ -64,7 +64,7 @@ describe("Test: POST /auth/signin ", () => {
         expect(userRes).toEqual(
             expect.objectContaining<UserLogIn>({
                 userId: expect.any(String),
-                authToken: expect.any(String),
+                accessToken: expect.any(String),
                 refreshToken: expect.any(String),
             })
         )
@@ -167,7 +167,7 @@ describe("Test: POST auth/myVehicle/signin", () => {
         expect(vehicleRes).toEqual(
             expect.objectContaining<VehicleLogIn>({
                 vehicleId: expect.any(String),
-                authToken: expect.any(String),
+                accessToken: expect.any(String),
                 refreshToken: expect.any(String),
             })
         )
