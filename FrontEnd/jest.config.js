@@ -1,7 +1,7 @@
 module.exports = {
   preset: 'jest-preset-angular',
   testEnvironment: 'jsdom',
-  roots: ['./tests', './src'],
+  roots: ['./tests', './src', '../src'],
   setupFilesAfterEnv: ['./tests/setup-jest.ts'],
   collectCoverage: true,
   coverageReporters: ['html'],
