@@ -195,3 +195,124 @@
   "requestPath": "error/request/path"
 }
 ```
+
+
+### Update Setting language
+
+| Endpoint                         | Method | Description             |
+|:---------------------------------|:-------|:------------------------|
+| /api/users/@meh/setting/language | PATCH  | update setting language |
+
+#### Example Request Body
+
+```json
+{
+  "language": "IT"
+}
+```
+
+
+#### Example Response Body
+
+##### Success
+
+- Status Code: 204
+
+```json
+{
+  
+}
+```
+
+##### Error
+
+- Status Codes: 400, 404, 500
+- [Error](#error) resource
+
+```json
+{
+  "timestamp": 1651881600,
+  "errorMessage": "some error message",
+  "requestPath": "error/request/path"
+}
+```
+
+### Update Setting theme
+
+| Endpoint                      | Method | Description          |
+|:------------------------------|:-------|:---------------------|
+| /api/users/@meh/setting/theme | PATCH  | update setting theme |
+
+#### Example Request Body
+
+```json
+{
+  "theme": "white"
+}
+```
+
+
+#### Example Response Body
+
+##### Success
+
+- Status Code: 204
+
+```json
+{
+  
+}
+```
+
+##### Error
+
+- Status Codes: 400, 404, 500
+- [Error](#error) resource
+
+```json
+{
+  "timestamp": 1651881600,
+  "errorMessage": "some error message",
+  "requestPath": "error/request/path"
+}
+```
+
+### Update Setting gamification
+
+| Endpoint                             | Method | Description                 |
+|:-------------------------------------|:-------|:----------------------------|
+| /api/users/@meh/setting/gamification | PATCH  | update setting gamification |
+
+#### Example Request Body
+
+```json
+{
+  "gamification": true
+}
+```
+
+
+#### Example Response Body
+
+##### Success
+
+- Status Code: 204
+
+```json
+{
+  
+}
+```
+
+##### Error
+
+- Status Codes: 400, 404, 500
+- [Error](#error) resource
+
+```json
+{
+  "timestamp": 1651881600,
+  "errorMessage": "some error message",
+  "requestPath": "error/request/path"
+}
+```
