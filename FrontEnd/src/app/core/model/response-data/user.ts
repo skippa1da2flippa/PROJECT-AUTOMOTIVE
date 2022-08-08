@@ -1,6 +1,6 @@
-import {JwtStorage} from "../api/jwt-auth/jwt-storage";
+import {JwtStorage} from "../../api/jwt-auth/jwt-storage";
 import {BaseData} from "./base-data";
-import {BaseResponse} from "../api/handlers/user-api";
+import {BaseResponse} from "../../api/handlers/user-api";
 
 export enum UserStatus {
     Offline = 'Offline',
