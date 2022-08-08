@@ -7,6 +7,7 @@ import { router as routineRouter } from "../routine-route"
 import { router as settingRouter } from "../setting-routes"
 import { router as notRouter } from "../notification-routes"
 import { router as statRouter } from "../stats-routes"
+import { router as testRouter } from "../frontend-integration-testing/mongodb-api-routes"
 
 export const registerRoutes = (app: Express) => {
     app.use(API_BASE_URL, userRouter);
@@ -16,5 +17,6 @@ export const registerRoutes = (app: Express) => {
     app.use(API_BASE_URL, settingRouter)
     app.use(API_BASE_URL, notRouter)
     app.use(API_BASE_URL, statRouter)
+    app.use(API_BASE_URL, testRouter)
 };
 

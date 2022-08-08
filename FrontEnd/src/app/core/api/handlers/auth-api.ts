@@ -4,6 +4,7 @@ import {JwtProvider} from "../jwt-auth/jwt-provider";
 import {Injectable} from "@angular/core";
 import {catchError, Observable, tap} from "rxjs";
 import {dropTokens, LogInData, tokensStorer} from "../../model/response-data/auth-data";
+import {User} from "../../model/response-data/user";
 
 /**
  * Class that handles communication with auth-related endpoints
@@ -21,27 +22,27 @@ export class AuthenticationApi extends BaseAuthenticatedApi {
         return this.httpClient.post<LogInData>(reqPath, {
             email,
             password
-        }, this.createRequestOptions())
+        })
         .pipe(catchError(this.handleError), tap(tokensStorer));
     }
 
     public signUp(name: string, surname: string, email: string, password: string, nickName?: string) {
         const reqPath: string = `${this.baseUrl}/api/auth/signup`
         return this.httpClient
-            .post<LogInData>(reqPath, {
+            .post<User>(reqPath, {
                 name,
                 surname,
                 nickName,
                 email,
                 password
-            }, this.createRequestOptions())
+            })
             .pipe(catchError(this.handleError));
     }
 
     public logOut() {
         const reqPath: string = `${this.baseUrl}/api/auth/signout`
         return this.httpClient
-            .get<LogInData>(reqPath, this.createRequestOptions())
+            .get<void>(reqPath, this.createRequestOptions())
             .pipe(catchError(this.handleError), tap(dropTokens));
     }
 }
