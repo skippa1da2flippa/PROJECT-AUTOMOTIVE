@@ -806,7 +806,7 @@ export async function removeUserEnjoyedVehicle(userId: Types.ObjectId, vehicleId
 }
 
 
-export async function deleteRoutine(userId: Types.ObjectId, name: string): Promise<void> {
+export async function deleteRoutine(userId: Types.ObjectId, name: string = ""): Promise<void> {
     name = name + "/" + userId.toString()
 
     console.log(name)

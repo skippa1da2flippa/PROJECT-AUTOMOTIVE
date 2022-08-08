@@ -21,7 +21,8 @@ import {addRoutine, getSaltNdHash, getUserById, updatePsw, UserDocument} from ".
 import {UpdatePasswordRequest} from "./user-routes";
 import {Routine} from "../model/database/routine";
 
-
+// TODO add || "" to every invocation of: new Types.ObjectId(req.body.wht)
+// TODO add accessToken to all the @it endpoints
 
 interface UserVehicleEndpointLocals {
     newAccessToken: string
@@ -284,7 +285,7 @@ router.patch(
     authenticateToken,
     async (req: BaseVehicleRequest, res: UserVehicleEndPointResponse) => {
         let vehicle: ProjectVehicleDocument
-        let vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
+        let vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId || "")
         let user: UserDocument
         let owner: UserVehicle
         let enjoyers: UserVehicle[] = []
@@ -415,7 +416,7 @@ router.delete(
 router.post(
     '/myVehicle/create',
     authenticateToken,
-    // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per creare una car
+    // superUserAuth, TODO implementa sto middleware e controlla che lo user sia admin per creare una car
     async (req: VehicleCreationRequest, res: UserVehicleEndPointResponse) => {
         try {
             const data = await getSaltNdHash(req.body.password)
@@ -454,6 +455,8 @@ router.put(
                         if (result === "false") return res.sendStatus(403).json();
                         else return res.sendStatus(204)
                     }
+
+                    // TODO add check if they friend
                     return await addEnjoyer(
                         new Types.ObjectId(vehicleId),
                         new Types.ObjectId(enjoyerId),
@@ -492,10 +495,10 @@ router.put(
 
 router.put(
     "/myVehicle/vehicleId/owner",
-    // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per cambiare owner car,
+    // superUserAuth, TODO implementa sto middleware e controlla che lo user sia admin per cambiare owner car,
     async (req: OwnerUpdateRequest, res: UserVehicleEndPointResponse) => {
-        const vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
-        const ownerId: Types.ObjectId = new Types.ObjectId(req.body.newOwner)
+        const vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId || "")
+        const ownerId: Types.ObjectId = new Types.ObjectId(req.body.newOwner || "")
         try {
             await changeOwner(vehicleId, ownerId)
             res.status(204).json()
