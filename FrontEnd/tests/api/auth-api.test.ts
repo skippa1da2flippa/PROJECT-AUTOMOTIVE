@@ -7,9 +7,10 @@ import {environment} from "../../src/environments/environment";
 import {JwtStorage} from "../../src/app/core/api/jwt-auth/jwt-storage";
 import {AuthenticationApi} from "../../src/app/core/api/handlers/auth-api";
 import {LogInData} from "../../src/app/core/model/response-data/auth-data";
-import {User} from "../../src/app/core/model/response-data/user"
+import {User, UserStatus} from "../../src/app/core/model/response-data/user"
+import {JwtStubProvider} from "../fixtures/model/token";
 
-interface AuthTestingSetupData {
+export interface AuthTestingSetupData {
     insertedData: {
         user: InsertedUser;
     };
@@ -18,8 +19,11 @@ interface AuthTestingSetupData {
 /**
  * Insert a user in the db, which will be used to authenticate with the api
  */
-const setupDb = async (): Promise<AuthTestingSetupData> => {
-    const userData = getUserData()
+const setupDb = async (friendId?: string): Promise<AuthTestingSetupData> => {
+    const userData = ! friendId
+                     ? getUserData()
+                     : getUserData([], UserStatus.Online, friendId)
+
     const insertedUser: InsertedUser = await insertUser(userData);
 
     return {
@@ -35,31 +39,41 @@ let jwtProvider: JwtProvider;
 let jwtStorer: JwtStorage
 
 
+export async function wrongTestSetUp() {
+    httpClient = injectHttpClient();
+    setupData = await setupDb();
+    const reqPath = environment.serverBaseUrl + "/api/testing/getHeader/" + setupData.insertedData.user.userId
+    const jwtStubProvider: JwtStubProvider = new JwtStubProvider();
+    jwtStorer = jwtStubProvider.getJwtStorageStub()
+    jwtProvider = jwtStubProvider.getJwtProviderStub();
+    let res = await axios.get(reqPath)
+    jwtStorer.store("", res.data.refreshToken)
+    return res.data.header
+}
+
 /**
  * Deletes the user inserted in the setup
  * @param setupData
  */
-const teardownDb = async (setupData: AuthTestingSetupData): Promise<void> => {
+export const teardownDb = async (setupData: AuthTestingSetupData, secondUser?: InsertedUser): Promise<void> => {
     await deleteUser(setupData.insertedData.user.userId);
+    if (secondUser) await deleteUser(secondUser.userId);
 };
 
 
-const testSetup = async () => {
+export const testSetup = async (friendId?: string) => {
     httpClient = injectHttpClient();
-    setupData = await setupDb();
-    const reqPath = environment.serverBaseUrl + "/api/" + setupData.insertedData.user.userId
-
+    setupData = await setupDb(friendId);
+    const reqPath = environment.serverBaseUrl + "/api/testing/getHeader/" + setupData.insertedData.user.userId
+    const jwtStubProvider: JwtStubProvider = new JwtStubProvider();
+    const jwtStorer = jwtStubProvider.getJwtStorageStub()
+    jwtProvider = jwtStubProvider.getJwtProviderStub();
     let res = await axios.get(reqPath)
-
-    jwtStorer.store(
-        res.data.header.authorization.split(",")[1],
-        res.data.header.authorization.split(",")[0]
-    )
-
+    jwtStorer.store(res.data.accessToken, res.data.refreshToken)
     return res.data.header
 };
 
-const getAuthApi = (): AuthenticationApi => {
+export const getAuthApi = (): AuthenticationApi => {
     return new AuthenticationApi (httpClient, jwtProvider);
 };
 
@@ -200,6 +214,20 @@ describe('Sign out', () => {
             },
             complete: () => {
                 done();
+            },
+        });
+    });
+
+    test('Should Throw', (done) => {
+        jwtStorer.store("")
+        authApi.logOut().subscribe({
+            error: (err: Error) => {
+                expect(err).toBeTruthy();
+
+                done();
+            },
+            complete: () => {
+                throw Error('Observable should not complete without throwing');
             },
         });
     });

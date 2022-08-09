@@ -115,14 +115,15 @@ export interface Notification {
  * The username has to be unique to avoid conflicts,
  * the other data does not, so it is static.
  */
-export const getUserData = (enjoyedVehicles = [], status: UserStatus = UserStatus.Online): User => {
+export const getUserData = (enjoyedVehicles = [], status: UserStatus = UserStatus.Online, friend?: string): User => {
     let random = randomInt(100000, 17)
+    let friends = friend ? [friend] : []
     let date = Date.now()
     return {
         name: `name-${random}-${date}`,
         surname: `surname-${random}-${date}`,
         nickname: `nickname-${random}-${date}`,
-        friends: [],
+        friends: friends,
         email: `email-${random}-${date}@project.com`,
         pwd_hash: knownBcryptDigest.pwdHash,
         salt: knownBcryptDigest.pwdSalt,

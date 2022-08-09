@@ -9,7 +9,7 @@ export enum UserStatus {
 }
 
     export const accessTokenRefresher = (res: any) => {
-    if (res.accessToken !== "") {
+    if (!res?.accessToken && res.accessToken !== "") {
         const jwtStorage = new JwtStorage()
         jwtStorage.store(res.accessToken)
     }
