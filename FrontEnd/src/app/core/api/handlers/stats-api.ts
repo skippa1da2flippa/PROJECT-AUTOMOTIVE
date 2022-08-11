@@ -32,7 +32,7 @@ export class UserStatsApi extends BaseAuthenticatedApi {
         );
     }
 
-    public updateMyStats(userId: string, statsUpdate: UserStats): Observable<void> {
+    public updateMyStats(statsUpdate: UserStats): Observable<void> {
         const reqPath: string = `${this.baseUrl}/api/users/@meh/stats`;
 
         return this.httpClient

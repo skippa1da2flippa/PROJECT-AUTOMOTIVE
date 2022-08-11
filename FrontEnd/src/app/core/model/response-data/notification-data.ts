@@ -16,6 +16,7 @@ export class Notification extends BaseData {
     sender: string
 
     constructor (type: NotTypes = NotTypes.placeHolder, sender: string = "") {
+        super()
         this.type = type
         this.sender = sender
     }

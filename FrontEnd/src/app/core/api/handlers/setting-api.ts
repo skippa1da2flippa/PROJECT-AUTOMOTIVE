@@ -66,7 +66,7 @@ export class UserSettingApi extends BaseAuthenticatedApi {
             catchError(this.handleError),
             tap(accessTokenRefresher),
             map<GamificationSettingResponse, boolean>(res => {
-                return res.gamificationHide
+                return !res.gamificationHide
             })
         )
     }

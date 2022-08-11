@@ -68,7 +68,7 @@ export class UserRoutineApi extends BaseAuthenticatedApi {
         musicToAdd: string[] = [],
         musicToRemove: string[] = [],
         newName?: string
-    ) {
+    ): Observable<void>{
         const reqPath: string = `${this.baseUrl}/api/users/@meh/routines/${routineName}`;
         return this.httpClient.put<void>(reqPath, {
             temperature,

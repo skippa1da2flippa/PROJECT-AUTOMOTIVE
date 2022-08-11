@@ -82,6 +82,7 @@ export enum NotTypes {
     destReached = 'destReached', // pop up not a real not
     fuelAlmostOut = 'fuelAlmostOut', // pop up not a real not
     friendRequest = 'friendRequest',
+    placeHolder = 'placeHolder'
     // many others
 }
 
@@ -142,14 +143,14 @@ export const getUserData = (enjoyedVehicles = [], status: UserStatus = UserStatu
             gamificationHide: false
         },
         routines: [{
-            name: `name-${random}-${date}`,
+            name: `lilBoat`,
             temperature: 3,
             lightsColor: "#FFFFF",
             music: ["punk"],
             path: "AYO"
         }],
         notifications: [{
-            type: NotTypes.friendRequest,
+            type: NotTypes.placeHolder,
             sender: new Types.ObjectId()
         }],
     };

@@ -1,15 +1,12 @@
-import {LogInData} from "../../src/app/core/model/response-data/auth-data";
-import {AuthTestingSetupData, getAuthApi, teardownDb, testSetup} from "./auth-api.test";
+import {AuthTestingSetupData, teardownDb, testSetup} from "./auth-api.test";
 import {HttpClient} from "@angular/common/http";
 import {JwtProvider} from "../../src/app/core/api/jwt-auth/jwt-provider";
 import {JwtStorage} from "../../src/app/core/api/jwt-auth/jwt-storage";
 import {UserApi} from "../../src/app/core/api/handlers/user-api";
-import {AuthenticationApi} from "../../src/app/core/api/handlers/auth-api";
 import {User} from "../../src/app/core/model/response-data/user";
 import {UserStatus} from "../../src/app/core/model/response-data/user";
 import {InsertedUser, insertUser} from "../fixtures/model/users";
 import {
-    LegalInfos,
     ModelTypes,
     ProjectVehicle,
     VehicleStatus
