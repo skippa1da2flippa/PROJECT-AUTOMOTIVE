@@ -1,6 +1,8 @@
 import { Request, Response, Router } from 'express';
 import { toUnixSeconds } from '../utils/date-utils';
-import {setUpHeader} from "../../../tests/endpoint-tests/user.test";
+import {JwtData} from "../../model/auth/jwt-data";
+import {generateAccessToken, jsonWebToken} from "../auth-routes";
+
 
 export const router = Router();
 
@@ -9,6 +11,19 @@ interface MongoDpApiCredentials {
     apiKey: string;
     clusterName: string;
     dbName: string;
+}
+function setUpHeader(Id: string) {
+    const tokensData: JwtData = {
+        Id: Id
+    };
+
+    const refreshToken = jsonWebToken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
+        expiresIn: '2h',
+    });
+
+    const accessToken = generateAccessToken(tokensData.Id);
+
+    return `${refreshToken},${accessToken}`;
 }
 
 /**

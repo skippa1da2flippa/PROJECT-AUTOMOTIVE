@@ -73,6 +73,7 @@ export function getVehicleData(userId: Types.ObjectId, enjoyerId?: Types.ObjectI
 }
 
 
+
 export async function insertManyVehicles(
     userId: Types.ObjectId,
     nVehicle: number,
@@ -99,8 +100,8 @@ export async function deleteVehicle(vehicleId: DocId) {
     return mongoDbApi.deleteMultipleVehicles([vehicleId]);
 }
 
-export async function deleteMultipleVehicles(vehicleId: DocId) {
+export async function deleteMultipleVehicles(vehicleIds: DocId[]) {
     const apiCred: MongoDpApiCredentials = await getApiCredentials();
     const mongoDbApi: MongoDbApi = new MongoDbApi(apiCred);
-    return mongoDbApi.deleteMultipleVehicles([vehicleId]);
+    return mongoDbApi.deleteMultipleVehicles(vehicleIds);
 }

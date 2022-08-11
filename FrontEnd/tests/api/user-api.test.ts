@@ -14,11 +14,15 @@ import {
     ProjectVehicle,
     VehicleStatus
 } from "../../src/app/core/model/response-data/project-vehicle";
+import {getApiCredentials, MongoDpApiCredentials} from "../fixtures/model/mongodb-api/mongodb-api";
+import {insertManyVehicles} from "../fixtures/model/vehicles";
+import {Types} from "mongoose";
 
 let httpClient: HttpClient;
 let setupData: AuthTestingSetupData;
 let jwtProvider: JwtProvider;
 let jwtStorer: JwtStorage
+let credentials: MongoDpApiCredentials
 
 export const getUserApi = (): UserApi => {
     return new UserApi (httpClient, jwtProvider);
@@ -28,7 +32,7 @@ export const getUserApi = (): UserApi => {
 describe('Get Meh', () => {
     let userApi: UserApi
     beforeEach(async () => {
-        await testSetup();
+        await testSetup(httpClient, setupData, jwtProvider);
     });
 
     afterEach(async () => {
@@ -82,7 +86,7 @@ describe('Get Meh', () => {
 describe('Get My Friends', () => {
     let userApi: UserApi
     beforeEach(async () => {
-        await testSetup()
+        await testSetup(httpClient, setupData, jwtProvider)
     });
 
     afterEach(async () => {
@@ -139,6 +143,9 @@ describe('Get One Friend', () => {
     beforeEach(async () => {
         friend = await insertUser()
         await testSetup(
+            httpClient,
+            setupData,
+            jwtProvider,
             friend.userId
         );
 
@@ -207,7 +214,7 @@ describe('Get One Friend', () => {
 describe('Get My Vehicles', () => {
     let userApi: UserApi
     beforeEach(async () => {
-        await testSetup()
+        await testSetup(httpClient, setupData, jwtProvider)
     });
 
     afterEach(async () => {
@@ -261,7 +268,7 @@ describe('Get My Vehicles', () => {
 describe('Get Enjoyed Vehicles', () => {
     let userApi: UserApi
     beforeEach(async () => {
-        await testSetup()
+        await testSetup(httpClient, setupData, jwtProvider)
     });
 
     afterEach(async () => {
@@ -315,7 +322,7 @@ describe('Get Enjoyed Vehicles', () => {
 describe('Delete Meh', () => {
     let userApi: UserApi
     beforeEach(async () => {
-        await testSetup();
+        await testSetup(httpClient, setupData, jwtProvider);
     });
 
     afterEach(async () => {
@@ -353,7 +360,7 @@ let name: string
 describe('Update nickName', () => {
     let userApi: UserApi
     beforeEach(async () => {
-        await testSetup();
+        await testSetup(httpClient, setupData, jwtProvider);
     });
 
     afterEach(async () => {
@@ -409,7 +416,7 @@ describe('Update nickName', () => {
 describe('Update email', () => {
     let userApi: UserApi
     beforeEach(async () => {
-        await testSetup();
+        await testSetup(httpClient, setupData, jwtProvider);
     });
 
     afterEach(async () => {
@@ -478,7 +485,7 @@ describe('Update email', () => {
 describe('Update psw', () => {
     let userApi: UserApi
     beforeEach(async () => {
-        await testSetup();
+        await testSetup(httpClient, setupData, jwtProvider);
     });
 
     afterEach(async () => {
@@ -528,9 +535,19 @@ describe('Update psw', () => {
 
 describe('Remove me from enjoyers', () => {
     let userApi: UserApi
+    let vehicles: Types.ObjectId[] = []
+    let owner: InsertedUser
     beforeEach(async () => {
-        // TODO set up a vehicle and a user
-        await testSetup();
+        await testSetup(httpClient, setupData, jwtProvider);
+        owner = await insertUser()
+        credentials = await getApiCredentials()
+        await insertManyVehicles(
+            new Types.ObjectId(owner.userId),
+            1,
+            vehicles,
+            credentials,
+            new Types.ObjectId(setupData.insertedData.user.userId)
+        )
     });
 
     afterEach(async () => {
@@ -540,7 +557,7 @@ describe('Remove me from enjoyers', () => {
     test('Should Return Non-Empty Response With Correct Fields', (done) => {
         userApi = getUserApi();
 
-        userApi.removeMehFromEnjoyers("AYO").subscribe({
+        userApi.removeMehFromEnjoyers(vehicles[0].toString()).subscribe({
             next: (value: string) => {
                 // Expect non-empty response
                 expect(value).toBeTruthy();

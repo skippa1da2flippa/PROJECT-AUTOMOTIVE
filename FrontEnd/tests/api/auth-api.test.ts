@@ -61,7 +61,7 @@ export const teardownDb = async (setupData: AuthTestingSetupData, secondUser?: I
 };
 
 
-export const testSetup = async (friendId?: string) => {
+export const testSetup = async (httpClient: HttpClient, setUpData: AuthTestingSetupData, jwtProvider: JwtProvider, friendId?: string) => {
     httpClient = injectHttpClient();
     setupData = await setupDb(friendId);
     const reqPath = environment.serverBaseUrl + "/api/testing/getHeader/" + setupData.insertedData.user.userId
@@ -82,7 +82,7 @@ export const getAuthApi = (): AuthenticationApi => {
 describe('Login', () => {
     let authApi: AuthenticationApi
     beforeEach(async () => {
-        await testSetup();
+        await testSetup(httpClient, setupData, jwtProvider);
     });
 
     afterEach(async () => {
@@ -134,7 +134,7 @@ describe('signUp', () => {
     let authApi: AuthenticationApi
     let email: string
     beforeEach(async () => {
-        await testSetup();
+        await testSetup(httpClient, setupData, jwtProvider);
     });
 
     afterEach(async () => {
@@ -198,7 +198,7 @@ describe('signUp', () => {
 describe('Sign out', () => {
     let authApi: AuthenticationApi
     beforeEach(async () => {
-        await testSetup();
+        await testSetup(httpClient, setupData, jwtProvider);
     });
 
     afterEach(async () => {

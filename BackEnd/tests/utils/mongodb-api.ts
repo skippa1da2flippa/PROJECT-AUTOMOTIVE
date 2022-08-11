@@ -18,6 +18,7 @@ export interface MongoDpApiCredentials {
     dbName: string;
 }
 
+// TODO server doesn't exclude test to run and TEST_DB_URI is undefined
 const getTestDbName = (): string => {
     // The string format is the following:
     // mongodb+srv://<username>:<pwd>@<cluster-name>.<some-id>.mongodb.net/<dbName>?retryWrites=true&w=majority

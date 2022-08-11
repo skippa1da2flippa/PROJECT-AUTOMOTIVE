@@ -1,3 +1,11 @@
 export interface UserData {
-    userId: string;
+    res: boolean,
+    ownerId: string,
+    name: string,
+    enjoyerId: string
+}
+
+
+export interface ServerUserData {
+    userId: string
 }
