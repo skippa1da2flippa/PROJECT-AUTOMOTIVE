@@ -8,7 +8,7 @@ import { pool } from '../..';
 /**
  * Class that wraps socket.io functionality to listen
  * to a 'owner-response' client event.
- * Such event allows the client to join a socket.io room for listeninig
+ * Such event allows the client to join a socket.io room for listening
  * specific chat, so that he can listen only to messages of such chat.
  */
  export class OwnerResponseListener extends ClientListener<OwnerResData> {

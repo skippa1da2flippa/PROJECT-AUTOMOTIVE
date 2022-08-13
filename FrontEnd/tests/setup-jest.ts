@@ -2,6 +2,8 @@ import 'jest-preset-angular/setup-jest';
 import 'core-js';
 import axios from 'axios';
 
+
+
 // TODO
 //jest.setTimeout(25000);
 
