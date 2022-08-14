@@ -3,6 +3,18 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import {AuthenticationModule} from "./feature/authentication/authentication.module";
+import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
+import {environment} from "../environments/environment";
+import {HttpClientModule} from "@angular/common/http";
+
+const sIoConfig: SocketIoConfig = {
+    url: environment.serverBaseUrl,
+    options: {
+        withCredentials: false,
+    },
+};
+
 
 @NgModule({
   declarations: [
@@ -10,7 +22,10 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AuthenticationModule,
+    HttpClientModule,
+    SocketIoModule.forRoot(sIoConfig),
   ],
   providers: [],
   bootstrap: [AppComponent]

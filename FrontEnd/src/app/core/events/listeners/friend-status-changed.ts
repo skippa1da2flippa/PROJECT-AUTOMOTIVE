@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 
 import { ServerListener } from './base/server-listener';
-import { FriendStatusChangedData } from '../../model/events/friend-status-changed-data';
+import { FriendStatusChangedData } from '../../model/events-data/friend-status-changed-data';
 
 /**
  * Class that wraps socket.io functionality to listen

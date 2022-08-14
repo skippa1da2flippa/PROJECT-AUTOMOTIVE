@@ -1,0 +1,274 @@
+/* screen - ipad-nexus-login */
+:root {
+    --canary: #0027ff;
+    --dove-gray: #707070;
+    --granite-gray: #696969;
+    --silver-chalice: #adadad;
+    --white: #ffffff;
+
+    --font-size-l: 22px;
+    --font-size-m: 18px;
+    --font-size-xl: 35px;
+
+    --font-family-helvetica_neue: "Helvetica Neue", Helvetica;
+    --font-family-helveticaneue-bold: "HelveticaNeue-Bold", Helvetica;
+    --font-family-helveticaneue-regular: "HelveticaNeue-Regular", Helvetica;
+}
+.helveticaneue-regular-normal-silver-chalice-18px {
+    color: var(--silver-chalice);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.helveticaneue-regular-normal-canary-18px {
+    color: var(--canary);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.helveticaneue-regular-normal-white-22px {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-l);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.helveticaneue-bold-white-35px {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-xl);
+    font-style: normal;
+    font-weight: 700;
+}
+
+.helveticaneue-bold-granite-gray-22px {
+    color: var(--granite-gray);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-l);
+    font-style: normal;
+    font-weight: 700;
+}
+
+.border-1px-canary {
+    border: 1px solid var(--canary);
+}
+
+.border-1px-dove-gray {
+    border: 1px solid var(--dove-gray);
+}
+
+
+
+.ipad-nexus-login {
+    align-items: flex-start;
+    background-color: var(--white);
+    display: flex;
+    width: 1024px;
+}
+
+.ipad-nexus-login .overlap-group2 {
+    background-color: var(--silver-chalice);
+    height: 768px;
+    position: relative;
+    width: 1024px;
+}
+
+.ipad-nexus-login .rettangolo-45 {
+    background-color: var(--white);
+    border-radius: 53px;
+    box-shadow: 0px 3px 6px #00000029;
+    filter: blur(32.73px);;
+    height: 489px;
+    left: 303px;
+    position: absolute;
+    top: 166px;
+    width: 419px;
+}
+
+.ipad-nexus-login .rettangolo-44 {
+    background-color: var(--granite-gray);
+    border-radius: 53px;
+    height: 489px;
+    left: 303px;
+    position: absolute;
+    top: 166px;
+    width: 419px;
+}
+
+.ipad-nexus-login .raggruppa-56 {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    left: 348px;
+    min-height: 415px;
+    position: absolute;
+    top: 203px;
+    width: 332px;
+}
+
+.ipad-nexus-login .raggruppa-54 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    margin-right: 2px;
+    min-height: 312px;
+    width: 330px;
+}
+
+.ipad-nexus-login .title {
+    letter-spacing: 0;
+    line-height: 35px;
+    margin-top: 4px;
+    min-height: 44px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-login .not-registered-yet-create-an-account {
+    color: var(--canary);
+    font-family: var(--font-family-helvetica_neue);
+    font-size: var(--font-size-m);
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-top: 3px;
+    min-height: 23px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-login .span1 {
+    color: #767676;
+    font-family: var(--font-family-helveticaneue-regular);
+}
+
+.ipad-nexus-login .raggruppa-52 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    margin-top: 22px;
+    min-height: 98px;
+    width: 330px;
+}
+
+.ipad-nexus-login .email-address {
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-top: 2px;
+    min-height: 28px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-login .overlap-group {
+    align-items: flex-end;
+    border-radius: 17px;
+    display: flex;
+    height: 58px;
+    margin-top: 10px;
+    min-width: 330px;
+    padding: 15.5px 17px;
+}
+
+.ipad-nexus-login .enter-your-email-address {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 23px;
+    min-width: 207px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-login .raggruppa-53 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    min-height: 98px;
+    width: 330px;
+}
+
+.ipad-nexus-login .password {
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-top: 2px;
+    min-height: 28px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-login .enter-your-password {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 23px;
+    min-width: 173px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-login .forgot-password {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-top: 8px;
+    min-height: 23px;
+    min-width: 148px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-login .raggruppa-55 {
+    align-items: flex-end;
+    align-self: center;
+    background-color: var(--white);
+    border-radius: 15px;
+    display: flex;
+    height: 48px;
+    margin-right: 4.0px;
+    margin-top: 24px;
+    min-width: 146px;
+    padding: 8px 37px;
+}
+
+.ipad-nexus-login .login {
+    letter-spacing: 0;
+    line-height: 22px;
+    min-height: 28px;
+    min-width: 72px;
+    white-space: nowrap;
+}
+
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+
+@font-face {
+    font-family: "HelveticaNeue-Regular";
+    font-style: normal;
+    font-weight: 400;
+    src: url("https://fonts.animaapp.com/HelveticaNeue-Regular") format("truetype");
+}
+@font-face {
+    font-family: "HelveticaNeue-Bold";
+    font-style: normal;
+    font-weight: 700;
+    src: url("https://fonts.animaapp.com/HelveticaNeue-Bold") format("opentype");
+}
+
+.screen a {
+    display: contents;
+    text-decoration: none;
+}
+
+.container-center-horizontal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    pointer-events: none;
+    width: 100%;
+}
+
+.container-center-horizontal > * {
+    flex-shrink: 0;
+    pointer-events: auto;
+}
+
+* {
+    box-sizing: border-box;
+}
+
