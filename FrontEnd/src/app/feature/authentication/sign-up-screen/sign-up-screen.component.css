@@ -1,0 +1,272 @@
+
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+/* The following line is used to measure usage of this code in production. For more info see our usage billing page */
+@import url("https://px.animaapp.com/62f90a649eb14dc09afacb73.62f90a65674ea1a1f907eb4c.KdygMSB.hcp.png");
+
+
+/* screen - ipad-nexus-signup */
+:root {
+    --canary: #0027ff;
+    --granite-gray: #696969;
+    --silver-chalice: #adadad;
+    --white: #ffffff;
+
+    --font-size-l: 22px;
+    --font-size-m: 18px;
+    --font-size-xl: 35px;
+
+    --font-family-helvetica_neue: "Helvetica Neue", Helvetica;
+    --font-family-helveticaneue-bold: "HelveticaNeue-Bold", Helvetica;
+    --font-family-helveticaneue-regular: "HelveticaNeue-Regular", Helvetica;
+}
+.helveticaneue-regular-normal-silver-chalice-18px {
+    color: var(--silver-chalice);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.helveticaneue-regular-normal-white-22px {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-l);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.border-1px-canary {
+    border: 1px solid var(--canary);
+}
+
+
+@font-face {
+    font-family: "HelveticaNeue-Regular";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../../../fonts/HelveticaNeue.ttf") format("truetype");
+}
+@font-face {
+    font-family: "HelveticaNeue-Bold";
+    font-style: normal;
+    font-weight: 700;
+    src: url("../../../fonts/ApexSans-Book.otf") format("opentype");
+}
+
+
+.screen a {
+    display: contents;
+    text-decoration: none;
+}
+
+.container-center-horizontal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    pointer-events: none;
+    width: 100%;
+}
+
+.container-center-horizontal > * {
+    flex-shrink: 0;
+    pointer-events: auto;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+.ipad-nexus-signup {
+    align-items: flex-start;
+    background-color: var(--white);
+    display: flex;
+    width: 1024px;
+}
+
+.ipad-nexus-signup .overlap-group4 {
+    background-image: url(../../../images/tracciato-1572@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 768px;
+    position: relative;
+    width: 1024px;
+}
+
+.ipad-nexus-signup .rettangolo-45 {
+    background-color: var(--white);
+    border-radius: 53px;
+    box-shadow: 0px 3px 6px #00000029;
+    filter: blur(32.73px);;
+    height: 645px;
+    left: 303px;
+    position: absolute;
+    top: 62px;
+    width: 419px;
+}
+
+.ipad-nexus-signup .tracciato-1575 {
+    height: 645px;
+    left: 303px;
+    object-fit: cover;
+    position: absolute;
+    top: 62px;
+    width: 419px;
+}
+
+.ipad-nexus-signup .title {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    left: 348px;
+    letter-spacing: 0;
+    line-height: 35px;
+    position: absolute;
+    top: 98px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-signup .raggruppa-52 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    left: 348px;
+    min-height: 98px;
+    position: absolute;
+    top: 274px;
+    width: 330px;
+}
+
+.ipad-nexus-signup .email-address {
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-top: 2px;
+    min-height: 28px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-signup .overlap-group {
+    align-items: flex-end;
+    border-radius: 17px;
+    display: flex;
+    height: 58px;
+    margin-top: 10px;
+    min-width: 330px;
+    padding: 15.5px 17px;
+}
+
+.ipad-nexus-signup .enter-your-email-address {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 23px;
+    min-width: 207px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-signup .raggruppa-57 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    left: 348px;
+    min-height: 98px;
+    position: absolute;
+    top: 156px;
+    width: 330px;
+}
+
+.ipad-nexus-signup .full-name {
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-top: 2px;
+    min-height: 28px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-signup .enter-your-full-name {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 23px;
+    min-width: 163px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-signup .raggruppa-53 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    left: 348px;
+    min-height: 98px;
+    position: absolute;
+    top: 510px;
+    width: 330px;
+}
+
+.ipad-nexus-signup .password {
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-top: 2px;
+    min-height: 28px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-signup .enter-your-password {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 23px;
+    min-width: 173px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-signup .raggruppa-59 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    left: 348px;
+    min-height: 98px;
+    position: absolute;
+    top: 392px;
+    width: 330px;
+}
+
+.ipad-nexus-signup .nickname {
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-top: 2px;
+    min-height: 28px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-signup .enter-your-nickname {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 23px;
+    min-width: 172px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-signup .raggruppa-58 {
+    align-items: flex-end;
+    background-color: var(--white);
+    border: 1px solid #707070;
+    border-radius: 15px;
+    display: flex;
+    height: 48px;
+    left: 439px;
+    min-width: 146px;
+    padding: 8px 37px;
+    position: absolute;
+    top: 628px;
+}
+
+.ipad-nexus-signup .login {
+    color: var(--granite-gray);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-l);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 22px;
+    min-height: 28px;
+    min-width: 72px;
+    white-space: nowrap;
+}

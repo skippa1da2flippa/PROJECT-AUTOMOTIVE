@@ -13,8 +13,8 @@ import {HtmlErrorMessage} from "../../../core/model/errors/html-error";
 })
 export class LogInScreenComponent implements OnInit {
     public userMessage: HtmlErrorMessage = new HtmlErrorMessage();
-    private email: string = ""
-    private password: string = ""
+    public email: string = ""
+    public password: string = ""
 
     constructor(
       private authClient: AuthenticationApi,
@@ -27,11 +27,11 @@ export class LogInScreenComponent implements OnInit {
 
     }
 
-    private saveEmail($event: KeyboardEvent) {
+    public saveEmail($event: KeyboardEvent) {
         this.email = $event.key
     }
 
-    private async logIn(email: string, password: string) {
+    public async logIn(email: string, password: string) {
         this.authClient.logIn(email, password).subscribe({
             next: (data: LogInData) => {
                 this.serverJoinedEmitter.emit({ userId: data.userId });
