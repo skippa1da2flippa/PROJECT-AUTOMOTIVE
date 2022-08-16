@@ -1,29 +1,43 @@
-/* screen - ipad-nexus-login */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+/* The following line is used to measure usage of this code in production. For more info see our usage billing page */
+@import url("https://px.animaapp.com/62f90a649eb14dc09afacb73.62f90a65674ea1a1f907eb4c.KdygMSB.hcp.png");
+
 :root {
     --canary: #0027ff;
     --dove-gray: #707070;
     --granite-gray: #696969;
+    --robins-egg-blue: #00ccfe;
     --silver-chalice: #adadad;
     --white: #ffffff;
 
     --font-size-l: 22px;
     --font-size-m: 18px;
+    --font-size-s: 17px;
     --font-size-xl: 35px;
 
     --font-family-helvetica_neue: "Helvetica Neue", Helvetica;
     --font-family-helveticaneue-bold: "HelveticaNeue-Bold", Helvetica;
+    --font-family-helveticaneue-medium: "HelveticaNeue-Medium", Helvetica;
     --font-family-helveticaneue-regular: "HelveticaNeue-Regular", Helvetica;
 }
-.helveticaneue-regular-normal-silver-chalice-18px {
+.helveticaneue-medium-white-18px {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-medium);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 500;
+}
+
+.helveticaneue-regular-normal-silver-chalice-17px {
     color: var(--silver-chalice);
     font-family: var(--font-family-helveticaneue-regular);
-    font-size: var(--font-size-m);
+    font-size: var(--font-size-s);
     font-style: normal;
     font-weight: 400;
 }
 
-.helveticaneue-regular-normal-canary-18px {
-    color: var(--canary);
+.helveticaneue-regular-normal-silver-chalice-18px {
+    color: var(--silver-chalice);
     font-family: var(--font-family-helveticaneue-regular);
     font-size: var(--font-size-m);
     font-style: normal;
@@ -34,6 +48,22 @@
     color: var(--white);
     font-family: var(--font-family-helveticaneue-regular);
     font-size: var(--font-size-l);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.helveticaneue-bold-canary-18px {
+    color: var(--canary);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 700;
+}
+
+.helveticaneue-regular-normal-white-18px {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-m);
     font-style: normal;
     font-weight: 400;
 }
@@ -63,6 +93,50 @@
 }
 
 
+@font-face {
+    font-family: "HelveticaNeue-Regular";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../../../fonts/HelveticaNeue.ttf") format("truetype");
+}
+@font-face {
+    font-family: "HelveticaNeue-Bold";
+    font-style: normal;
+    font-weight: 700;
+    src: url("../../../fonts/ApexSans-Book.otf") format("opentype");
+}
+@font-face {
+    font-family: "HelveticaNeue-Medium";
+    font-style: normal;
+    font-weight: 500;
+    src: url("../../../fonts/HelveticaNeue-Medium.otf") format("opentype");
+}
+
+
+.screen a {
+    display: contents;
+    text-decoration: none;
+}
+
+.container-center-horizontal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    pointer-events: none;
+    width: 100%;
+}
+
+.container-center-horizontal > * {
+    flex-shrink: 0;
+    pointer-events: auto;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+/* screen - ipad-nexus-login */
 
 .ipad-nexus-login {
     align-items: flex-start;
@@ -120,7 +194,7 @@
     width: 330px;
 }
 
-.ipad-nexus-login .title {
+.ipad-nexus-login .login {
     letter-spacing: 0;
     line-height: 35px;
     margin-top: 4px;
@@ -142,6 +216,10 @@
 
 .ipad-nexus-login .span1 {
     color: #767676;
+    font-family: var(--font-family-helveticaneue-regular);
+}
+
+.ipad-nexus-login .span2 {
     font-family: var(--font-family-helveticaneue-regular);
 }
 
@@ -206,6 +284,10 @@
 }
 
 .ipad-nexus-login .forgot-password {
+    color: var(--canary);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-m);
+    font-weight: 400;
     letter-spacing: 0;
     line-height: 18px;
     margin-top: 8px;
@@ -227,48 +309,10 @@
     padding: 8px 37px;
 }
 
-.ipad-nexus-login .login {
+.ipad-nexus-login .login-1 {
     letter-spacing: 0;
     line-height: 22px;
     min-height: 28px;
     min-width: 72px;
     white-space: nowrap;
 }
-
-@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
-
-@font-face {
-    font-family: "HelveticaNeue-Regular";
-    font-style: normal;
-    font-weight: 400;
-    src: url("https://fonts.animaapp.com/HelveticaNeue-Regular") format("truetype");
-}
-@font-face {
-    font-family: "HelveticaNeue-Bold";
-    font-style: normal;
-    font-weight: 700;
-    src: url("https://fonts.animaapp.com/HelveticaNeue-Bold") format("opentype");
-}
-
-.screen a {
-    display: contents;
-    text-decoration: none;
-}
-
-.container-center-horizontal {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    pointer-events: none;
-    width: 100%;
-}
-
-.container-center-horizontal > * {
-    flex-shrink: 0;
-    pointer-events: auto;
-}
-
-* {
-    box-sizing: border-box;
-}
-

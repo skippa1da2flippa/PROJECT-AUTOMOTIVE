@@ -1,12 +1,8 @@
-
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
-/* The following line is used to measure usage of this code in production. For more info see our usage billing page */
-@import url("https://px.animaapp.com/62f90a649eb14dc09afacb73.62f90a65674ea1a1f907eb4c.KdygMSB.hcp.png");
 
-
-/* screen - ipad-nexus-signup */
 :root {
     --canary: #0027ff;
+    --dove-gray: #707070;
     --granite-gray: #696969;
     --silver-chalice: #adadad;
     --white: #ffffff;
@@ -15,18 +11,9 @@
     --font-size-m: 18px;
     --font-size-xl: 35px;
 
-    --font-family-helvetica_neue: "Helvetica Neue", Helvetica;
     --font-family-helveticaneue-bold: "HelveticaNeue-Bold", Helvetica;
     --font-family-helveticaneue-regular: "HelveticaNeue-Regular", Helvetica;
 }
-.helveticaneue-regular-normal-silver-chalice-18px {
-    color: var(--silver-chalice);
-    font-family: var(--font-family-helveticaneue-regular);
-    font-size: var(--font-size-m);
-    font-style: normal;
-    font-weight: 400;
-}
-
 .helveticaneue-regular-normal-white-22px {
     color: var(--white);
     font-family: var(--font-family-helveticaneue-regular);
@@ -35,8 +22,224 @@
     font-weight: 400;
 }
 
+.helveticaneue-regular-normal-silver-chalice-18px {
+    color: var(--silver-chalice);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.helveticaneue-bold-white-35px {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-xl);
+    font-style: normal;
+    font-weight: 700;
+}
+
+.helveticaneue-bold-granite-gray-22px {
+    color: var(--granite-gray);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-l);
+    font-style: normal;
+    font-weight: 700;
+}
+
 .border-1px-canary {
     border: 1px solid var(--canary);
+}
+
+.border-1px-dove-gray {
+    border: 1px solid var(--dove-gray);
+}
+
+
+/* screen - ipad-3 */
+
+.ipad-3 {
+    align-items: flex-start;
+    background-color: var(--white);
+    display: flex;
+    width: 1024px;
+}
+
+.ipad-3 .overlap-group4 {
+    background-image: url(https://anima-uploads.s3.amazonaws.com/projects/62f90f12e2894db8bf01d639/releases/62f90f37f5e0f8f0397614fc/img/tracciato-1572@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 768px;
+    position: relative;
+    width: 1024px;
+}
+
+.ipad-3 .rettangolo-45 {
+    background-color: var(--white);
+    border-radius: 53px;
+    box-shadow: 0px 3px 6px #00000029;
+    filter: blur(32.73px);;
+    height: 645px;
+    left: 303px;
+    position: absolute;
+    top: 62px;
+    width: 419px;
+}
+
+.ipad-3 .tracciato-1575 {
+    height: 645px;
+    left: 303px;
+    object-fit: cover;
+    position: absolute;
+    top: 62px;
+    width: 419px;
+}
+
+.ipad-3 .title {
+    left: 348px;
+    letter-spacing: 0;
+    line-height: 35px;
+    position: absolute;
+    top: 98px;
+    white-space: nowrap;
+}
+
+.ipad-3 .raggruppa-52 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    left: 348px;
+    min-height: 98px;
+    position: absolute;
+    top: 274px;
+    width: 330px;
+}
+
+.ipad-3 .email-address {
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-top: 2px;
+    min-height: 28px;
+    white-space: nowrap;
+}
+
+.ipad-3 .overlap-group {
+    align-items: flex-end;
+    border-radius: 17px;
+    display: flex;
+    height: 58px;
+    margin-top: 10px;
+    min-width: 330px;
+    padding: 15.5px 17px;
+}
+
+.ipad-3 .enter-your-email-address {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 23px;
+    min-width: 207px;
+    white-space: nowrap;
+}
+
+.ipad-3 .raggruppa-57 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    left: 348px;
+    min-height: 98px;
+    position: absolute;
+    top: 156px;
+    width: 330px;
+}
+
+.ipad-3 .full-name {
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-top: 2px;
+    min-height: 28px;
+    white-space: nowrap;
+}
+
+.ipad-3 .enter-your-full-name {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 23px;
+    min-width: 163px;
+    white-space: nowrap;
+}
+
+.ipad-3 .raggruppa-53 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    left: 348px;
+    min-height: 98px;
+    position: absolute;
+    top: 510px;
+    width: 330px;
+}
+
+.ipad-3 .password {
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-top: 2px;
+    min-height: 28px;
+    white-space: nowrap;
+}
+
+.ipad-3 .enter-your-password {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 23px;
+    min-width: 173px;
+    white-space: nowrap;
+}
+
+.ipad-3 .raggruppa-59 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    left: 348px;
+    min-height: 98px;
+    position: absolute;
+    top: 392px;
+    width: 330px;
+}
+
+.ipad-3 .nickname {
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-top: 2px;
+    min-height: 28px;
+    white-space: nowrap;
+}
+
+.ipad-3 .enter-your-nickname {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 23px;
+    min-width: 172px;
+    white-space: nowrap;
+}
+
+.ipad-3 .raggruppa-58 {
+    align-items: flex-end;
+    background-color: var(--white);
+    border-radius: 15px;
+    display: flex;
+    height: 48px;
+    left: 439px;
+    min-width: 146px;
+    padding: 8px 37px;
+    position: absolute;
+    top: 628px;
+}
+
+.ipad-3 .login {
+    letter-spacing: 0;
+    line-height: 22px;
+    min-height: 28px;
+    min-width: 72px;
+    white-space: nowrap;
 }
 
 
@@ -44,15 +247,14 @@
     font-family: "HelveticaNeue-Regular";
     font-style: normal;
     font-weight: 400;
-    src: url("../../../fonts/HelveticaNeue.ttf") format("truetype");
+    src: url("https://fonts.animaapp.com/HelveticaNeue-Regular") format("truetype");
 }
 @font-face {
     font-family: "HelveticaNeue-Bold";
     font-style: normal;
     font-weight: 700;
-    src: url("../../../fonts/ApexSans-Book.otf") format("opentype");
+    src: url("https://fonts.animaapp.com/HelveticaNeue-Bold") format("opentype");
 }
-
 
 .screen a {
     display: contents;
@@ -74,199 +276,4 @@
 
 * {
     box-sizing: border-box;
-}
-
-
-.ipad-nexus-signup {
-    align-items: flex-start;
-    background-color: var(--white);
-    display: flex;
-    width: 1024px;
-}
-
-.ipad-nexus-signup .overlap-group4 {
-    background-image: url(../../../images/tracciato-1572@1x.png);
-    background-position: 50% 50%;
-    background-size: cover;
-    height: 768px;
-    position: relative;
-    width: 1024px;
-}
-
-.ipad-nexus-signup .rettangolo-45 {
-    background-color: var(--white);
-    border-radius: 53px;
-    box-shadow: 0px 3px 6px #00000029;
-    filter: blur(32.73px);;
-    height: 645px;
-    left: 303px;
-    position: absolute;
-    top: 62px;
-    width: 419px;
-}
-
-.ipad-nexus-signup .tracciato-1575 {
-    height: 645px;
-    left: 303px;
-    object-fit: cover;
-    position: absolute;
-    top: 62px;
-    width: 419px;
-}
-
-.ipad-nexus-signup .title {
-    color: var(--white);
-    font-family: var(--font-family-helveticaneue-bold);
-    font-size: var(--font-size-xl);
-    font-weight: 700;
-    left: 348px;
-    letter-spacing: 0;
-    line-height: 35px;
-    position: absolute;
-    top: 98px;
-    white-space: nowrap;
-}
-
-.ipad-nexus-signup .raggruppa-52 {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    left: 348px;
-    min-height: 98px;
-    position: absolute;
-    top: 274px;
-    width: 330px;
-}
-
-.ipad-nexus-signup .email-address {
-    letter-spacing: 0;
-    line-height: 22px;
-    margin-top: 2px;
-    min-height: 28px;
-    white-space: nowrap;
-}
-
-.ipad-nexus-signup .overlap-group {
-    align-items: flex-end;
-    border-radius: 17px;
-    display: flex;
-    height: 58px;
-    margin-top: 10px;
-    min-width: 330px;
-    padding: 15.5px 17px;
-}
-
-.ipad-nexus-signup .enter-your-email-address {
-    letter-spacing: 0;
-    line-height: 18px;
-    min-height: 23px;
-    min-width: 207px;
-    white-space: nowrap;
-}
-
-.ipad-nexus-signup .raggruppa-57 {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    left: 348px;
-    min-height: 98px;
-    position: absolute;
-    top: 156px;
-    width: 330px;
-}
-
-.ipad-nexus-signup .full-name {
-    letter-spacing: 0;
-    line-height: 22px;
-    margin-top: 2px;
-    min-height: 28px;
-    white-space: nowrap;
-}
-
-.ipad-nexus-signup .enter-your-full-name {
-    letter-spacing: 0;
-    line-height: 18px;
-    min-height: 23px;
-    min-width: 163px;
-    white-space: nowrap;
-}
-
-.ipad-nexus-signup .raggruppa-53 {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    left: 348px;
-    min-height: 98px;
-    position: absolute;
-    top: 510px;
-    width: 330px;
-}
-
-.ipad-nexus-signup .password {
-    letter-spacing: 0;
-    line-height: 22px;
-    margin-top: 2px;
-    min-height: 28px;
-    white-space: nowrap;
-}
-
-.ipad-nexus-signup .enter-your-password {
-    letter-spacing: 0;
-    line-height: 18px;
-    min-height: 23px;
-    min-width: 173px;
-    white-space: nowrap;
-}
-
-.ipad-nexus-signup .raggruppa-59 {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    left: 348px;
-    min-height: 98px;
-    position: absolute;
-    top: 392px;
-    width: 330px;
-}
-
-.ipad-nexus-signup .nickname {
-    letter-spacing: 0;
-    line-height: 22px;
-    margin-top: 2px;
-    min-height: 28px;
-    white-space: nowrap;
-}
-
-.ipad-nexus-signup .enter-your-nickname {
-    letter-spacing: 0;
-    line-height: 18px;
-    min-height: 23px;
-    min-width: 172px;
-    white-space: nowrap;
-}
-
-.ipad-nexus-signup .raggruppa-58 {
-    align-items: flex-end;
-    background-color: var(--white);
-    border: 1px solid #707070;
-    border-radius: 15px;
-    display: flex;
-    height: 48px;
-    left: 439px;
-    min-width: 146px;
-    padding: 8px 37px;
-    position: absolute;
-    top: 628px;
-}
-
-.ipad-nexus-signup .login {
-    color: var(--granite-gray);
-    font-family: var(--font-family-helveticaneue-bold);
-    font-size: var(--font-size-l);
-    font-weight: 700;
-    letter-spacing: 0;
-    line-height: 22px;
-    min-height: 28px;
-    min-width: 72px;
-    white-space: nowrap;
 }

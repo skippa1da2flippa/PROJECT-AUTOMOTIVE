@@ -7,6 +7,7 @@ import {AuthenticationModule} from "./feature/authentication/authentication.modu
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 import {environment} from "../environments/environment";
 import {HttpClientModule} from "@angular/common/http";
+import { RoutinesComponent } from './feature/routines/routines.component';
 
 const sIoConfig: SocketIoConfig = {
     url: environment.serverBaseUrl,
@@ -18,7 +19,8 @@ const sIoConfig: SocketIoConfig = {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    RoutinesComponent
   ],
   imports: [
     BrowserModule,

@@ -1,14 +1,16 @@
-
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="utf-8" />
     <!--<meta name=description content="This site was generated with Anima. www.animaapp.com"/>-->
-    <!--link rel="shortcut icon" type=image/png href=https://animaproject.s3.amazonaws.com/home/favicon.png-->
+    <link rel="shortcut icon" type=image/png href=https://animaproject.s3.amazonaws.com/home/favicon.png/>
     <meta name="viewport" content="width=1024, maximum-scale=1.0" />
     <link rel="shortcut icon" type="image/png" href="https://animaproject.s3.amazonaws.com/home/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="./log-in-screen.component.css" />
-    <link rel="stylesheet" type="text/css" href="./log-in-screen.component.css" />
-    <link rel="stylesheet" type="text/css" href="./log-in-screen.component.css" />
-    <title>PROJECT AUTOMOTIVE</title>
+    <meta name="og:type" content="website" />
+    <meta name="twitter:card" content="photo" />
+    <link rel="stylesheet" type="text/css" href="log-in-screen.component.css" />
+    <link rel="stylesheet" type="text/css" href="log-in-screen.component.css" />
+    <link rel="stylesheet" type="text/css" href="log-in-screen.component.css" />
 </head>
 <body style="margin: 0; background: #ffffff">
 <input type="hidden" id="anPageName" name="page" value="ipad-nexus-login" />
@@ -19,20 +21,16 @@
             <div class="rettangolo-44"></div>
             <div class="raggruppa-56">
                 <div class="raggruppa-54">
-                    <h1 class="title helveticaneue-bold-white-35px">Login</h1>
+                    <div class="login helveticaneue-bold-white-35px">Login</div>
                     <div class="not-registered-yet-create-an-account">
-                <span class="helveticaneue-regular-normal-silver-chalice-18px">Not registered yet?
-                </span
-                ><span class="span1">&nbsp;</span
-                    ><span class="helveticaneue-regular-normal-canary-18px">
-                        <a routerLink="/authentication/register"> Register here ! </a>
-                    </span>
+                <span class="helveticaneue-regular-normal-silver-chalice-18px">Not registered yet?</span
+                ><span class="span1">&nbsp;</span><span class="span2">Create an account</span>
                     </div>
                     <div class="raggruppa-52">
                         <div class="email-address helveticaneue-regular-normal-white-22px">Email address</div>
                         <div class="overlap-group border-1px-canary">
                             <div class="enter-your-email-address helveticaneue-regular-normal-silver-chalice-18px">
-                                <input (keyup)="saveEmail($event)" placeholder="Enter your email">
+                                Enter your email address
                             </div>
                         </div>
                     </div>
@@ -40,23 +38,18 @@
                         <div class="password helveticaneue-regular-normal-white-22px">Password</div>
                         <div class="overlap-group border-1px-canary">
                             <div class="enter-your-password helveticaneue-regular-normal-silver-chalice-18px">
-                                <input (keyup)="saveEmail($event)" placeholder="Enter your password">
+                                Enter your password
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="forgot-password helveticaneue-regular-normal-canary-18px">
-                    <a routerLink="/authentication/generatePassword"> Forgot password? </a>
-                </div>
+                <div class="forgot-password">Forgot password?</div>
                 <div class="raggruppa-55 border-1px-dove-gray">
-                    <div class="login helveticaneue-bold-granite-gray-22px">
-                        <button type="button" (click)="logIn(email, password)">LOG IN</button>
-                    </div>
+                    <div class="login-1 helveticaneue-bold-granite-gray-22px">LOGIN</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 </body>
-
-
+</html>

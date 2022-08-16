@@ -17,10 +17,10 @@ export class LogInScreenComponent implements OnInit {
     public password: string = ""
 
     constructor(
-      private authClient: AuthenticationApi,
-      private router: Router,
-      private userClient: UserApi,
-      private serverJoinedEmitter: ServerJoinedEmitter,
+        private authClient: AuthenticationApi,
+        private router: Router,
+        private userClient: UserApi,
+        private serverJoinedEmitter: ServerJoinedEmitter,
     ) { }
 
     ngOnInit(): void {

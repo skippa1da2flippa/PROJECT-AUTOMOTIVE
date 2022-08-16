@@ -1,0 +1,590 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+/* The following line is used to measure usage of this code in production. For more info see our usage billing page */
+@import url("https://px.animaapp.com/62f90a649eb14dc09afacb73.62f90a65674ea1a1f907eb4c.KdygMSB.hcp.png");
+
+:root {
+    --canary: #0027ff;
+    --dove-gray: #707070;
+    --granite-gray: #696969;
+    --robins-egg-blue: #00ccfe;
+    --silver-chalice: #adadad;
+    --white: #ffffff;
+
+    --font-size-l: 22px;
+    --font-size-m: 18px;
+    --font-size-s: 17px;
+    --font-size-xl: 35px;
+
+    --font-family-helvetica_neue: "Helvetica Neue", Helvetica;
+    --font-family-helveticaneue-bold: "HelveticaNeue-Bold", Helvetica;
+    --font-family-helveticaneue-medium: "HelveticaNeue-Medium", Helvetica;
+    --font-family-helveticaneue-regular: "HelveticaNeue-Regular", Helvetica;
+}
+.helveticaneue-medium-white-18px {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-medium);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 500;
+}
+
+.helveticaneue-regular-normal-silver-chalice-17px {
+    color: var(--silver-chalice);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-s);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.helveticaneue-regular-normal-silver-chalice-18px {
+    color: var(--silver-chalice);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.helveticaneue-regular-normal-white-22px {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-l);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.helveticaneue-bold-canary-18px {
+    color: var(--canary);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 700;
+}
+
+.helveticaneue-regular-normal-white-18px {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.helveticaneue-bold-white-35px {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-xl);
+    font-style: normal;
+    font-weight: 700;
+}
+
+.helveticaneue-bold-granite-gray-22px {
+    color: var(--granite-gray);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-l);
+    font-style: normal;
+    font-weight: 700;
+}
+
+.border-1px-canary {
+    border: 1px solid var(--canary);
+}
+
+.border-1px-dove-gray {
+    border: 1px solid var(--dove-gray);
+}
+
+
+@font-face {
+    font-family: "HelveticaNeue-Regular";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../../../fonts/HelveticaNeue.ttf") format("truetype");
+}
+@font-face {
+    font-family: "HelveticaNeue-Bold";
+    font-style: normal;
+    font-weight: 700;
+    src: url("../../../fonts/ApexSans-Book.otf") format("opentype");
+}
+@font-face {
+    font-family: "HelveticaNeue-Medium";
+    font-style: normal;
+    font-weight: 500;
+    src: url("../../../fonts/HelveticaNeue-Medium.otf") format("opentype");
+}
+
+
+.screen a {
+    display: contents;
+    text-decoration: none;
+}
+
+.container-center-horizontal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    pointer-events: none;
+    width: 100%;
+}
+
+.container-center-horizontal > * {
+    flex-shrink: 0;
+    pointer-events: auto;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* screen - ipad-nexus-routines */
+
+.ipad-nexus-routines {
+    align-items: flex-start;
+    background-color: var(--white);
+    display: flex;
+    height: 1228px;
+    overflow: hidden;
+    width: 1024px;
+}
+
+.ipad-nexus-routines .overlap-group8 {
+    align-items: center;
+    background-color: var(--silver-chalice);
+    display: flex;
+    flex-direction: column;
+    min-height: 1240px;
+    padding: 21px 0;
+    width: 1024px;
+}
+
+.ipad-nexus-routines .raggruppa-33 {
+    align-items: flex-start;
+    display: flex;
+    height: 57px;
+    justify-content: flex-end;
+    margin-left: 0.02px;
+    min-width: 942px;
+}
+
+.ipad-nexus-routines .raggruppa-25 {
+    align-self: center;
+    background-image: url(../img/raggruppa-24-1@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 32px;
+    margin-bottom: 4.81px;
+    width: 32px;
+}
+
+.ipad-nexus-routines .flex-col {
+    align-items: center;
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    margin-left: 26px;
+    min-height: 41px;
+    width: 790px;
+}
+
+.ipad-nexus-routines .navbar {
+    align-items: flex-end;
+    display: flex;
+    height: 22px;
+    min-width: 790px;
+    opacity: 1.0;
+}
+
+.ipad-nexus-routines .navbar-link-vehicles-near-me {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    min-height: 23px;
+    min-width: 143px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .navbar-link-routines {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-m);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -4px;
+    margin-left: 38px;
+    min-height: 24px;
+    min-width: 78px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .navbar-link-maps {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 33px;
+    min-height: 23px;
+    min-width: 47px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .navbar-link-my-vehicles {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 97px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .navbar-link-enjoyed-vehicles {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 137px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .navbar-link-notifications {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 103px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .rettangolo-28 {
+    background-color: var(--white);
+    border-radius: 6px;
+    height: 4px;
+    margin-right: 351.0px;
+    margin-top: 15px;
+    width: 75px;
+}
+
+.ipad-nexus-routines .raggruppa-28 {
+    background-color: var(--white);
+    border: 2px solid #c7c7c7;
+    border-radius: 28px;
+    display: flex;
+    height: 56px;
+    margin-left: 38px;
+    width: 56px;
+}
+
+.ipad-nexus-routines .businessman-with-arm {
+    border-radius: 25.5px;
+    flex: 1;
+    margin-bottom: 2px;
+    margin-left: 3px;
+    margin-right: 2px;
+    margin-top: 3px;
+    object-fit: cover;
+    width: 51px;
+}
+
+.ipad-nexus-routines .raggruppa-186 {
+    display: flex;
+    height: 35px;
+    justify-content: space-between;
+    margin-left: 4.0px;
+    margin-top: 27px;
+    width: 948px;
+}
+
+.ipad-nexus-routines .raggruppa-144 {
+    align-items: center;
+    display: flex;
+    margin-bottom: 0;
+    margin-top: 0;
+    min-width: 35px;
+}
+
+.ipad-nexus-routines .overlap-group1 {
+    height: 35px;
+    position: relative;
+    width: 35px;
+}
+
+.ipad-nexus-routines .raggruppa-119 {
+    background-image: url(../img/raggruppa-118@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 3px;
+    left: 7px;
+    position: absolute;
+    top: 16px;
+    width: 22px;
+}
+
+.ipad-nexus-routines .tracciato-1571 {
+    height: 35px;
+    left: 0;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 35px;
+}
+
+.ipad-nexus-routines .raggruppa-143 {
+    align-items: flex-start;
+    display: flex;
+    margin-bottom: 0;
+    margin-right: 0;
+    margin-top: 0;
+    min-width: 35px;
+}
+
+.ipad-nexus-routines .overlap-group {
+    border-radius: 17.5px;
+    height: 35px;
+    position: relative;
+    width: 35px;
+}
+
+.ipad-nexus-routines .raggruppa-117 {
+    background-image: url(../img/raggruppa-116@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 22px;
+    left: 7px;
+    position: absolute;
+    top: 7px;
+    width: 22px;
+}
+
+.ipad-nexus-routines .ellisse-12 {
+    border: 2px solid var(--canary);
+    border-radius: 17.5px;
+    height: 35px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 35px;
+}
+
+.ipad-nexus-routines .overlap-group-container {
+    height: 1063px;
+    margin-top: 5px;
+    position: relative;
+    width: 1024px;
+}
+
+.ipad-nexus-routines .overlap-group2 {
+    height: 544px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 368px;
+}
+
+.routine .overlap-group2 {
+    height: 544px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 368px;
+}
+
+.ipad-nexus-routines .tracciato-1574 {
+    height: 544px;
+    left: 9px;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 351px;
+}
+
+.ipad-nexus-routines .tracciato-1573 {
+    height: 479px;
+    left: 41px;
+    object-fit: cover;
+    position: absolute;
+    top: 32px;
+    width: 286px;
+}
+
+.ipad-nexus-routines .rettangolo-82 {
+    background-color: var(--white);
+    border-radius: 19px;
+    box-shadow: 0px 3px 50px #00000029;
+    height: 37px;
+    left: 59px;
+    position: absolute;
+    top: 45px;
+    width: 250px;
+}
+
+.ipad-nexus-routines .full-concept-v28-_-2 {
+    height: 168px;
+    left: 0;
+    object-fit: cover;
+    position: absolute;
+    top: 57px;
+    width: 368px;
+}
+
+.ipad-nexus-routines .estate {
+    left: 154px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    top: 55px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .light-color {
+    left: 142px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    top: 216px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .temperature {
+    left: 132px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    top: 273px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .timing {
+    left: 159px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    top: 444px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .destination {
+    left: 140px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    top: 330px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .music {
+    left: 162px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    top: 387px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .x800-am {
+    left: 149px;
+    letter-spacing: 0;
+    line-height: 17px;
+    position: absolute;
+    top: 474px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .via-bafile-75-jesolo {
+    left: 102px;
+    letter-spacing: 0;
+    line-height: 17px;
+    position: absolute;
+    top: 360px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .x80s-classics {
+    left: 138px;
+    letter-spacing: 0;
+    line-height: 17px;
+    position: absolute;
+    top: 416px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-routines .raggruppa-147 {
+    display: flex;
+    height: 20px;
+    left: 165px;
+    position: absolute;
+    top: 300px;
+    width: 40px;
+}
+
+.ipad-nexus-routines .x21-c {
+    flex: 1;
+    letter-spacing: 0;
+    line-height: 17px;
+    margin-bottom: -3.5px;
+    margin-right: -2px;
+    margin-top: 1.5px;
+    white-space: nowrap;
+    width: 40px;
+}
+
+.ipad-nexus-routines .raggruppa-192 {
+    background-image: url(../img/raggruppa-136-1@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 24px;
+    left: 278px;
+    position: absolute;
+    top: 51px;
+    width: 24px;
+}
+
+.ipad-nexus-routines .ellisse-15 {
+    background-color: var(--robins-egg-blue);
+    border-radius: 12px;
+    height: 24px;
+    left: 172px;
+    position: absolute;
+    top: 243px;
+    width: 24px;
+}
+
+.ipad-nexus-routines .overlap-group3 {
+    height: 544px;
+    left: 0;
+    position: absolute;
+    top: 519px;
+    width: 368px;
+}
+
+.ipad-nexus-routines .overlap-group4 {
+    height: 544px;
+    left: 328px;
+    position: absolute;
+    top: 0;
+    width: 368px;
+}
+
+.ipad-nexus-routines .overlap-group5 {
+    height: 544px;
+    left: 328px;
+    position: absolute;
+    top: 519px;
+    width: 368px;
+}
+
+.ipad-nexus-routines .overlap-group6 {
+    height: 544px;
+    left: 656px;
+    position: absolute;
+    top: 0;
+    width: 368px;
+}
+
+.ipad-nexus-routines .overlap-group7 {
+    height: 544px;
+    left: 656px;
+    position: absolute;
+    top: 519px;
+    width: 368px;
+}
