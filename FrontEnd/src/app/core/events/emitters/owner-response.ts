@@ -1,7 +1,7 @@
 import { Socket } from 'ngx-socket-io';
 import { Emitter } from './base/emitter';
 import { Injectable } from '@angular/core';
-import { UserData } from '../../model/events-data/user-data';
+import {OwnerResData} from "../../model/events-data/owner-response";
 /**
  * Class that wraps socket.io functionality to generate a "server-joined" event.
  * This allows the client to register itself to the socket.io server, so that
@@ -12,7 +12,7 @@ import { UserData } from '../../model/events-data/user-data';
 @Injectable({
     providedIn: 'root',
 })
-export class OwnerResponseEmitter extends Emitter<UserData> {
+export class OwnerResponseEmitter extends Emitter<OwnerResData> {
     public constructor(client: Socket) {
         super(client, `owner-response`);
     }

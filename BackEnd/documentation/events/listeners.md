@@ -58,9 +58,9 @@ table th:nth-of-type(3) {
 
 ### Server Joined
 
-| Event name    | Description                                                                                                                     | Event Data                                                                    |
-|:--------------|:--------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------|
-| server-joined | Every time a user (client-side) emit a socket with this event name, he starts listening in a room identified with is mongoDb id | With this event, a [UserData](#user-Data) resource is expected to be received |
+| Event name    | Description                                                                                                                    | Event Data                                                                    |
+|:--------------|:-------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------|
+| server-joined | Every time a user (client-side) emit a socket with this event name, he starts listening in a room identified by his mongoDb id | With this event, a [UserData](#user-Data) resource is expected to be received |
 
 
 ### Friend Request Accepted
