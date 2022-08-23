@@ -28,7 +28,7 @@ const msgs500: string[] = [
 
 
 export class ServerError extends Error {
-    readonly statusCode: number;
+    readonly statusCode: number = 400;
   
     constructor(message: string) {
         super(message);
@@ -38,7 +38,7 @@ export class ServerError extends Error {
 
         else if (msgs500.includes(message)) this.statusCode = 500
 
-        else if (msgs400.includes(message)) this.statusCode = 400 
+        else if (msgs400.includes(message)) this.statusCode = 400
     }
   
     getErrorMessage() {

@@ -33,6 +33,12 @@ export interface Routine {
     path: any
 }
 
+interface Document {
+    type: string
+    content: string
+    expiresOn: Date
+}
+
 export class User {
     public readonly userId?: string
     public readonly email: string
@@ -49,7 +55,7 @@ export class User {
         trophies: 10
     }
     public enjoyedVehicles = []
-    public docs = []
+    public docs: Document[] = []
     public setting: Object = {}
     public routines: Routine[] = []
     public notifications: Notification[] = []
@@ -116,8 +122,8 @@ export interface Notification {
  * The username has to be unique to avoid conflicts,
  * the other data does not, so it is static.
  */
-export const getUserData = (enjoyedVehicles = [], status: UserStatus = UserStatus.Online, friend?: string): User => {
-    let random = randomInt(100000, 17)
+export const getUserData = (enjoyedVehicles = [], status: UserStatus = UserStatus.Offline, friend?: string): User => {
+    let random = randomInt(17, 100000)
     let friends = friend ? [friend] : []
     let date = Date.now()
     return {
@@ -135,7 +141,11 @@ export const getUserData = (enjoyedVehicles = [], status: UserStatus = UserStatu
             trophies: 0
         },
         enjoyedVehicles: enjoyedVehicles,
-        docs: [],
+        docs: [{
+            type: `name-${random}-${date}`,
+            content: "DAJE",
+            expiresOn: new Date()
+        }],
         setting: {
             theme: "#FFFFF",
             size: 3,

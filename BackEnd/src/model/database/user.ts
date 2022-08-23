@@ -30,6 +30,7 @@ import {
     SettingSchema
 } from './setting'
 import { Server } from 'socket.io';
+import {options} from "superagent";
 
 export enum UserRoles {
     Child = 'Child',
@@ -192,7 +193,6 @@ export const UserSchema = new Schema<UserDocument>(
             type: SchemaTypes.String,
             required: true,
             unique: true,
-            index: true
         },
 
         nickname: {
@@ -205,7 +205,7 @@ export const UserSchema = new Schema<UserDocument>(
             default: []
         },
 
-        // TODO this field needs a role paired with each vehicle id to let us know when it's possible to doc certain action
+        // TODO this field needs a role paired with each vehicle id to let us know when it's possible to do certain action
         enjoyedVehicles: {
             type: [SchemaTypes.ObjectId],
             default: []
@@ -520,10 +520,14 @@ export async function removeFriendship(userId: Types.ObjectId, friendId: Types.O
 }
 
 export async function createUser(data: AnyKeys<UserDocument>): Promise<UserDocument> {
-    const user: UserDocument = new UserModel(data);
-    return user.save().catch((err) =>
-        Promise.reject(new ServerError('Internal server error'))
+    console.log("dentro la craeate")
+    console.log(data)
+
+    let result = await UserModel.insertMany([data]).catch((err) =>
+        Promise.reject(new ServerError(err.message))
     );
+
+    return await getUserById(result[0]._id)
 }
 
 export async function deleteUser(filter: FilterQuery<UserDocument>): Promise<void> {

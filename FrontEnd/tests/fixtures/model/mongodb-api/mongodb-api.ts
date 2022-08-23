@@ -203,8 +203,8 @@ export class MongoDbApi {
     }
 
     /**
-     * Deletes the chat with the provided id from the database
-     * @param chatId
+     * Deletes the vehicle with the provided id from the database
+     * @param vehicleId
      */
     public async deleteVehicle(vehicleId: DocId): Promise<void> {
         return this.deleteMultipleVehicles([vehicleId]);
@@ -220,8 +220,8 @@ export class MongoDbApi {
     }
 
     /**
-     * Deletes from the database the users with the provided ids
-     * @param userIds ids of the users that should be deleted
+     * Deletes from the database the vehicles with the provided ids
+     * @param vehicleIds ids of the users that should be deleted
      */
     public async deleteMultipleVehicles(vehicleIds: DocId[]): Promise<void> {
         await this.deleteMultipleDocumentsById(dbCollectionNames.myVehicleCollection, vehicleIds);

@@ -82,9 +82,9 @@
 
 ### Get User header
 
-| Endpoint                           | Method | Description                                                                                                                                                                                                                                                              |
-|:-----------------------------------|:-------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| /api/testing/getHeader/:userId     | GET    | Retrieve the necessary information, including secrets such as the api-key, to access the MongoDb data Api. This endpoint is available in the testing phase only, and allows the client to directly access the database. This is useful for integration-testing purposes. |
+| Endpoint                           | Method | Description                                                                                           |
+|:-----------------------------------|:-------|:------------------------------------------------------------------------------------------------------|
+| /api/testing/getHeader/:userId     | GET    | Retrieve user Header(with access and refresh token). This is useful for integration-testing purposes. |
 
 #### Url Parameters
 

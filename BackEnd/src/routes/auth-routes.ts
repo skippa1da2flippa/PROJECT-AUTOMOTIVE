@@ -19,7 +19,7 @@ import {AuthenticatedRequest} from './utils/authenticated-request';
 import {toUnixSeconds} from './utils/date-utils';
 import {Socket} from 'socket.io';
 import chalk from 'chalk';
-import {getVehicleById, ProjectVehicleDocument, setVehicleStatus, VehicleStatus} from "../model/database/my-vehicle";
+import {getVehicleById, ProjectVehicleDocument} from "../model/database/my-vehicle";
 import {ServerError} from "../model/errors/server-error";
 import {BanListPool} from "../model/ban-list/ban-list-pool";
 
@@ -58,14 +58,9 @@ export const authenticateToken = async function (
 
             jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET, (err: any, content: JwtData) => {
                 if(err){
-                    return res.status(403).json({
-                        timestamp: toUnixSeconds(new Date()),
-                        errorMessage: err.message,
-                        requestPath: req.path,
-                    });
+                    return res.status(403)
                 } else {
-                    let accessToken = generateAccessToken(content.Id);
-                    res.locals.newAccessToken = accessToken;
+                    res.locals.newAccessToken = generateAccessToken(content.Id);
 
                     /* TO DO in every route we must remember to check if locals.newAccessToken is true,
                     if so we should send it's value with the response
@@ -181,11 +176,9 @@ export const generateAccessToken = (data: string): string => {
         Id: data,
     };
     // Access token generation with 1 min duration (just for roaming in the app)
-    let accessT: string = jsonwebtoken.sign(tokensData, process.env.JWT_ACCESS_TOKEN_SECRET, {
+    return jsonwebtoken.sign(tokensData, process.env.JWT_ACCESS_TOKEN_SECRET, {
         expiresIn: '60s',
     });
-
-    return accessT;
 }
 
 
@@ -263,7 +256,6 @@ router.post('/auth/signup', async (req: SignUpRequest, res: Response) => {
     if (name && surname && email && password) {
         try {
             const data = await getSaltNdHash(req.body.password)
-            // A user that registers through this endpoint becomes online right away
             const userData: AnyKeys<UserDocument> = {
                 email: email,
                 name: name,

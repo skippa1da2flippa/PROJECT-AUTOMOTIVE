@@ -22,10 +22,9 @@ export interface AuthTestingSetupData {
 const setupDb = async (friendId?: string): Promise<AuthTestingSetupData> => {
     const userData = ! friendId
                      ? getUserData()
-                     : getUserData([], UserStatus.Online, friendId)
+                     : getUserData([], UserStatus.Offline, friendId)
 
     const insertedUser: InsertedUser = await insertUser(userData);
-
     return {
         insertedData: {
             user: insertedUser,
@@ -38,39 +37,27 @@ let setupData: AuthTestingSetupData;
 let jwtProvider: JwtProvider;
 let jwtStorer: JwtStorage
 
-
-export async function wrongTestSetUp() {
-    httpClient = injectHttpClient();
-    setupData = await setupDb();
-    const reqPath = environment.serverBaseUrl + "/api/testing/getHeader/" + setupData.insertedData.user.userId
-    const jwtStubProvider: JwtStubProvider = new JwtStubProvider();
-    jwtStorer = jwtStubProvider.getJwtStorageStub()
-    jwtProvider = jwtStubProvider.getJwtProviderStub();
-    let res = await axios.get(reqPath)
-    jwtStorer.store("", res.data.refreshToken)
-    return res.data.header
-}
-
 /**
  * Deletes the user inserted in the setup
  * @param setupData
+ * @param secondUser
  */
-export const teardownDb = async (setupData: AuthTestingSetupData, secondUser?: InsertedUser): Promise<void> => {
+export const teardownDb = async (setupData: AuthTestingSetupData, secondUser?: string): Promise<void> => {
     await deleteUser(setupData.insertedData.user.userId);
-    if (secondUser) await deleteUser(secondUser.userId);
+    if (secondUser) await deleteUser(secondUser);
 };
 
+export const preSetUp = async (friendId?: string) => {
+    return await setupDb(friendId)
+}
 
-export const testSetup = async (httpClient: HttpClient, setUpData: AuthTestingSetupData, jwtProvider: JwtProvider, friendId?: string) => {
-    httpClient = injectHttpClient();
-    setupData = await setupDb(friendId);
+
+export const testSetup = async (setUpData: AuthTestingSetupData, jwtStubProvider: JwtStubProvider) => {
     const reqPath = environment.serverBaseUrl + "/api/testing/getHeader/" + setupData.insertedData.user.userId
-    const jwtStubProvider: JwtStubProvider = new JwtStubProvider();
     const jwtStorer = jwtStubProvider.getJwtStorageStub()
-    jwtProvider = jwtStubProvider.getJwtProviderStub();
     let res = await axios.get(reqPath)
-    jwtStorer.store(res.data.accessToken, res.data.refreshToken)
-    return res.data.header
+    jwtStorer.store(res.data.header.authorization.split(",")[1], res.data.header.authorization.split(",")[0])
+    return injectHttpClient()
 };
 
 export const getAuthApi = (): AuthenticationApi => {
@@ -82,10 +69,12 @@ export const getAuthApi = (): AuthenticationApi => {
 describe('Login', () => {
     let authApi: AuthenticationApi
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        httpClient = await testSetup(setupData, new JwtStubProvider());
     });
 
     afterEach(async () => {
+        console.log("setupdata: " + setupData)
         await teardownDb(setupData);
     });
 
@@ -133,38 +122,40 @@ describe('Login', () => {
 describe('signUp', () => {
     let authApi: AuthenticationApi
     let email: string
+    let friendId: string
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        httpClient = await testSetup(setupData, new JwtStubProvider());
     });
 
     afterEach(async () => {
-        await teardownDb(setupData);
+        await teardownDb(setupData, friendId);
     });
+
 
     test('Should Return Non-Empty Response With Correct Fields', (done) => {
         authApi = getAuthApi();
 
         authApi.signUp(
-            "name",
-            "surnmae",
-            "ayo.ayo",
+            "n",
+            "s",
+            "ay.ao",
             "test",
-            "MR AYO"
+            "MR AO"
         ).subscribe({
             next: (value: User) => {
                 // Expect non-empty response
                 expect(value).toBeTruthy();
-
+                friendId = value.userId
                 // Expect an object with the correct fields
                 expect(value).toEqual(
                     expect.objectContaining<User>({
                         userId: expect.any(String),
-                        accessToken: expect.any(String),
-                        status: expect.any(String),
                         name: expect.any(String),
                         surname: expect.any(String),
                         email: expect.any(String),
                         nickName: expect.any(String),
+                        status: expect.any(String),
                     })
                 );
             },
@@ -197,8 +188,13 @@ describe('signUp', () => {
 
 describe('Sign out', () => {
     let authApi: AuthenticationApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
+        console.log(jwtProvider.getTokens())
     });
 
     afterEach(async () => {
@@ -219,7 +215,9 @@ describe('Sign out', () => {
     });
 
     test('Should Throw', (done) => {
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
+        authApi = getAuthApi();
         authApi.logOut().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
