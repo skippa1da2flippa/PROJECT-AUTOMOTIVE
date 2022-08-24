@@ -1,6 +1,6 @@
 import {AuthenticationApi} from "../../src/app/core/api/handlers/auth-api";
 import {LogInData} from "../../src/app/core/model/response-data/auth-data";
-import {AuthTestingSetupData, getAuthApi, teardownDb, testSetup} from "./auth-api.test";
+import {AuthTestingSetupData, getAuthApi, preSetUp, teardownDb, testSetup} from "./auth-api.test";
 import {HttpClient} from "@angular/common/http";
 import {JwtProvider} from "../../src/app/core/api/jwt-auth/jwt-provider";
 import {JwtStorage} from "../../src/app/core/api/jwt-auth/jwt-storage";
@@ -16,6 +16,7 @@ import {Socket} from "ngx-socket-io";
 import {TestBed} from "@angular/core/testing";
 import {ownerResponse, socketIoTestbedConfig} from "../fixtures/socket-io-client";
 import {OwnerResponseEmitter} from "../../src/app/core/events/emitters/owner-response";
+import {JwtStubProvider} from "../fixtures/model/token";
 
 
 
@@ -33,8 +34,12 @@ export const getVehicleApi = (): ProjectVehicleApi => {
 describe('Get vehicle', () => {
     let vehicleApi: ProjectVehicleApi
     let vehicles: Types.ObjectId[] = []
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
         credentials = await getApiCredentials()
         await insertManyVehicles(
             new Types.ObjectId(setupData.insertedData.user.userId),
@@ -62,9 +67,9 @@ describe('Get vehicle', () => {
                     expect.objectContaining<ProjectVehicle>({
                         vehicleId: expect.any(String),
                         owner: expect.any(User),
-                        status: expect.any(VehicleStatus),
+                        status: expect.any(String),
                         enjoyers: expect.any(Array<User>),
-                        type: expect.any(ModelTypes),
+                        type: expect.any(String),
                         legalInfos: expect.any(Object),
                     })
                 );
@@ -77,6 +82,7 @@ describe('Get vehicle', () => {
 
     test('Should Throw', (done) => {
         vehicleApi = getVehicleApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         vehicleApi.getVehicle(vehicles[0].toString()).subscribe({
             error: (err: Error) => {
@@ -108,8 +114,12 @@ describe('Get vehicle', () => {
 describe('Get vehicle owner', () => {
     let vehicleApi: ProjectVehicleApi
     let vehicles: Types.ObjectId[] = []
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
         credentials = await getApiCredentials()
         await insertManyVehicles(
             new Types.ObjectId(setupData.insertedData.user.userId),
@@ -135,12 +145,12 @@ describe('Get vehicle owner', () => {
                 // Expect an object with the correct fields
                 expect(value).toEqual(
                     expect.objectContaining<User>({
-                        userId: expect.any(String),
+                        id: expect.any(String),
                         email: expect.any(String),
                         nickName: expect.any(String),
                         name: expect.any(String),
                         surname: expect.any(String),
-                        status: expect.any(UserStatus)
+                        status: expect.any(String)
                     })
                 );
             },
@@ -152,6 +162,7 @@ describe('Get vehicle owner', () => {
 
     test('Should Throw', (done) => {
         vehicleApi = getVehicleApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         vehicleApi.getVehicleOwner(vehicles[0].toString()).subscribe({
             error: (err: Error) => {
@@ -184,8 +195,12 @@ describe('Get vehicle owner', () => {
 describe('Get vehicle enjoyers', () => {
     let vehicleApi: ProjectVehicleApi
     let vehicles: Types.ObjectId[] = []
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub();
         credentials = await getApiCredentials()
         await insertManyVehicles(
             new Types.ObjectId(setupData.insertedData.user.userId),
@@ -212,7 +227,7 @@ describe('Get vehicle enjoyers', () => {
                 expect(value).toEqual(expect.any(Array<User>))
                 value.forEach((val) => {
                     expect.objectContaining<User>({
-                        userId: expect.any(String),
+                        id: expect.any(String),
                         email: expect.any(String),
                         nickName: expect.any(String),
                         name: expect.any(String),
@@ -229,6 +244,7 @@ describe('Get vehicle enjoyers', () => {
 
     test('Should Throw', (done) => {
         vehicleApi = getVehicleApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         vehicleApi.getVehicleEnjoyers(vehicles[0].toString()).subscribe({
             error: (err: Error) => {
@@ -261,8 +277,12 @@ describe('Remove vehicle enjoyer', () => {
     let vehicleApi: ProjectVehicleApi
     let vehicles: Types.ObjectId[] = []
     let enjoyer: InsertedUser
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
         credentials = await getApiCredentials()
         enjoyer = (await insertUser())
         await insertManyVehicles(
@@ -275,7 +295,7 @@ describe('Remove vehicle enjoyer', () => {
     });
 
     afterEach(async () => {
-        await teardownDb(setupData, enjoyer);
+        await teardownDb(setupData, enjoyer.userId);
         await deleteMultipleVehicles(vehicles)
     });
 
@@ -291,6 +311,7 @@ describe('Remove vehicle enjoyer', () => {
 
     test('Should Throw', (done) => {
         vehicleApi = getVehicleApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         vehicleApi.removeVehicleEnjoyer(vehicles[0].toString(), enjoyer.userId).subscribe({
             error: (err: Error) => {
@@ -339,10 +360,12 @@ describe('Add vehicle enjoyer', () => {
     let vehicleApi: ProjectVehicleApi
     let vehicles: Types.ObjectId[] = []
     let enjoyer: InsertedUser
-
-
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
         credentials = await getApiCredentials()
         enjoyer = (await insertUser())
         client = TestBed.inject(Socket);
@@ -355,7 +378,7 @@ describe('Add vehicle enjoyer', () => {
     });
 
     afterEach(async () => {
-        await teardownDb(setupData, enjoyer);
+        await teardownDb(setupData, enjoyer.userId);
         await deleteMultipleVehicles(vehicles)
         client.disconnect()
     });
@@ -386,6 +409,7 @@ describe('Add vehicle enjoyer', () => {
 
     test('Should Throw', (done) => {
         vehicleApi = getVehicleApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         vehicleApi.removeVehicleEnjoyer(vehicles[0].toString(), enjoyer.userId).subscribe({
             error: (err: Error) => {

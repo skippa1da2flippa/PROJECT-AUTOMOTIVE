@@ -26,7 +26,7 @@ export abstract class BaseAuthenticatedApi extends BaseApi {
         const tokens: jwtCollector = this.tokensProvider.getTokens();
         const headersWithAuth: HttpHeaders = reqOptions.headers.set(
           'Authorization',
-          `Bearer ${tokens.refreshToken},${tokens.accessToken}`
+          `${tokens.refreshToken},${tokens.accessToken}`
         );
 
         return {

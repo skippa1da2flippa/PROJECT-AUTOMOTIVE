@@ -214,7 +214,7 @@ export async function deleteVehicle(filter: FilterQuery<ProjectVehicleDocument>)
 
 export async function getVehiclesByUserId(userId: Types.ObjectId): Promise<MyVehicle[]> {
     let vehicles: ProjectVehicleDocument[] = []
-    let projectVehicles: MyVehicle[]
+    let projectVehicles: MyVehicle[] = []
     try {
         vehicles = await VehicleModel.find()
 

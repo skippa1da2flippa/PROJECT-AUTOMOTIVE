@@ -63,12 +63,12 @@ export class ProjectVehicleApi extends BaseAuthenticatedApi {
 
     public removeVehicleEnjoyer(vehicleId: string, enjoyerId: string): Observable<void> {
         const queryParams: string = `action=remove`
-        const reqPath: string = `${this.baseUrl}/api/myVehicle/vehicleId/enjoyers?${queryParams}`
+        const reqPath: string = `${this.baseUrl}/api/myVehicle/vehicleId/enjoyers`
         return this.httpClient
             .put<RemoveVehicleEnjoyerResponse>(reqPath, {
                 vehicleId,
                 enjoyerId
-            }, this.createRequestOptions())
+            }, this.createRequestOptions({ fromObject: { action: "remove" } }))
             .pipe(catchError(this.handleError), tap(accessTokenRefresher));
     }
 

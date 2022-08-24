@@ -153,7 +153,7 @@ export const getUserData = (enjoyedVehicles = [], status: UserStatus = UserStatu
             gamificationHide: false
         },
         routines: [{
-            name: `lilBoat`,
+            name: `lilBoat/` + `name-${random}-${date}`,
             temperature: 3,
             lightsColor: "#FFFFF",
             music: ["punk"],

@@ -1,10 +1,11 @@
 import {HttpClient} from "@angular/common/http";
-import {AuthTestingSetupData, teardownDb, testSetup} from "./auth-api.test";
+import {AuthTestingSetupData, preSetUp, teardownDb, testSetup} from "./auth-api.test";
 import {JwtProvider} from "../../src/app/core/api/jwt-auth/jwt-provider";
 import {JwtStorage} from "../../src/app/core/api/jwt-auth/jwt-storage";
 import {MongoDpApiCredentials} from "../fixtures/model/mongodb-api/mongodb-api";
 import {UserRoutineApi} from "../../src/app/core/api/handlers/routine-api";
 import {Routine} from "../fixtures/model/users";
+import {JwtStubProvider} from "../fixtures/model/token";
 
 let httpClient: HttpClient;
 let setupData: AuthTestingSetupData;
@@ -18,8 +19,12 @@ export const getRoutineApi = (): UserRoutineApi => {
 
 describe('Get My Routines', () => {
     let userApi: UserRoutineApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
 
     afterEach(async () => {
@@ -54,7 +59,7 @@ describe('Get My Routines', () => {
 
     test('Should Throw', (done) => {
         userApi = getRoutineApi();
-        let email = 'AYO'
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getMyRoutines().subscribe({
             error: (err: Error) => {
@@ -73,8 +78,12 @@ describe('Get My Routines', () => {
 describe('Get My Routine', () => {
     let userApi: UserRoutineApi
     let name: string
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
 
     afterEach(async () => {
@@ -106,6 +115,7 @@ describe('Get My Routine', () => {
 
     test('Should Throw', (done) => {
         userApi = getRoutineApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getMyRoutine(`lilBoat`).subscribe({
             error: (err: Error) => {
@@ -137,8 +147,12 @@ describe('Get My Routine', () => {
 describe('Add a Routine', () => {
     let userApi: UserRoutineApi
     let name: string
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
 
     afterEach(async () => {
@@ -148,7 +162,7 @@ describe('Add a Routine', () => {
     test('Should Return Non-Empty Response With Correct Fields', (done) => {
         userApi = getRoutineApi();
         userApi.addRoutine({
-            name: `lilBoat`,
+            name: `lilBot`,
             temperature: 3,
             lightsColor: "#FFFFF",
             music: ["punk"],
@@ -162,6 +176,7 @@ describe('Add a Routine', () => {
 
     test('Should Throw', (done) => {
         userApi = getRoutineApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.addRoutine({
             name: `lilBoat`,
@@ -205,8 +220,12 @@ describe('Add a Routine', () => {
 describe('Delete My Routine', () => {
     let userApi: UserRoutineApi
     let name: string
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
 
     afterEach(async () => {
@@ -225,6 +244,7 @@ describe('Delete My Routine', () => {
 
     test('Should Throw', (done) => {
         userApi = getRoutineApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.deleteRoutine(`lilBoat`).subscribe({
             error: (err: Error) => {
@@ -256,8 +276,12 @@ describe('Delete My Routine', () => {
 describe('Update a Routine', () => {
     let userApi: UserRoutineApi
     let name: string
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
 
     afterEach(async () => {
@@ -279,6 +303,7 @@ describe('Update a Routine', () => {
 
     test('Should Throw', (done) => {
         userApi = getRoutineApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.updateRoutine(
             `lilBoat`,

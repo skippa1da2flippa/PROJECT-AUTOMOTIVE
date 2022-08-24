@@ -1,13 +1,11 @@
 import {HttpClient} from "@angular/common/http";
-import {AuthTestingSetupData, teardownDb, testSetup} from "./auth-api.test";
+import {AuthTestingSetupData, preSetUp, teardownDb, testSetup} from "./auth-api.test";
 import {JwtProvider} from "../../src/app/core/api/jwt-auth/jwt-provider";
 import {JwtStorage} from "../../src/app/core/api/jwt-auth/jwt-storage";
 import {MongoDpApiCredentials} from "../fixtures/model/mongodb-api/mongodb-api";
 import {UserStatsApi} from "../../src/app/core/api/handlers/stats-api";
-import {UserApi} from "../../src/app/core/api/handlers/user-api";
-import {User, UserStatus} from "../../src/app/core/model/response-data/user";
-import {getUserApi} from "./user-api.test";
 import {UserStats} from "../fixtures/model/users";
+import {JwtStubProvider} from "../fixtures/model/token";
 
 let httpClient: HttpClient;
 let setupData: AuthTestingSetupData;
@@ -21,8 +19,12 @@ export const getUserStatsApi = (): UserStatsApi => {
 
 describe('Get My stats', () => {
     let userApi: UserStatsApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
 
     afterEach(async () => {
@@ -53,6 +55,7 @@ describe('Get My stats', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserStatsApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getMyStats().subscribe({
             error: (err: Error) => {
@@ -71,8 +74,12 @@ describe('Get My stats', () => {
 describe('Update My stats', () => {
     let userApi: UserStatsApi
     let fakeStats: UserStats
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
 
     afterEach(async () => {
@@ -94,6 +101,7 @@ describe('Update My stats', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserStatsApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.updateMyStats({
             sauce: 0,
@@ -112,7 +120,6 @@ describe('Update My stats', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserStatsApi();
-        jwtStorer.store("")
         userApi.updateMyStats(fakeStats).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();

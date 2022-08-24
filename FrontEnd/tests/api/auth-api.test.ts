@@ -145,11 +145,11 @@ describe('signUp', () => {
             next: (value: User) => {
                 // Expect non-empty response
                 expect(value).toBeTruthy();
-                friendId = value.userId
+                friendId = value.id
                 // Expect an object with the correct fields
                 expect(value).toEqual(
                     expect.objectContaining<User>({
-                        userId: expect.any(String),
+                        id: expect.any(String),
                         name: expect.any(String),
                         surname: expect.any(String),
                         email: expect.any(String),

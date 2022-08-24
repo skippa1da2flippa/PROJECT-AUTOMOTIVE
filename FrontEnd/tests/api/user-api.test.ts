@@ -53,7 +53,7 @@ describe('Get Meh', () => {
                 // Expect an object with the correct fields
                 expect(value).toEqual(
                     expect.objectContaining<User>({
-                        userId: expect.any(String),
+                        id: expect.any(String),
                         email: expect.any(String),
                         nickName: expect.any(String),
                         name: expect.any(String),
@@ -113,7 +113,7 @@ describe('Get My Friends', () => {
                 expect(value).toEqual(expect.any(Array<User>))
                 value.forEach((val) => {
                     expect.objectContaining<User>({
-                        userId: expect.any(String),
+                        id: expect.any(String),
                         email: expect.any(String),
                         nickName: expect.any(String),
                         name: expect.any(String),
@@ -151,6 +151,7 @@ describe('Get One Friend', () => {
     let friend: InsertedUser
     let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
+        friend = await insertUser()
         setupData = await preSetUp(friend.userId)
         jwtStubProvider = new JwtStubProvider()
         httpClient = await testSetup(setupData, jwtStubProvider);
@@ -172,12 +173,13 @@ describe('Get One Friend', () => {
                 // Expect an object with the correct fields
                 expect(value).toEqual(
                     expect.objectContaining<User>({
-                        userId: expect.any(String),
+                        id: expect.any(String),
                         email: expect.any(String),
                         nickName: expect.any(String),
                         name: expect.any(String),
                         surname: expect.any(String),
-                        status: expect.any(UserStatus)
+                        status: expect.any(String),
+                        accessToken: expect.any(String)
                     })
                 );
             },
@@ -350,7 +352,6 @@ describe('Delete Meh', () => {
 
 
     afterEach(async () => {
-        await teardownDb(setupData);
     });
 
     test('Should Return Non-Empty Response With Correct Fields', (done) => {
