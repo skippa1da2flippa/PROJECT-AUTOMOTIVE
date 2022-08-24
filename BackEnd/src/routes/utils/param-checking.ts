@@ -46,7 +46,6 @@ export const skipLimitChecker = function (req: Request, res: Response, next: Nex
  */
 export const retrieveUserId = function (req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
-        console.log("Sono nel middleware di retrieve user id")
         res.locals.userId = new Types.ObjectId(req.jwtContent.Id);
         next();
     } catch (err) {

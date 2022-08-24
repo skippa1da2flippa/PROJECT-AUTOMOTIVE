@@ -1,5 +1,5 @@
 import {HttpClient} from "@angular/common/http";
-import {AuthTestingSetupData, teardownDb, testSetup} from "./auth-api.test";
+import {AuthTestingSetupData, preSetUp, teardownDb, testSetup} from "./auth-api.test";
 import {JwtProvider} from "../../src/app/core/api/jwt-auth/jwt-provider";
 import {JwtStorage} from "../../src/app/core/api/jwt-auth/jwt-storage";
 import {MongoDpApiCredentials} from "../fixtures/model/mongodb-api/mongodb-api";
@@ -8,6 +8,7 @@ import {UserApi} from "../../src/app/core/api/handlers/user-api";
 import {User, UserStatus} from "../../src/app/core/model/response-data/user";
 import {getUserApi} from "./user-api.test";
 import {Setting} from "../../src/app/core/model/response-data/setting-data";
+import {JwtStubProvider} from "../fixtures/model/token";
 
 let httpClient: HttpClient;
 let setupData: AuthTestingSetupData;
@@ -23,8 +24,12 @@ export const getSettingApi = (): UserSettingApi => {
 
 describe('Get My Setting', () => {
     let userApi: UserSettingApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
 
     afterEach(async () => {
@@ -56,7 +61,7 @@ describe('Get My Setting', () => {
 
     test('Should Throw', (done) => {
         userApi = getSettingApi();
-        let email = 'AYO'
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getMySetting().subscribe({
             error: (err: Error) => {
@@ -74,8 +79,12 @@ describe('Get My Setting', () => {
 
 describe('Get My Language', () => {
     let userApi: UserSettingApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
 
     afterEach(async () => {
@@ -99,7 +108,7 @@ describe('Get My Language', () => {
 
     test('Should Throw', (done) => {
         userApi = getSettingApi();
-        let email = 'AYO'
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getMyLanguageSetting().subscribe({
             error: (err: Error) => {
@@ -117,9 +126,14 @@ describe('Get My Language', () => {
 
 describe('Get My Theme', () => {
     let userApi: UserSettingApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -142,7 +156,7 @@ describe('Get My Theme', () => {
 
     test('Should Throw', (done) => {
         userApi = getSettingApi();
-        let email = 'AYO'
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getMyThemeSetting().subscribe({
             error: (err: Error) => {
@@ -159,9 +173,14 @@ describe('Get My Theme', () => {
 
 describe('Get My gamification', () => {
     let userApi: UserSettingApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -184,7 +203,7 @@ describe('Get My gamification', () => {
 
     test('Should Throw', (done) => {
         userApi = getSettingApi();
-        let email = 'AYO'
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getMyGamificationSetting().subscribe({
             error: (err: Error) => {
@@ -202,9 +221,14 @@ describe('Get My gamification', () => {
 describe('Update My Language', () => {
     let userApi: UserSettingApi
     let lang: string
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -222,6 +246,7 @@ describe('Update My Language', () => {
 
     test('Should Throw', (done) => {
         userApi = getSettingApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.updateLanguageSetting("IT").subscribe({
             error: (err: Error) => {
@@ -253,8 +278,12 @@ describe('Update My Language', () => {
 describe('Update My theme', () => {
     let userApi: UserSettingApi
     let theme: string
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
 
     afterEach(async () => {
@@ -273,6 +302,7 @@ describe('Update My theme', () => {
 
     test('Should Throw', (done) => {
         userApi = getSettingApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.updateThemeSetting("black").subscribe({
             error: (err: Error) => {
@@ -305,9 +335,14 @@ describe('Update My theme', () => {
 describe('Update My gamification', () => {
     let userApi: UserSettingApi
     let res: boolean
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -315,8 +350,8 @@ describe('Update My gamification', () => {
 
     test('Should Return Non-Empty Response With Correct Fields', (done) => {
         userApi = getSettingApi();
-
-        userApi.updateGamificationSetting(false).subscribe({
+        let bol = false
+        userApi.updateGamificationSetting(bol).subscribe({
             complete: () => {
                 done();
             },
@@ -325,6 +360,7 @@ describe('Update My gamification', () => {
 
     test('Should Throw', (done) => {
         userApi = getSettingApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.updateGamificationSetting(false).subscribe({
             error: (err: Error) => {

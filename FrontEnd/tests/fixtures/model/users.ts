@@ -160,7 +160,7 @@ export const getUserData = (enjoyedVehicles = [], status: UserStatus = UserStatu
             path: "AYO"
         }],
         notifications: [{
-            type: NotTypes.placeHolder,
+            type: NotTypes.carOccupied,
             sender: new Types.ObjectId()
         }],
     };

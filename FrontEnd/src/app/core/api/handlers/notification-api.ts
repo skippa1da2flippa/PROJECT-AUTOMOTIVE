@@ -12,6 +12,11 @@ interface GetNotificationsResponse {
     notifications: Notification[];
 }
 
+interface AddNotificationResponse {
+    accessToken: string
+    notificationData: Notification;
+}
+
 /**
  * Class that handles communication with notification-related endpoints
  */
@@ -48,11 +53,17 @@ export class NotificationApi extends BaseAuthenticatedApi {
                 receiver: receiverId,
                 type: notType
             }, this.createRequestOptions())
-            .pipe(catchError(this.handleError), tap(accessTokenRefresher));
+            .pipe(
+                catchError(this.handleError),
+                tap(accessTokenRefresher),
+                map<AddNotificationResponse, Notification>((res) => {
+                    return res.notificationData
+                })
+            );
     }
 
     public removeNotification(notType: NotTypes): Observable<void> {
-        const reqPath: string = `${this.baseUrl}/api/users/@meh/notifications?${notType}`;
+        const reqPath: string = `${this.baseUrl}/api/users/@meh/notifications/${notType}`;
 
         return this.httpClient
             .delete<void>(reqPath, this.createRequestOptions())

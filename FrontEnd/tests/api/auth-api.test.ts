@@ -53,7 +53,7 @@ export const preSetUp = async (friendId?: string) => {
 
 
 export const testSetup = async (setUpData: AuthTestingSetupData, jwtStubProvider: JwtStubProvider) => {
-    const reqPath = environment.serverBaseUrl + "/api/testing/getHeader/" + setupData.insertedData.user.userId
+    const reqPath = environment.serverBaseUrl + "/api/testing/getHeader/" + setUpData.insertedData.user.userId
     const jwtStorer = jwtStubProvider.getJwtStorageStub()
     let res = await axios.get(reqPath)
     jwtStorer.store(res.data.header.authorization.split(",")[1], res.data.header.authorization.split(",")[0])
@@ -74,7 +74,6 @@ describe('Login', () => {
     });
 
     afterEach(async () => {
-        console.log("setupdata: " + setupData)
         await teardownDb(setupData);
     });
 
@@ -194,7 +193,6 @@ describe('Sign out', () => {
         jwtStubProvider = new JwtStubProvider()
         httpClient = await testSetup(setupData, jwtStubProvider);
         jwtProvider = jwtStubProvider.getJwtProviderStub()
-        console.log(jwtProvider.getTokens())
     });
 
     afterEach(async () => {

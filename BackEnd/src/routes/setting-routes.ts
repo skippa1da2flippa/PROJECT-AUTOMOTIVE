@@ -256,8 +256,8 @@ router.patch(
     retrieveUserId,
     async (req: SettingGamificationRequest, res: UserEndpointResponse) => {
         let userId = res.locals.userId
-        let gamification  = req.body.gamification
-        if (gamification) {
+        let gamification = req.body.gamification
+        if (gamification !== undefined) {
             try {
                 await updateGamification(userId, gamification)
                 return res.sendStatus(204)

@@ -91,6 +91,7 @@ export class UserSettingApi extends BaseAuthenticatedApi {
 
     public updateGamificationSetting(newSetting: boolean): Observable<void> {
         const reqPath: string = `${this.baseUrl}/api/users/@meh/setting/gamification`
+        console.log("new Setting;" + newSetting)
         return this.httpClient.patch<void>(reqPath, {
             gamification: newSetting
         },this.createRequestOptions()).pipe(

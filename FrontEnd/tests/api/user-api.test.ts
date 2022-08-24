@@ -1,4 +1,4 @@
-import {AuthTestingSetupData, teardownDb, testSetup} from "./auth-api.test";
+import {AuthTestingSetupData, preSetUp, teardownDb, testSetup} from "./auth-api.test";
 import {HttpClient} from "@angular/common/http";
 import {JwtProvider} from "../../src/app/core/api/jwt-auth/jwt-provider";
 import {JwtStorage} from "../../src/app/core/api/jwt-auth/jwt-storage";
@@ -14,6 +14,7 @@ import {
 import {getApiCredentials, MongoDpApiCredentials} from "../fixtures/model/mongodb-api/mongodb-api";
 import {insertManyVehicles} from "../fixtures/model/vehicles";
 import {Types} from "mongoose";
+import {JwtStubProvider} from "../fixtures/model/token";
 
 let httpClient: HttpClient;
 let setupData: AuthTestingSetupData;
@@ -28,9 +29,14 @@ export const getUserApi = (): UserApi => {
 
 describe('Get Meh', () => {
     let userApi: UserApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -52,7 +58,7 @@ describe('Get Meh', () => {
                         nickName: expect.any(String),
                         name: expect.any(String),
                         surname: expect.any(String),
-                        status: expect.any(UserStatus)
+                        accessToken: expect.any(String),
                     })
                 );
             },
@@ -64,7 +70,7 @@ describe('Get Meh', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
-        let email = 'AYO'
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getMeh().subscribe({
             error: (err: Error) => {
@@ -82,9 +88,14 @@ describe('Get Meh', () => {
 
 describe('Get My Friends', () => {
     let userApi: UserApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider)
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -119,6 +130,7 @@ describe('Get My Friends', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getFriends().subscribe({
             error: (err: Error) => {
@@ -137,19 +149,16 @@ describe('Get My Friends', () => {
 describe('Get One Friend', () => {
     let userApi: UserApi
     let friend: InsertedUser
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        friend = await insertUser()
-        await testSetup(
-            httpClient,
-            setupData,
-            jwtProvider,
-            friend.userId
-        );
-
+        setupData = await preSetUp(friend.userId)
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
 
     afterEach(async () => {
-        await teardownDb(setupData, friend);
+        await teardownDb(setupData);
     });
 
     test('Should Return Non-Empty Response With Correct Fields', (done) => {
@@ -180,6 +189,7 @@ describe('Get One Friend', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getOneFriend(friend.userId).subscribe({
             error: (err: Error) => {
@@ -210,9 +220,14 @@ describe('Get One Friend', () => {
 
 describe('Get My Vehicles', () => {
     let userApi: UserApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider)
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -247,6 +262,7 @@ describe('Get My Vehicles', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getMyVehicles().subscribe({
             error: (err: Error) => {
@@ -264,9 +280,14 @@ describe('Get My Vehicles', () => {
 
 describe('Get Enjoyed Vehicles', () => {
     let userApi: UserApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider)
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -301,6 +322,7 @@ describe('Get Enjoyed Vehicles', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.getEnjoyedVehicles().subscribe({
             error: (err: Error) => {
@@ -318,9 +340,14 @@ describe('Get Enjoyed Vehicles', () => {
 
 describe('Delete Meh', () => {
     let userApi: UserApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -338,6 +365,7 @@ describe('Delete Meh', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.deleteMeh().subscribe({
             error: (err: Error) => {
@@ -356,9 +384,14 @@ let name: string
 
 describe('Update nickName', () => {
     let userApi: UserApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -380,7 +413,6 @@ describe('Update nickName', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
-        let email = 'AYO'
         userApi.updateNickName(name).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -395,7 +427,7 @@ describe('Update nickName', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
-        let email = 'AYO'
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.updateNickName("AYO").subscribe({
             error: (err: Error) => {
@@ -412,9 +444,14 @@ describe('Update nickName', () => {
 
 describe('Update email', () => {
     let userApi: UserApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -465,6 +502,7 @@ describe('Update email', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.updateEmail("AYO@ayo.com").subscribe({
             error: (err: Error) => {
@@ -481,9 +519,14 @@ describe('Update email', () => {
 
 describe('Update psw', () => {
     let userApi: UserApi
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -515,6 +558,7 @@ describe('Update psw', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.updatePassword("AYO").subscribe({
             error: (err: Error) => {
@@ -534,8 +578,12 @@ describe('Remove me from enjoyers', () => {
     let userApi: UserApi
     let vehicles: Types.ObjectId[] = []
     let owner: InsertedUser
+    let jwtStubProvider: JwtStubProvider
     beforeEach(async () => {
-        await testSetup(httpClient, setupData, jwtProvider);
+        setupData = await preSetUp()
+        jwtStubProvider = new JwtStubProvider()
+        httpClient = await testSetup(setupData, jwtStubProvider);
+        jwtProvider = jwtStubProvider.getJwtProviderStub()
         owner = await insertUser()
         credentials = await getApiCredentials()
         await insertManyVehicles(
@@ -546,6 +594,7 @@ describe('Remove me from enjoyers', () => {
             new Types.ObjectId(setupData.insertedData.user.userId)
         )
     });
+
 
     afterEach(async () => {
         await teardownDb(setupData);
@@ -582,7 +631,7 @@ describe('Remove me from enjoyers', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
-        let email = 'AYO'
+        jwtStorer = jwtStubProvider.getJwtStorageStub()
         jwtStorer.store("")
         userApi.removeMehFromEnjoyers("AYO").subscribe({
             error: (err: Error) => {

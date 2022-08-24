@@ -21,7 +21,7 @@ export class User extends BaseData {
     public readonly nickName: string
     public readonly name: string
     public readonly surname: string
-    public readonly status: UserStatus
+    public readonly status?: UserStatus
 
     constructor(
         userId: string = "",
