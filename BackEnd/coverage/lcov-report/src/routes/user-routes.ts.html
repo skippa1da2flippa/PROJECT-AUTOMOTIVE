@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.69% </span>
+                <span class="strong">18.01% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/107</span>
+                <span class='fraction'>20/111</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.83% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/96</span>
+                <span class='fraction'>20/100</span>
             </div>
         
             
@@ -475,7 +475,9 @@
 <a name='L410'></a><a href='#L410'>410</a>
 <a name='L411'></a><a href='#L411'>411</a>
 <a name='L412'></a><a href='#L412'>412</a>
-<a name='L413'></a><a href='#L413'>413</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -483,8 +485,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -584,6 +584,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -592,6 +595,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -895,9 +899,7 @@ import { toUnixSeconds } from './utils/date-utils';
 import { retrieveUserId, skipLimitChecker } from './utils/param-checking';
 import { authenticateToken } from './auth-routes';
 import {
-    ProjectVehicleDocument,
-    getVehiclesByUserId,
-    getVehicleById, removeEnjoyer, VehicleStatus, ModelTypes, getFullVehicleData
+    getVehiclesByUserId, removeEnjoyer, VehicleStatus, ModelTypes, getFullVehicleData
 } from '../model/database/my-vehicle'
 import {ServerError} from "../model/errors/server-error";
 import {getUserById, updatePsw, User, UserDocument, validateEmail} from "../model/database/user";
@@ -922,7 +924,7 @@ interface UserEndpointLocals {
 }
 &nbsp;
 export interface MyVehicle {
-    id: string,
+    vehicleId: string,
     owner: UserVehicle,
     status: VehicleStatus,
     legalInfos: LegalInfos,
@@ -994,7 +996,10 @@ router.get(
         let user: usr.UserDocument;
         const <span class="cstat-no" title="statement not covered" >userId: Types.ObjectId = res.locals.userId;</span>
         try {
+<span class="cstat-no" title="statement not covered" >            console.log("sono dentro la route")</span>
 <span class="cstat-no" title="statement not covered" >            user = <span class="cstat-no" title="statement not covered" >await usr.getUserById(userId);</span></span>
+<span class="cstat-no" title="statement not covered" >            console.log("dopo la getUserById")</span>
+<span class="cstat-no" title="statement not covered" >            console.log("prima del return")</span>
 <span class="cstat-no" title="statement not covered" >            return res.status(201).json({</span>
                 userId: user._id,
                 nickname: user.nickname,
@@ -1004,9 +1009,10 @@ router.get(
                 accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             });
         } catch (err) {
+<span class="cstat-no" title="statement not covered" >            console.log("Dentro il try")</span>
 <span class="cstat-no" title="statement not covered" >            return res.status(err.statusCode).json({</span>
                 timestamp: toUnixSeconds(new Date()),
-                errorMessage: err.message,
+                errorMessage: "AYO", //err.message,
                 requestPath: req.path,
             });
         }
@@ -1021,13 +1027,13 @@ router.get(
 <span class="fstat-no" title="function not covered" >    async (r</span>eq: AuthenticatedRequest, res: UserEndpointResponse<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >) =&gt; {</span></span>
         let user: usr.UserDocument;
         const <span class="cstat-no" title="statement not covered" >userId: Types.ObjectId = res.locals.userId;</span>
-        let <span class="cstat-no" title="statement not covered" >friends = []</span>
+        let <span class="cstat-no" title="statement not covered" >friends: UserVehicle[] = []</span>
         try {
 <span class="cstat-no" title="statement not covered" >            user = <span class="cstat-no" title="statement not covered" >await usr.getUserById(userId);</span></span>
             for (let idx in user.friends) {
                 let <span class="cstat-no" title="statement not covered" >tempUser = <span class="cstat-no" title="statement not covered" >await getUserById(user.friends[idx])</span></span>
 <span class="cstat-no" title="statement not covered" >                friends.push({</span>
-                    id: tempUser._id,
+                    userId: tempUser._id,
                     name: tempUser.name,
                     surname: tempUser.surname,
                     nickname: tempUser.nickname,
@@ -1128,7 +1134,7 @@ router.delete(
     }
 );
 &nbsp;
-// TODO fai test
+&nbsp;
 router.patch(
     '/users/@meh/friends/friendId',
     authenticateToken,
@@ -1152,7 +1158,7 @@ router.patch(
 <span class="cstat-no" title="statement not covered" >            tempUser = <span class="cstat-no" title="statement not covered" >await getUserById(friendId)</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            return res.status(201).json({</span>
-                id: tempUser._id,
+                userId: tempUser._id,
                 name: tempUser.name,
                 surname: tempUser.surname,
                 nickname: tempUser.nickname,
@@ -1306,7 +1312,7 @@ router.patch(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-08-06T13:45:05.397Z
+                at 2022-08-25T14:03:15.852Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

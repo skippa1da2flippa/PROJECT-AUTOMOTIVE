@@ -19,7 +19,7 @@ interface UserResponse {
     name: string,
     surname: string,
     email: string,
-    accesToken: string
+    accessToken: string
 }
 
 interface UserMyVehiclesResponse {
@@ -95,7 +95,7 @@ describe("Test: GET /users/@meh", () => {
                 name: expect.any(String),
                 surname: expect.any(String),
                 email: expect.any(String),
-                accesToken: expect.any(String)
+                accessToken: expect.any(String)
             })
         )
     });

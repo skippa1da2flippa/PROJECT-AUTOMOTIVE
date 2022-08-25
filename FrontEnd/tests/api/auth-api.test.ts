@@ -1,5 +1,5 @@
 import {deleteUser, getUserData, InsertedUser, insertUser} from "../fixtures/model/users";
-import {injectHttpClient} from "../fixtures/model/mongodb-api/mongodb-api";
+import {injectHttpClient, MongoDbApi} from "../fixtures/model/mongodb-api/mongodb-api";
 import {HttpClient} from "@angular/common/http";
 import {JwtProvider} from "../../src/app/core/api/jwt-auth/jwt-provider";
 import axios from "axios";
@@ -145,15 +145,15 @@ describe('signUp', () => {
             next: (value: User) => {
                 // Expect non-empty response
                 expect(value).toBeTruthy();
-                friendId = value.id
+                friendId = value.userId
                 // Expect an object with the correct fields
                 expect(value).toEqual(
                     expect.objectContaining<User>({
-                        id: expect.any(String),
+                        userId: expect.any(String),
                         name: expect.any(String),
                         surname: expect.any(String),
                         email: expect.any(String),
-                        nickName: expect.any(String),
+                        nickname: expect.any(String),
                         status: expect.any(String),
                     })
                 );

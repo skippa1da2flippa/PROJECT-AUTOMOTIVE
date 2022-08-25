@@ -16,9 +16,9 @@ export enum UserStatus {
 }
 
 export class User extends BaseData {
-    public readonly id: string
+    public readonly userId: string
     public readonly email: string
-    public readonly nickName: string
+    public readonly nickname: string
     public readonly name: string
     public readonly surname: string
     public readonly status?: UserStatus
@@ -32,9 +32,9 @@ export class User extends BaseData {
         status: UserStatus = UserStatus.Online
     ) {
         super()
-        this.id = userId
+        this.userId = userId
         this.email = email
-        this.nickName = nickname
+        this.nickname = nickname
         this.name = name
         this.surname = surname
         this.status = status

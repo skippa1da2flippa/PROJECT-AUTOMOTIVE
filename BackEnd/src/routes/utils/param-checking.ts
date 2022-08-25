@@ -36,7 +36,7 @@ export const skipLimitChecker = function (req: Request, res: Response, next: Nex
 
 /**
  * Middleware that tries to extract the userId request parameter from
- * the request url.
+ * the jwt.
  * If the parameter is invalid, an error response is returned.
  * The parsed param can be found in the "locals" field of the response.
  *

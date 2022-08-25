@@ -145,9 +145,9 @@ describe('Get vehicle owner', () => {
                 // Expect an object with the correct fields
                 expect(value).toEqual(
                     expect.objectContaining<User>({
-                        id: expect.any(String),
+                        userId: expect.any(String),
                         email: expect.any(String),
-                        nickName: expect.any(String),
+                        nickname: expect.any(String),
                         name: expect.any(String),
                         surname: expect.any(String),
                         status: expect.any(String)
@@ -227,9 +227,9 @@ describe('Get vehicle enjoyers', () => {
                 expect(value).toEqual(expect.any(Array<User>))
                 value.forEach((val) => {
                     expect.objectContaining<User>({
-                        id: expect.any(String),
+                        userId: expect.any(String),
                         email: expect.any(String),
-                        nickName: expect.any(String),
+                        nickname: expect.any(String),
                         name: expect.any(String),
                         surname: expect.any(String),
                         status: expect.any(UserStatus)

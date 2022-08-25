@@ -37,7 +37,7 @@ export interface UserVehicle {
     name: string,
     surname: string,
     status: string
-    id: string,
+    userId: string,
     email: string,
     nickname: string
 }
@@ -153,7 +153,7 @@ router.get(
                 name: user.name,
                 surname:user.surname,
                 status: user.status,
-                id: user._id,
+                userId: user._id,
                 email: user.email,
                 nickname: user.nickname
             });
@@ -182,7 +182,7 @@ router.get(
                 users.push({
                     name: user.name,
                     surname:user.surname,
-                    id: user._id,
+                    userId: user._id,
                     status: user.status,
                     email: user.email,
                     nickname: user.nickname
@@ -296,7 +296,7 @@ router.patch(
                 name: user.name,
                 status: user.status,
                 surname:user.surname,
-                id: user._id,
+                userId: user._id,
                 email: user.email,
                 nickname: user.nickname
             }
@@ -306,7 +306,7 @@ router.patch(
                     name: enjoyer.name,
                     surname:enjoyer.surname,
                     status: user.status,
-                    id: enjoyer._id,
+                    userId: enjoyer._id,
                     email: enjoyer.email,
                     nickname: enjoyer.nickname
                 })
@@ -343,7 +343,7 @@ router.patch(
             return res.status(201).json({
                 name: user.name,
                 surname:user.surname,
-                id: user._id,
+                userId: user._id,
                 email: user.email,
                 nickname: user.nickname,
                 status: user.status,
@@ -375,7 +375,7 @@ router.patch(
                     name: user.name,
                     surname:user.surname,
                     status: user.status,
-                    id: user._id,
+                    userId: user._id,
                     email: user.email,
                     nickname: user.nickname
                 })

@@ -40,6 +40,7 @@ export const authenticateToken = async function (
     res: Response,
     next: NextFunction
 ) {
+    console.log("sono dentro la authenticate token")
     const authHeaders = req.headers['authorization'];
     const refreshToken = authHeaders && authHeaders.split(',')[0];
     const accessToken = authHeaders && authHeaders.split(',')[1];

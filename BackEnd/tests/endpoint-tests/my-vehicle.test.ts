@@ -24,7 +24,7 @@ interface UserVehicle {
     name: string
     surname: string
     status: string
-    id: string
+    userId: string
     email: string
     nickname: string
     accessToken?: string
@@ -127,7 +127,7 @@ describe("Test: GET /myVehicle/@it/owner", () => {
                 name: expect.any(String),
                 surname: expect.any(String),
                 status: expect.any(String),
-                id: expect.any(String),
+                userId: expect.any(String),
                 email: expect.any(String),
                 nickname: expect.any(String)
             })
@@ -601,7 +601,7 @@ describe("Test: PATCH /myVehicle/vehicleId/owner", () => {
                 name: expect.any(String),
                 surname: expect.any(String),
                 status: expect.any(String),
-                id: expect.any(String),
+                userId: expect.any(String),
                 email: expect.any(String),
                 nickname: expect.any(String),
                 accessToken: expect.any(String)

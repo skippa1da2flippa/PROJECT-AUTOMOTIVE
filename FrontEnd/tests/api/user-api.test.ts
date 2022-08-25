@@ -27,6 +27,8 @@ export const getUserApi = (): UserApi => {
 };
 
 
+//TODO scoppia il server quando fai una richiesta sbagliata
+
 describe('Get Meh', () => {
     let userApi: UserApi
     let jwtStubProvider: JwtStubProvider
@@ -53,9 +55,9 @@ describe('Get Meh', () => {
                 // Expect an object with the correct fields
                 expect(value).toEqual(
                     expect.objectContaining<User>({
-                        id: expect.any(String),
+                        userId: expect.any(String),
                         email: expect.any(String),
-                        nickName: expect.any(String),
+                        nickname: expect.any(String),
                         name: expect.any(String),
                         surname: expect.any(String),
                         accessToken: expect.any(String),
@@ -67,6 +69,7 @@ describe('Get Meh', () => {
             },
         });
     });
+
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
@@ -113,9 +116,9 @@ describe('Get My Friends', () => {
                 expect(value).toEqual(expect.any(Array<User>))
                 value.forEach((val) => {
                     expect.objectContaining<User>({
-                        id: expect.any(String),
+                        userId: expect.any(String),
                         email: expect.any(String),
-                        nickName: expect.any(String),
+                        nickname: expect.any(String),
                         name: expect.any(String),
                         surname: expect.any(String),
                         status: expect.any(UserStatus)
@@ -173,9 +176,9 @@ describe('Get One Friend', () => {
                 // Expect an object with the correct fields
                 expect(value).toEqual(
                     expect.objectContaining<User>({
-                        id: expect.any(String),
+                        userId: expect.any(String),
                         email: expect.any(String),
-                        nickName: expect.any(String),
+                        nickname: expect.any(String),
                         name: expect.any(String),
                         surname: expect.any(String),
                         status: expect.any(String),
@@ -223,9 +226,12 @@ describe('Get One Friend', () => {
 describe('Get My Vehicles', () => {
     let userApi: UserApi
     let jwtStubProvider: JwtStubProvider
+    let vehiclesIds: Types.ObjectId[] = []
     beforeEach(async () => {
         setupData = await preSetUp()
         jwtStubProvider = new JwtStubProvider()
+        credentials = await getApiCredentials()
+        await insertManyVehicles(new Types.ObjectId(setupData.insertedData.user.userId),1, vehiclesIds, credentials)
         httpClient = await testSetup(setupData, jwtStubProvider);
         jwtProvider = jwtStubProvider.getJwtProviderStub()
     });

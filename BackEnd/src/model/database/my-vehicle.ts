@@ -394,7 +394,7 @@ export async function getFullVehicleData(vehicleId: Types.ObjectId): Promise<MyV
             name: user.name,
             surname:user.surname,
             status: user.status,
-            id: user._id,
+            userId: user._id,
             email: user.email,
             nickname: user.nickname
         }
@@ -404,7 +404,7 @@ export async function getFullVehicleData(vehicleId: Types.ObjectId): Promise<MyV
             enjoyers.push({
                 name: user.name,
                 surname:user.surname,
-                id: user._id,
+                userId: user._id,
                 status: user.status,
                 email: user.email,
                 nickname: user.nickname
@@ -412,7 +412,7 @@ export async function getFullVehicleData(vehicleId: Types.ObjectId): Promise<MyV
         }
 
         return {
-            id: vehicle._id,
+            vehicleId: vehicle._id,
             owner: owner,
             status: vehicle.status,
             legalInfos: vehicle.legalInfos,

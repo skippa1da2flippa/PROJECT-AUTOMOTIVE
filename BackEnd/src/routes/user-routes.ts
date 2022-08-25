@@ -6,9 +6,7 @@ import { toUnixSeconds } from './utils/date-utils';
 import { retrieveUserId, skipLimitChecker } from './utils/param-checking';
 import { authenticateToken } from './auth-routes';
 import {
-    ProjectVehicleDocument,
-    getVehiclesByUserId,
-    getVehicleById, removeEnjoyer, VehicleStatus, ModelTypes, getFullVehicleData
+    getVehiclesByUserId, removeEnjoyer, VehicleStatus, ModelTypes, getFullVehicleData
 } from '../model/database/my-vehicle'
 import {ServerError} from "../model/errors/server-error";
 import {getUserById, updatePsw, User, UserDocument, validateEmail} from "../model/database/user";
@@ -33,7 +31,7 @@ interface UserEndpointLocals {
 }
 
 export interface MyVehicle {
-    id: string,
+    vehicleId: string,
     owner: UserVehicle,
     status: VehicleStatus,
     legalInfos: LegalInfos,
@@ -105,7 +103,10 @@ router.get(
         let user: usr.UserDocument;
         const userId: Types.ObjectId = res.locals.userId;
         try {
+            console.log("sono dentro la route")
             user = await usr.getUserById(userId);
+            console.log("dopo la getUserById")
+            console.log("prima del return")
             return res.status(201).json({
                 userId: user._id,
                 nickname: user.nickname,
@@ -115,9 +116,10 @@ router.get(
                 accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             });
         } catch (err) {
+            console.log("Dentro il try")
             return res.status(err.statusCode).json({
                 timestamp: toUnixSeconds(new Date()),
-                errorMessage: err.message,
+                errorMessage: "AYO", //err.message,
                 requestPath: req.path,
             });
         }
@@ -132,13 +134,13 @@ router.get(
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
         let user: usr.UserDocument;
         const userId: Types.ObjectId = res.locals.userId;
-        let friends = []
+        let friends: UserVehicle[] = []
         try {
             user = await usr.getUserById(userId);
             for (let idx in user.friends) {
                 let tempUser = await getUserById(user.friends[idx])
                 friends.push({
-                    id: tempUser._id,
+                    userId: tempUser._id,
                     name: tempUser.name,
                     surname: tempUser.surname,
                     nickname: tempUser.nickname,
@@ -263,7 +265,7 @@ router.patch(
             tempUser = await getUserById(friendId)
 
             return res.status(201).json({
-                id: tempUser._id,
+                userId: tempUser._id,
                 name: tempUser.name,
                 surname: tempUser.surname,
                 nickname: tempUser.nickname,
