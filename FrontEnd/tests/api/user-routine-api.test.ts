@@ -60,7 +60,7 @@ describe('Get My Routines', () => {
     test('Should Throw', (done) => {
         userApi = getRoutineApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getMyRoutines().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -116,7 +116,7 @@ describe('Get My Routine', () => {
     test('Should Throw', (done) => {
         userApi = getRoutineApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getMyRoutine(`lilBoat`).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -177,7 +177,7 @@ describe('Add a Routine', () => {
     test('Should Throw', (done) => {
         userApi = getRoutineApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.addRoutine({
             name: `lilBoat`,
             temperature: 3,
@@ -245,7 +245,7 @@ describe('Delete My Routine', () => {
     test('Should Throw', (done) => {
         userApi = getRoutineApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.deleteRoutine(`lilBoat`).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -304,7 +304,7 @@ describe('Update a Routine', () => {
     test('Should Throw', (done) => {
         userApi = getRoutineApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.updateRoutine(
             `lilBoat`,
             3,

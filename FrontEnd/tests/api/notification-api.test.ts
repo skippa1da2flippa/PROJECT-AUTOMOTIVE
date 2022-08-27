@@ -62,7 +62,7 @@ describe('Get My Notification', () => {
     test('Should Throw', (done) => {
         notApi = getNotificationApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         notApi.getMyNotifications().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -118,7 +118,7 @@ describe('Add a Notification', () => {
     test('Should Throw', (done) => {
         notApi = getNotificationApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         notApi.addNotification("", NotTypes.placeHolder).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -160,7 +160,7 @@ describe('Remove a Notification', () => {
     test('Should Throw', (done) => {
         notApi = getNotificationApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         notApi.getMyNotifications().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();

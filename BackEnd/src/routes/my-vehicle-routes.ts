@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 import {Router, Response, Request} from 'express';
 import { AuthenticatedRequest } from './utils/authenticated-request';
 import { toUnixSeconds } from './utils/date-utils';
-import {retrieveUserId, retrieveVehicleId, skipLimitChecker} from './utils/param-checking';
+import {retrieveId, retrieveUserId, retrieveVehicleId, skipLimitChecker} from './utils/param-checking';
 import { authenticateToken } from './auth-routes';
 import {
     ProjectVehicleDocument,
@@ -285,11 +285,11 @@ router.patch(
     authenticateToken,
     async (req: BaseVehicleRequest, res: UserVehicleEndPointResponse) => {
         let vehicle: ProjectVehicleDocument
-        let vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId || "")
         let user: UserDocument
         let owner: UserVehicle
         let enjoyers: UserVehicle[] = []
         try {
+            let vehicleId: Types.ObjectId = retrieveId(req.body.vehicleId, false)
             vehicle = await getVehicleById(vehicleId)
             user = await getUserById(vehicle.owner)
             owner = {
@@ -335,9 +335,9 @@ router.patch(
     authenticateToken,
     async (req: BaseVehicleRequest, res: UserVehicleEndPointResponse) => {
         let vehicle: ProjectVehicleDocument
-        let vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
         let user: UserDocument
         try {
+            let vehicleId: Types.ObjectId = retrieveId(req.body.vehicleId, false)
             vehicle = await getVehicleById(vehicleId)
             user = await getUserById(vehicle.owner)
             return res.status(201).json({
@@ -365,9 +365,9 @@ router.patch(
     authenticateToken,
     async (req: BaseVehicleRequest, res: UserVehicleEndPointResponse) => {
         let vehicle: ProjectVehicleDocument
-        let vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId)
         let enjoyers: UserVehicle[] = []
         try {
+            let vehicleId: Types.ObjectId = retrieveId(req.body.vehicleId, false)
             vehicle = await getVehicleById(vehicleId)
             for(let idx in vehicle.enjoyers){
                 let user = await getUserById(vehicle.enjoyers[idx])
@@ -399,8 +399,8 @@ router.delete(
     authenticateToken,
     // superUserAuth, TO DO implementa sto middleware e controlla che lo user sia admin per deletare una car
     async (req: BaseVehicleRequest, res: UserVehicleEndPointResponse) => {
-        const vehicleId: Types.ObjectId = new Types.ObjectId(req.params.vehicleId);
         try {
+            let vehicleId: Types.ObjectId = retrieveId(req.body.vehicleId, false)
             await deleteVehicle({ _id: vehicleId });
             return res.status(204).json();
         } catch (err) {
@@ -458,8 +458,8 @@ router.put(
 
                     // TODO add check if they friend
                     return await addEnjoyer(
-                        new Types.ObjectId(vehicleId),
-                        new Types.ObjectId(enjoyerId),
+                        retrieveId(vehicleId, false),
+                        retrieveId(enjoyerId),
                         enjoyerName,
                         enjoyerSurname,
                         ioServer,
@@ -468,8 +468,8 @@ router.put(
                 }
                 else {
                     await removeEnjoyer(
-                        new Types.ObjectId(vehicleId),
-                        new Types.ObjectId(enjoyerId)
+                        retrieveId(vehicleId, false),
+                        retrieveId(enjoyerId),
                     );
                     return res.status(200).json({
                         removed: enjoyerId,
@@ -497,9 +497,9 @@ router.put(
     "/myVehicle/vehicleId/owner",
     // superUserAuth, TODO implementa sto middleware e controlla che lo user sia admin per cambiare owner car,
     async (req: OwnerUpdateRequest, res: UserVehicleEndPointResponse) => {
-        const vehicleId: Types.ObjectId = new Types.ObjectId(req.body.vehicleId || "")
-        const ownerId: Types.ObjectId = new Types.ObjectId(req.body.newOwner || "")
         try {
+            const vehicleId: Types.ObjectId = retrieveId(req.body.vehicleId, false)
+            const ownerId: Types.ObjectId = retrieveId(req.body.newOwner)
             await changeOwner(vehicleId, ownerId)
             res.status(204).json()
         } catch (err) {

@@ -77,6 +77,7 @@ router.post(
         const typeBodyParam: string = req.body.type as string;
         const reqType: NotTypes = NotTypes[typeBodyParam as keyof typeof NotTypes];
         const senderId: Types.ObjectId = res.locals.userId;
+        //TODO mettilo nel try
         const receiverId = new Types.ObjectId(req.body.receiver)
         if (reqType && receiverId){
             try {

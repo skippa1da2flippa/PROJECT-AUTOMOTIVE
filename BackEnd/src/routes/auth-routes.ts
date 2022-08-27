@@ -22,10 +22,10 @@ import chalk from 'chalk';
 import {getVehicleById, ProjectVehicleDocument} from "../model/database/my-vehicle";
 import {ServerError} from "../model/errors/server-error";
 import {BanListPool} from "../model/ban-list/ban-list-pool";
+import {retrieveUserId} from "./utils/param-checking";
 
 export const router = Router();
 export const jsonWebToken = jsonwebtoken
-// TO DO quando il client riceve la risposta del login deve buildare l'header "Authorization" come segue: Refresh token,Access token.
 
 /**
  * This function verifies the authentication token that comes with each
@@ -56,34 +56,30 @@ export const authenticateToken = async function (
 
     jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET, (err: any, content: JwtData) => {
         if (err){
-
             jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET, (err: any, content: JwtData) => {
                 if(err){
-                    return res.status(403)
+                    res.sendStatus(403)
                 } else {
                     res.locals.newAccessToken = generateAccessToken(content.Id);
-
                     /* TO DO in every route we must remember to check if locals.newAccessToken is true,
                     if so we should send it's value with the response
                      *  to let client to properly store the new access token for next requests
                      */    
                     req.jwtContent = content;
-
-                    next();
+                    next()
                 }
 
             })
-
-            
         }
-
-        // Here the content of the token is assigned
-        // to its own request field, so that each endpoint
-        // can access it
-        req.jwtContent = content;
-
-        next();
+        else {
+            // Here the content of the token is assigned
+            // to its own request field, so that each endpoint
+            // can access it
+            req.jwtContent = content;
+            next()
+        }
     });
+
 }
 
 /**
@@ -96,7 +92,7 @@ const localAuth = async function (email: string, password: string, done: Functio
     try {
         user = await getUserByEmail(email)
     } catch(err) {
-        return done(err)
+        return done(null, false, {message: "No user with that identifier"})
     }
 
     if (user && (await user.validatePassword(password))) {
@@ -111,7 +107,6 @@ const localAuth = async function (email: string, password: string, done: Functio
  */
 const vehicleAuth = async function (vehicleId: string, password: string, done: Function) {
     let vehicle: ProjectVehicleDocument | void
-    console.log("dentro vehicle auth")
     try {
         vehicle = await getVehicleById(new Types.ObjectId(vehicleId))
     } catch(err) {
@@ -195,7 +190,7 @@ router.post(
         };
         // Refresh token generation with 2 h duration, allow a user to maintain a session and be issued with access tokens
         const refreshToken = jsonwebtoken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
-            expiresIn: '2h',
+            expiresIn: '1h',
         });
 
         const accessToken = generateAccessToken(tokensData.Id);

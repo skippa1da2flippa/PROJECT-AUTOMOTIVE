@@ -51,7 +51,7 @@ describe('Get vehicle', () => {
 
     afterEach(async () => {
         await teardownDb(setupData);
-        await deleteMultipleVehicles(vehicles)
+        //await deleteMultipleVehicles(vehicles)
     });
 
     test('Should Return Non-Empty Response With Correct Fields', (done) => {
@@ -83,7 +83,7 @@ describe('Get vehicle', () => {
     test('Should Throw', (done) => {
         vehicleApi = getVehicleApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         vehicleApi.getVehicle(vehicles[0].toString()).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -163,7 +163,7 @@ describe('Get vehicle owner', () => {
     test('Should Throw', (done) => {
         vehicleApi = getVehicleApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         vehicleApi.getVehicleOwner(vehicles[0].toString()).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -245,7 +245,7 @@ describe('Get vehicle enjoyers', () => {
     test('Should Throw', (done) => {
         vehicleApi = getVehicleApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         vehicleApi.getVehicleEnjoyers(vehicles[0].toString()).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -312,7 +312,7 @@ describe('Remove vehicle enjoyer', () => {
     test('Should Throw', (done) => {
         vehicleApi = getVehicleApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         vehicleApi.removeVehicleEnjoyer(vehicles[0].toString(), enjoyer.userId).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -410,7 +410,7 @@ describe('Add vehicle enjoyer', () => {
     test('Should Throw', (done) => {
         vehicleApi = getVehicleApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         vehicleApi.removeVehicleEnjoyer(vehicles[0].toString(), enjoyer.userId).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();

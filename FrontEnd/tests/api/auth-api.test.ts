@@ -102,7 +102,6 @@ describe('Login', () => {
 
     test('Should Throw', (done) => {
         authApi = getAuthApi();
-        let email = 'AYO'
 
         authApi.logIn("AYO", "ayo").subscribe({
             error: (err: Error) => {
@@ -214,7 +213,7 @@ describe('Sign out', () => {
 
     test('Should Throw', (done) => {
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         authApi = getAuthApi();
         authApi.logOut().subscribe({
             error: (err: Error) => {

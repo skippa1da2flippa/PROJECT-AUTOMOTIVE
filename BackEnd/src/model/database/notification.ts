@@ -77,7 +77,7 @@ export const NotificationModel = mongoose.model('Notification', NotificationSche
 export async function getMostRecentNotifications(
     userId: Types.ObjectId
 ): Promise<NotificationSubDocument[]> {
-    const not: UserDocument = await UserModel.findOne({ _id: userId }, { notifications: 1 }).sort({
+    const not: UserDocument = await UserModel.findOne({ _id: userId.toString() }, { notifications: 1 }).sort({
         createdAt: -1,
     });
     return not.notifications;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1661436195960" clover="3.2.0">
-  <project timestamp="1661436195960" name="All files">
-    <metrics statements="1169" coveredstatements="390" conditionals="318" coveredconditionals="23" methods="289" coveredmethods="28" elements="1776" coveredelements="441" complexity="0" loc="1169" ncloc="1169" packages="11" files="33" classes="33"/>
+<coverage generated="1661439793377" clover="3.2.0">
+  <project timestamp="1661439793378" name="All files">
+    <metrics statements="1168" coveredstatements="390" conditionals="318" coveredconditionals="23" methods="289" coveredmethods="28" elements="1775" coveredelements="441" complexity="0" loc="1168" ncloc="1168" packages="11" files="33" classes="33"/>
     <package name="src">
       <metrics statements="59" coveredstatements="48" conditionals="3" coveredconditionals="2" methods="6" coveredmethods="3"/>
       <file name="index.ts" path="C:\Users\biagi\OneDrive\Documents\Desktop\PROJECT-AUTOMOTIVE\BackEnd\src\index.ts">
@@ -671,7 +671,7 @@
       </file>
     </package>
     <package name="src.routes">
-      <metrics statements="521" coveredstatements="129" conditionals="140" coveredconditionals="8" methods="104" coveredmethods="3"/>
+      <metrics statements="520" coveredstatements="129" conditionals="140" coveredconditionals="8" methods="104" coveredmethods="3"/>
       <file name="auth-routes.ts" path="C:\Users\biagi\OneDrive\Documents\Desktop\PROJECT-AUTOMOTIVE\BackEnd\src\routes\auth-routes.ts">
         <metrics statements="106" coveredstatements="38" conditionals="35" coveredconditionals="8" methods="16" coveredmethods="3"/>
         <line num="1" count="1" type="stmt"/>
@@ -1112,7 +1112,7 @@
         <line num="60" count="0" type="stmt"/>
       </file>
       <file name="user-routes.ts" path="C:\Users\biagi\OneDrive\Documents\Desktop\PROJECT-AUTOMOTIVE\BackEnd\src\routes\user-routes.ts">
-        <metrics statements="100" coveredstatements="20" conditionals="31" coveredconditionals="0" methods="20" coveredmethods="0"/>
+        <metrics statements="99" coveredstatements="20" conditionals="31" coveredconditionals="0" methods="20" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -1131,7 +1131,6 @@
         <line num="108" count="0" type="stmt"/>
         <line num="109" count="0" type="stmt"/>
         <line num="110" count="0" type="stmt"/>
-        <line num="119" count="0" type="stmt"/>
         <line num="120" count="0" type="stmt"/>
         <line num="130" count="1" type="stmt"/>
         <line num="134" count="0" type="stmt"/>
@@ -1256,30 +1255,30 @@
       <file name="param-checking.ts" path="C:\Users\biagi\OneDrive\Documents\Desktop\PROJECT-AUTOMOTIVE\BackEnd\src\routes\utils\param-checking.ts">
         <metrics statements="25" coveredstatements="9" conditionals="7" coveredconditionals="0" methods="4" coveredmethods="1"/>
         <line num="2" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="23" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="24" count="0" type="stmt"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
         <line num="47" count="1" type="stmt"/>
         <line num="48" count="1" type="stmt"/>
-        <line num="49" count="1" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="52" count="1" type="stmt"/>
-        <line num="71" count="1" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="84" count="1" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
-        <line num="86" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
       </file>
       <file name="register-routes.ts" path="C:\Users\biagi\OneDrive\Documents\Desktop\PROJECT-AUTOMOTIVE\BackEnd\src\routes\utils\register-routes.ts">
         <metrics statements="18" coveredstatements="18" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>

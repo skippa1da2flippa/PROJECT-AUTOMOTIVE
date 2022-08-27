@@ -1,6 +1,6 @@
 import { Express } from 'express';
 import { router as userRouter } from '../user-routes';
-import { router as authRouter } from '../auth-routes'
+import {authenticateToken, router as authRouter} from '../auth-routes'
 import { API_BASE_URL} from '../../index';
 import { router as myVehicleRouter } from '../my-vehicle-routes'
 import { router as routineRouter } from "../routine-route"
@@ -8,6 +8,7 @@ import { router as settingRouter } from "../setting-routes"
 import { router as notRouter } from "../notification-routes"
 import { router as statRouter } from "../stats-routes"
 import { router as testRouter } from "../frontend-integration-testing/mongodb-api-routes"
+import {retrieveUserId} from "./param-checking";
 
 export const registerRoutes = (app: Express) => {
     app.use(API_BASE_URL, userRouter);

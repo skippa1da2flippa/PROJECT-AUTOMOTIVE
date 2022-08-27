@@ -56,7 +56,7 @@ describe('Get My stats', () => {
     test('Should Throw', (done) => {
         userApi = getUserStatsApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getMyStats().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -102,7 +102,7 @@ describe('Update My stats', () => {
     test('Should Throw', (done) => {
         userApi = getUserStatsApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.updateMyStats({
             sauce: 0,
             trophies: 0

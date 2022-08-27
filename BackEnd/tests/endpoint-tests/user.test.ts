@@ -1,13 +1,13 @@
-import mongoose, { Types } from "mongoose";
+import { Types } from "mongoose";
 import { apiCredentials, MongoDbApi, MongoDbSingleInsertResponse } from "../utils/mongodb-api";
 import { getUserData } from "../utils/user-helper";
-import {createUser, User, UserDocument, UserModel, UserStatus} from "../../src/model/database/user";
-import axios, { AxiosRequestConfig } from "axios";
+import {User} from "../../src/model/database/user";
+import axios from "axios";
 import { JwtData } from "../../src/model/auth/jwt-data";
 import { jsonWebToken} from "../../src/routes/auth-routes";
 import { generateAccessToken } from "../../src/routes/auth-routes";
 import { insertManyVehicles } from "../utils/my-vehicle-helper";
-import {projectVehicle, ProjectVehicleDocument} from "../../src/model/database/my-vehicle";
+import {projectVehicle} from "../../src/model/database/my-vehicle";
 import {pool} from "../../src";
 import {toUnixSeconds} from "../../src/routes/utils/date-utils";
 
@@ -104,7 +104,7 @@ describe("Test: GET /users/@meh", () => {
     test("It should have response 404", async () => {
         const requestPath: string = baseUrl + "/api/users/@meh"
         const header = {
-            "authorization" : setUpHeader("AYO")
+            "authorization" : setUpHeader("AYO") //new Types.ObjectId().toString())
         }
         try {
             await axios.get<ErrResponse>(requestPath, {

@@ -4,9 +4,6 @@ import {JwtProvider} from "../../src/app/core/api/jwt-auth/jwt-provider";
 import {JwtStorage} from "../../src/app/core/api/jwt-auth/jwt-storage";
 import {MongoDpApiCredentials} from "../fixtures/model/mongodb-api/mongodb-api";
 import {UserSettingApi} from "../../src/app/core/api/handlers/setting-api";
-import {UserApi} from "../../src/app/core/api/handlers/user-api";
-import {User, UserStatus} from "../../src/app/core/model/response-data/user";
-import {getUserApi} from "./user-api.test";
 import {Setting} from "../../src/app/core/model/response-data/setting-data";
 import {JwtStubProvider} from "../fixtures/model/token";
 
@@ -62,7 +59,7 @@ describe('Get My Setting', () => {
     test('Should Throw', (done) => {
         userApi = getSettingApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getMySetting().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -109,7 +106,7 @@ describe('Get My Language', () => {
     test('Should Throw', (done) => {
         userApi = getSettingApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getMyLanguageSetting().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -157,7 +154,7 @@ describe('Get My Theme', () => {
     test('Should Throw', (done) => {
         userApi = getSettingApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getMyThemeSetting().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -204,7 +201,7 @@ describe('Get My gamification', () => {
     test('Should Throw', (done) => {
         userApi = getSettingApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getMyGamificationSetting().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -247,7 +244,7 @@ describe('Update My Language', () => {
     test('Should Throw', (done) => {
         userApi = getSettingApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.updateLanguageSetting("IT").subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -303,7 +300,7 @@ describe('Update My theme', () => {
     test('Should Throw', (done) => {
         userApi = getSettingApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.updateThemeSetting("black").subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -361,7 +358,7 @@ describe('Update My gamification', () => {
     test('Should Throw', (done) => {
         userApi = getSettingApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.updateGamificationSetting(false).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();

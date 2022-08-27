@@ -27,7 +27,14 @@ export const getUserApi = (): UserApi => {
 };
 
 
-//TODO scoppia il server quando fai una richiesta sbagliata
+//TODO scoppia il server quando fai una richiesta sbagliata:
+/**
+ * In caso mettessi al posto dell'accesstoken una stringa a caso tipo ayo il server crasha prima inviando
+ * un 404 CANNOT GET/PATCH/POST/PUT/DELETE in base al metodo e poi è come se se ne sbattesse la ciolla e
+ * andasse avanti con l'esecuzione della route scatenando così un errore dato che viene inviata un altra risposta.
+ * Nel caso invece mettessi al posto di ayo un pezzo di accesstoken esso bloccherà il server dal rispondere, però
+ * non crasha, in cazso invece il token fosse scaduto allora succederebbe la stessa cosa di ayo
+ * */
 
 describe('Get Meh', () => {
     let userApi: UserApi
@@ -74,7 +81,7 @@ describe('Get Meh', () => {
     test('Should Throw', (done) => {
         userApi = getUserApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getMeh().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -134,7 +141,7 @@ describe('Get My Friends', () => {
     test('Should Throw', (done) => {
         userApi = getUserApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getFriends().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -195,7 +202,7 @@ describe('Get One Friend', () => {
     test('Should Throw', (done) => {
         userApi = getUserApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getOneFriend(friend.userId).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -271,7 +278,7 @@ describe('Get My Vehicles', () => {
     test('Should Throw', (done) => {
         userApi = getUserApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getMyVehicles().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -331,7 +338,7 @@ describe('Get Enjoyed Vehicles', () => {
     test('Should Throw', (done) => {
         userApi = getUserApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.getEnjoyedVehicles().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -373,7 +380,7 @@ describe('Delete Meh', () => {
     test('Should Throw', (done) => {
         userApi = getUserApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.deleteMeh().subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -435,7 +442,7 @@ describe('Update nickName', () => {
     test('Should Throw', (done) => {
         userApi = getUserApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.updateNickName("AYO").subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -510,7 +517,7 @@ describe('Update email', () => {
     test('Should Throw', (done) => {
         userApi = getUserApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.updateEmail("AYO@ayo.com").subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -566,7 +573,7 @@ describe('Update psw', () => {
     test('Should Throw', (done) => {
         userApi = getUserApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.updatePassword("AYO").subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -623,7 +630,6 @@ describe('Remove me from enjoyers', () => {
 
     test('Should Throw', (done) => {
         userApi = getUserApi();
-        let email = 'AYO'
         userApi.removeMehFromEnjoyers(name).subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();
@@ -639,7 +645,7 @@ describe('Remove me from enjoyers', () => {
     test('Should Throw', (done) => {
         userApi = getUserApi();
         jwtStorer = jwtStubProvider.getJwtStorageStub()
-        jwtStorer.store("")
+        jwtStorer.store("", "AYO")
         userApi.removeMehFromEnjoyers("AYO").subscribe({
             error: (err: Error) => {
                 expect(err).toBeTruthy();

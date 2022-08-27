@@ -100,13 +100,10 @@ router.get(
     authenticateToken,
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
-        let user: usr.UserDocument;
+        let user: UserDocument;
         const userId: Types.ObjectId = res.locals.userId;
         try {
-            console.log("sono dentro la route")
-            user = await usr.getUserById(userId);
-            console.log("dopo la getUserById")
-            console.log("prima del return")
+            user = await getUserById(userId);
             return res.status(201).json({
                 userId: user._id,
                 nickname: user.nickname,
@@ -116,10 +113,9 @@ router.get(
                 accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             });
         } catch (err) {
-            console.log("Dentro il try")
             return res.status(err.statusCode).json({
                 timestamp: toUnixSeconds(new Date()),
-                errorMessage: "AYO", //err.message,
+                errorMessage: err.message,
                 requestPath: req.path,
             });
         }

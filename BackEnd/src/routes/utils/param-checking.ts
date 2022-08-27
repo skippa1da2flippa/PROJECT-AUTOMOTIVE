@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { Types } from 'mongoose';
-import { ServerError } from '../../model/errors/server-error';
 import { AuthenticatedRequest } from './authenticated-request';
 import { toUnixSeconds } from './date-utils';
+import {ServerError} from "../../model/errors/server-error";
 
 /**
  * Middleware that tries to extract the skip and limit query parameters from
@@ -46,12 +46,14 @@ export const skipLimitChecker = function (req: Request, res: Response, next: Nex
  */
 export const retrieveUserId = function (req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
+        console.log("sono dentro retrieveUserId e questo è l'id: ")
+        console.log(req.jwtContent.Id)
         res.locals.userId = new Types.ObjectId(req.jwtContent.Id);
         next();
     } catch (err) {
         return res.status(404).json({
             timestamp: toUnixSeconds(new Date()),
-            errorMessage: err.message,
+            errorMessage: "User id not valid",
             requestPath: req.path,
         });
     }
@@ -81,11 +83,13 @@ export const retrieveVehicleId = function (req:  AuthenticatedRequest, res: Resp
     }
 };
 
-export const retrieveId = function (s_id: string) {
+export const retrieveId = function (s_id: string, human: boolean = true) {
     try {
         return new Types.ObjectId(s_id);
     } catch (err) {
-        throw new Error('No user with that identifier');
+        if (human)
+            throw new ServerError('No user with that identifier');
+        else throw new ServerError('No vehicle with that identifier');
     }
 };
 
