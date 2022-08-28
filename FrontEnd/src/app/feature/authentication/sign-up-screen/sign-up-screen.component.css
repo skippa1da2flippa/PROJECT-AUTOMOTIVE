@@ -1,60 +1,3 @@
-@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
-
-:root {
-    --canary: #0027ff;
-    --dove-gray: #707070;
-    --granite-gray: #696969;
-    --silver-chalice: #adadad;
-    --white: #ffffff;
-
-    --font-size-l: 22px;
-    --font-size-m: 18px;
-    --font-size-xl: 35px;
-
-    --font-family-helveticaneue-bold: "HelveticaNeue-Bold", Helvetica;
-    --font-family-helveticaneue-regular: "HelveticaNeue-Regular", Helvetica;
-}
-.helveticaneue-regular-normal-white-22px {
-    color: var(--white);
-    font-family: var(--font-family-helveticaneue-regular);
-    font-size: var(--font-size-l);
-    font-style: normal;
-    font-weight: 400;
-}
-
-.helveticaneue-regular-normal-silver-chalice-18px {
-    color: var(--silver-chalice);
-    font-family: var(--font-family-helveticaneue-regular);
-    font-size: var(--font-size-m);
-    font-style: normal;
-    font-weight: 400;
-}
-
-.helveticaneue-bold-white-35px {
-    color: var(--white);
-    font-family: var(--font-family-helveticaneue-bold);
-    font-size: var(--font-size-xl);
-    font-style: normal;
-    font-weight: 700;
-}
-
-.helveticaneue-bold-granite-gray-22px {
-    color: var(--granite-gray);
-    font-family: var(--font-family-helveticaneue-bold);
-    font-size: var(--font-size-l);
-    font-style: normal;
-    font-weight: 700;
-}
-
-.border-1px-canary {
-    border: 1px solid var(--canary);
-}
-
-.border-1px-dove-gray {
-    border: 1px solid var(--dove-gray);
-}
-
-
 /* screen - ipad-3 */
 
 .ipad-3 {
@@ -65,7 +8,7 @@
 }
 
 .ipad-3 .overlap-group4 {
-    background-image: url(https://anima-uploads.s3.amazonaws.com/projects/62f90f12e2894db8bf01d639/releases/62f90f37f5e0f8f0397614fc/img/tracciato-1572@1x.png);
+    background-image: url(../../../../assets/images/tracciato-1572@1x.png);
     background-position: 50% 50%;
     background-size: cover;
     height: 768px;
@@ -95,6 +38,10 @@
 }
 
 .ipad-3 .title {
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
     left: 348px;
     letter-spacing: 0;
     line-height: 35px;
@@ -224,6 +171,7 @@
 .ipad-3 .raggruppa-58 {
     align-items: flex-end;
     background-color: var(--white);
+    border: 1px solid #707070;
     border-radius: 15px;
     display: flex;
     height: 48px;
@@ -235,45 +183,13 @@
 }
 
 .ipad-3 .login {
+    color: var(--granite-gray);
+    font-family: var(--font-family-helveticaneue-bold);
+    font-size: var(--font-size-l);
+    font-weight: 700;
     letter-spacing: 0;
     line-height: 22px;
     min-height: 28px;
     min-width: 72px;
     white-space: nowrap;
-}
-
-
-@font-face {
-    font-family: "HelveticaNeue-Regular";
-    font-style: normal;
-    font-weight: 400;
-    src: url("https://fonts.animaapp.com/HelveticaNeue-Regular") format("truetype");
-}
-@font-face {
-    font-family: "HelveticaNeue-Bold";
-    font-style: normal;
-    font-weight: 700;
-    src: url("https://fonts.animaapp.com/HelveticaNeue-Bold") format("opentype");
-}
-
-.screen a {
-    display: contents;
-    text-decoration: none;
-}
-
-.container-center-horizontal {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    pointer-events: none;
-    width: 100%;
-}
-
-.container-center-horizontal > * {
-    flex-shrink: 0;
-    pointer-events: auto;
-}
-
-* {
-    box-sizing: border-box;
 }

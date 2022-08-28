@@ -27,9 +27,6 @@ export class LogInScreenComponent implements OnInit {
 
     }
 
-    public saveEmail($event: KeyboardEvent) {
-        this.email = $event.key
-    }
 
     public async logIn(email: string, password: string) {
         this.authClient.logIn(email, password).subscribe({
@@ -50,6 +47,5 @@ export class LogInScreenComponent implements OnInit {
             },
         })
     }
-
 
 }

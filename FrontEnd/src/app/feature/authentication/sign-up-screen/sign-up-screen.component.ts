@@ -22,9 +22,10 @@ export class SignUpScreenComponent implements OnInit {
 
     ngOnInit(): void {}
 
-    public signup(email: string, name: string, surname: string, password: string, nickName?: string) {
+    public signup(email: string, fullName: string, password: string, nickName?: string) {
         this.userMessage.error = false;
-
+        let name = fullName.split(" ")[0]
+        let surname = fullName.split(" ")[1]
         this.authClient.signUp(name, surname, email, password, nickName).subscribe({
             next: async (data: User) => {
                 this.authClient

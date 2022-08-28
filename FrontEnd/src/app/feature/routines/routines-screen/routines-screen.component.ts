@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {HtmlErrorMessage} from "../../../core/model/errors/html-error";
 import {Router} from "@angular/router";
 import {UserRoutineApi} from "../../../core/api/handlers/routine-api";
 import {Routine} from "../../../core/model/response-data/routine-data";
@@ -34,5 +33,4 @@ export class RoutinesScreenComponent extends ErrorHandler implements OnInit {
             error: super.errorHandler,
         })
     }
-
 }

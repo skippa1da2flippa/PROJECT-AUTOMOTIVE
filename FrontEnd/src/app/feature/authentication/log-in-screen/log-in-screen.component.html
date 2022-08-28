@@ -1,19 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <!--<meta name=description content="This site was generated with Anima. www.animaapp.com"/>-->
-    <link rel="shortcut icon" type=image/png href=https://animaproject.s3.amazonaws.com/home/favicon.png/>
-    <meta name="viewport" content="width=1024, maximum-scale=1.0" />
-    <link rel="shortcut icon" type="image/png" href="https://animaproject.s3.amazonaws.com/home/favicon.png" />
-    <meta name="og:type" content="website" />
-    <meta name="twitter:card" content="photo" />
-    <link rel="stylesheet" type="text/css" href="log-in-screen.component.css" />
-    <link rel="stylesheet" type="text/css" href="log-in-screen.component.css" />
-    <link rel="stylesheet" type="text/css" href="log-in-screen.component.css" />
-</head>
-<body style="margin: 0; background: #ffffff">
-<input type="hidden" id="anPageName" name="page" value="ipad-nexus-login" />
+
 <div class="container-center-horizontal">
     <div class="ipad-nexus-login screen">
         <div class="overlap-group2">
@@ -21,35 +6,27 @@
             <div class="rettangolo-44"></div>
             <div class="raggruppa-56">
                 <div class="raggruppa-54">
-                    <div class="login helveticaneue-bold-white-35px">Login</div>
+                    <div class="login">Login</div>
                     <div class="not-registered-yet-create-an-account">
-                <span class="helveticaneue-regular-normal-silver-chalice-18px">Not registered yet?</span
-                ><span class="span1">&nbsp;</span><span class="span2">Create an account</span>
+                <a><span class="helveticaneue-regular-normal-silver-chalice-18px">Not registered yet?</span
+                ></a><span class="span1">&nbsp;</span><a routerLink="/authentication/register"><span class="span2">Create an account</span></a>
                     </div>
                     <div class="raggruppa-52">
                         <div class="email-address helveticaneue-regular-normal-white-22px">Email address</div>
                         <div class="overlap-group border-1px-canary">
-                            <div class="enter-your-email-address helveticaneue-regular-normal-silver-chalice-18px">
-                                Enter your email address
-                            </div>
+                            <input class="borderless" type="text" placeholder="Enter your email address" #email>
                         </div>
                     </div>
                     <div class="raggruppa-53">
                         <div class="password helveticaneue-regular-normal-white-22px">Password</div>
                         <div class="overlap-group border-1px-canary">
-                            <div class="enter-your-password helveticaneue-regular-normal-silver-chalice-18px">
-                                Enter your password
-                            </div>
+                            <input class="borderless" type="text"  placeholder="Enter your password" #password>
                         </div>
                     </div>
                 </div>
-                <div class="forgot-password">Forgot password?</div>
-                <div class="raggruppa-55 border-1px-dove-gray">
-                    <div class="login-1 helveticaneue-bold-granite-gray-22px">LOGIN</div>
-                </div>
+                <div class="raggruppa-55"><div class="login-1" (click)="logIn(email.value, password.value)">LOGIN</div></div>
             </div>
         </div>
     </div>
 </div>
-</body>
-</html>
+

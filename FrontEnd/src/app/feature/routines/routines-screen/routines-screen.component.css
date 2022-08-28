@@ -97,19 +97,19 @@
     font-family: "HelveticaNeue-Regular";
     font-style: normal;
     font-weight: 400;
-    src: url("../../../fonts/HelveticaNeue.ttf") format("truetype");
+    src: url("../../../../assets/fonts/HelveticaNeue.ttf") format("truetype");
 }
 @font-face {
     font-family: "HelveticaNeue-Bold";
     font-style: normal;
     font-weight: 700;
-    src: url("../../../fonts/ApexSans-Book.otf") format("opentype");
+    src: url("../../../../assets/fonts/ApexSans-Book.otf") format("opentype");
 }
 @font-face {
     font-family: "HelveticaNeue-Medium";
     font-style: normal;
     font-weight: 500;
-    src: url("../../../fonts/HelveticaNeue-Medium.otf") format("opentype");
+    src: url("../../../../assets/fonts/HelveticaNeue-Medium.otf") format("opentype");
 }
 
 
@@ -167,7 +167,7 @@
 
 .ipad-nexus-routines .raggruppa-25 {
     align-self: center;
-    background-image: url(../img/raggruppa-24-1@1x.png);
+    background-image: url(../../../../assets/images/raggruppa-24-1@1x.png);
     background-position: 50% 50%;
     background-size: cover;
     height: 32px;
@@ -310,7 +310,7 @@
 }
 
 .ipad-nexus-routines .raggruppa-119 {
-    background-image: url(../img/raggruppa-118@1x.png);
+    background-image: url(../../../../assets/images/raggruppa-118@1x.png);
     background-position: 50% 50%;
     background-size: cover;
     height: 3px;
@@ -346,7 +346,7 @@
 }
 
 .ipad-nexus-routines .raggruppa-117 {
-    background-image: url(../img/raggruppa-116@1x.png);
+    background-image: url(../../../../assets/images/raggruppa-116@1x.png);
     background-position: 50% 50%;
     background-size: cover;
     height: 22px;
@@ -529,7 +529,7 @@
 }
 
 .ipad-nexus-routines .raggruppa-192 {
-    background-image: url(../img/raggruppa-136-1@1x.png);
+    background-image: url(../../../../assets/images/raggruppa-136-1@1x.png);
     background-position: 50% 50%;
     background-size: cover;
     height: 24px;

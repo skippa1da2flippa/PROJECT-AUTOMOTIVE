@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RoutinesScreenComponent } from './routines-screen/routines-screen.component';
+import {RoutinesRoutingModule} from "./routines-routing.module";
 
 
 
@@ -9,7 +10,8 @@ import { RoutinesScreenComponent } from './routines-screen/routines-screen.compo
     RoutinesScreenComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RoutinesRoutingModule
   ]
 })
 export class RoutinesModule { }

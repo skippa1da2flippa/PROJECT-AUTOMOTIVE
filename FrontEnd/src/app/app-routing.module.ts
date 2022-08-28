@@ -10,6 +10,20 @@ const routes: Routes = [
             ),
     },
     {
+        path: 'routines',
+        loadChildren: () =>
+            import('./feature/routines/routines.module').then(
+                (m) => m.RoutinesModule
+            ),
+    },
+    {
+        path: 'homepage',
+        loadChildren: () =>
+            import('./feature/homepage/homepage.module').then(
+                (m) => m.HomepageModule
+            ),
+    },
+    {
         path: '**',
         redirectTo: '/authentication/login',
         pathMatch: 'full',

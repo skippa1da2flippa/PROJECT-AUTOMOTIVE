@@ -5,6 +5,7 @@ import {accessTokenRefresher, UserStats} from "../../model/response-data/user";
 import {catchError, map, Observable, tap} from "rxjs";
 import {Routine} from "../../model/response-data/routine-data";
 import {BaseResponse} from "./user-api";
+import {Injectable} from "@angular/core";
 
 interface UserSingleRoutineResponse extends BaseResponse {
     routine: Routine
@@ -14,6 +15,9 @@ interface UserRoutinesResponse extends BaseResponse{
     routines: Routine[]
 }
 
+@Injectable({
+    providedIn: 'root',
+})
 export class UserRoutineApi extends BaseAuthenticatedApi {
     public constructor(httpClient: HttpClient, accessTokenProvider: JwtProvider) {
         super(httpClient, accessTokenProvider);
