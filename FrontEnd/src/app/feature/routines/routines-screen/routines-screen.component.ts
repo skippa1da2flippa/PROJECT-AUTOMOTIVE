@@ -28,6 +28,10 @@ export class RoutinesScreenComponent extends ErrorHandler implements OnInit {
         })
     }
 
+    public addRoutineDiv() {
+        //do something to add a div (for retrieving the up to be inserted routine data)
+    }
+
     public deleteRoutine(name: string){
         this.userRoutine.deleteRoutine(name).subscribe({
             error: super.errorHandler,

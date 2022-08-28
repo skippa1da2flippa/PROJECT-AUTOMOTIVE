@@ -1,24 +1,31 @@
 <div class="container-center-horizontal">
-    <div class="ipad-4 screen">
-        <div class="overlap-group10">
+    <div class="ipad-15 screen">
+        <div class="overlap-group1">
             <div class="raggruppa-324">
-                <div class="raggruppa-25"></div>
+                <div class="raggruppa-25 pointer" (click)="redirect('/homepage')"></div>
                 <div class="flex-col">
                     <div class="raggruppa-26">
-                        <div class="vehicles-near-me helveticaneue-regular-normal-white-18px" (click)="redirect('/vehiclesNearMe')">Vehicles near me</div>
-                        <div class="routines helveticaneue-bold-white-18px" (click)="redirect('/routines')">Routines</div>
-                        <div class="maps helveticaneue-regular-normal-white-18px" (click)="redirect('/maps')">Maps</div>
-                        <div class="my-vehicles helveticaneue-regular-normal-white-18px" (click)="redirect('/myVehicles')">My vehicles</div>
-                        <div class="enjoyed-vehicles helveticaneue-regular-normal-white-18px" (click)="redirect('/enjoyedVehicles')">Enjoyed vehicles</div>
-                        <div class="notifications helveticaneue-regular-normal-white-18px" (click)="redirect('/notifications')">Notifications</div>
+                        <div class="vehicles-near-me helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/vehiclesNearMe')">Vehicles near me</div>
+                        <div class="routines helveticaneue-bold-white-18px pointer" (click)="redirect('/routines')">Routines</div>
+                        <div class="maps helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/maps')">Maps</div>
+                        <div class="my-vehicles helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/myVehicles')">My vehicles</div>
+                        <div class="enjoyed-vehicles helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/enjoyedVehicles')">Enjoyed vehicles</div>
+                        <div class="notifications helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/notifications')">Notifications</div>
                     </div>
                     <div class="rettangolo-28"></div>
                 </div>
-                <div class="raggruppa-28 border-2px-cloud">
-                    <img class="businessman-with-arm" src="assets/images/gends%20-%20Copy.png" />
+                <div class="raggruppa-28 border-2px-cloud" (click)="redirect('/profile')">
+                    <img
+                        class="businessman-with-arm pointer"
+                        src="assets/images/gends%20-%20Copy.png"
+                    />
                 </div>
             </div>
-            <div class="overlap-group-container-1"></div>
+            <div class="overlap-group">
+                <div class="raggruppa-117"></div>
+                <div class="ellisse-12 border-2px-canary pointer" (click)="addRoutineDiv()"></div>
+            </div>
         </div>
     </div>
 </div>
+

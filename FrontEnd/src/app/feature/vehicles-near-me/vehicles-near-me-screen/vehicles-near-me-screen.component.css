@@ -1,34 +1,36 @@
-/* screen - ipad-15 */
+/* screen - ipad-nexus-9-5 */
 
-.ipad-15 {
+.ipad-nexus-9-5 {
     align-items: flex-start;
     background-color: var(--white);
     display: flex;
-    height: 1492px;
+    height: 768px;
     width: 1024px;
 }
 
-.ipad-15 .overlap-group1 {
+.ipad-nexus-9-5 .overlap-group {
     align-items: flex-end;
-    background-color: var(--silver-chalice);
+    background-color: var(--silver-chalice-2);
     display: flex;
     flex-direction: column;
-    min-height: 1491px;
-    padding: 21px 41.0px;
+    min-height: 768px;
+    padding: 21px 38px;
     width: 1024px;
 }
 
-.ipad-15 .raggruppa-324 {
+.ipad-nexus-9-5 .raggruppa-32 {
     align-items: flex-start;
+    align-self: center;
     display: flex;
     height: 57px;
     justify-content: flex-end;
+    margin-left: 0.02px;
     min-width: 942px;
 }
 
-.ipad-15 .raggruppa-25 {
+.ipad-nexus-9-5 .raggruppa-31 {
     align-self: center;
-    background-image: url(https://anima-uploads.s3.amazonaws.com/projects/62f90f12e2894db8bf01d639/releases/62f90f37f5e0f8f0397614fc/img/raggruppa-24-1@1x.png);
+    background-image: url(../../../../assets/images/raggruppa-24-1@1x.png);
     background-position: 50% 50%;
     background-size: cover;
     height: 32px;
@@ -36,8 +38,8 @@
     width: 32px;
 }
 
-.ipad-15 .flex-col {
-    align-items: center;
+.ipad-nexus-9-5 .flex-col {
+    align-items: flex-start;
     align-self: flex-end;
     display: flex;
     flex-direction: column;
@@ -46,7 +48,7 @@
     width: 790px;
 }
 
-.ipad-15 .raggruppa-26 {
+.ipad-nexus-9-5 .raggruppa-29 {
     align-items: flex-end;
     display: flex;
     height: 22px;
@@ -54,36 +56,36 @@
     opacity: 1.0;
 }
 
-.ipad-15 .vehicles-near-me {
-    letter-spacing: 0;
-    line-height: 18px;
-    margin-bottom: -3.5px;
-    min-height: 23px;
-    min-width: 143px;
-    white-space: nowrap;
-}
-
-.ipad-15 .routines {
+.ipad-nexus-9-5 .vehicles-near-me {
     letter-spacing: 0;
     line-height: 18px;
     margin-bottom: -4px;
-    margin-left: 38px;
     min-height: 24px;
-    min-width: 78px;
+    min-width: 153px;
     white-space: nowrap;
 }
 
-.ipad-15 .maps {
+.ipad-nexus-9-5 .routines {
     letter-spacing: 0;
     line-height: 18px;
     margin-bottom: -3.5px;
-    margin-left: 33px;
+    margin-left: 28px;
+    min-height: 23px;
+    min-width: 73px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-5 .maps {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
     min-height: 23px;
     min-width: 47px;
     white-space: nowrap;
 }
 
-.ipad-15 .my-vehicles {
+.ipad-nexus-9-5 .my-vehicles {
     letter-spacing: 0;
     line-height: 18px;
     margin-bottom: -3.5px;
@@ -93,7 +95,7 @@
     white-space: nowrap;
 }
 
-.ipad-15 .enjoyed-vehicles {
+.ipad-nexus-9-5 .enjoyed-vehicles {
     letter-spacing: 0;
     line-height: 18px;
     margin-bottom: -3.5px;
@@ -103,7 +105,7 @@
     white-space: nowrap;
 }
 
-.ipad-15 .notifications {
+.ipad-nexus-9-5 .notifications {
     letter-spacing: 0;
     line-height: 18px;
     margin-bottom: -3.5px;
@@ -113,16 +115,15 @@
     white-space: nowrap;
 }
 
-.ipad-15 .rettangolo-28 {
+.ipad-nexus-9-5 .rettangolo-32 {
     background-color: var(--white);
     border-radius: 6px;
     height: 4px;
-    margin-right: 351.0px;
     margin-top: 15px;
-    width: 75px;
+    width: 145px;
 }
 
-.ipad-15 .raggruppa-28 {
+.ipad-nexus-9-5 .raggruppa-30 {
     background-color: var(--white);
     border-radius: 28px;
     display: flex;
@@ -131,7 +132,7 @@
     width: 56px;
 }
 
-.ipad-15 .businessman-with-arm {
+.ipad-nexus-9-5 .businessman-with-arm {
     border-radius: 25.5px;
     flex: 1;
     margin-bottom: 2px;
@@ -142,32 +143,58 @@
     width: 51px;
 }
 
-.ipad-15 .overlap-group {
-    align-self: center;
-    border-radius: 17.5px;
-    height: 35px;
-    margin-left: 3.0px;
-    margin-top: 39px;
+.ipad-nexus-9-5 .raggruppa-container {
+    border-radius: 53px;
+    height: 606px;
+    margin-top: 28px;
     position: relative;
-    width: 35px;
+    width: 947px;
 }
 
-.ipad-15 .raggruppa-117 {
-    background-image: url(https://anima-uploads.s3.amazonaws.com/projects/62f90f12e2894db8bf01d639/releases/62f90f37f5e0f8f0397614fc/img/raggruppa-116@1x.png);
-    background-position: 50% 50%;
-    background-size: cover;
-    height: 22px;
-    left: 7px;
-    position: absolute;
-    top: 7px;
-    width: 22px;
-}
-
-.ipad-15 .ellisse-12 {
-    border-radius: 17.5px;
-    height: 35px;
+.ipad-nexus-9-5 .raggruppa-270 {
+    background-color: var(--white);
+    border-radius: 53px;
+    display: flex;
+    height: 606px;
     left: 0;
     position: absolute;
     top: 0;
-    width: 35px;
+    width: 947px;
+}
+
+.ipad-nexus-9-5 .dark-map {
+    border-radius: 53px;
+    flex: 1;
+    margin-bottom: 2px;
+    margin-left: 3px;
+    margin-right: 2px;
+    margin-top: 3px;
+    object-fit: cover;
+    width: 942px;
+}
+
+.ipad-nexus-9-5 .raggruppa-42 {
+    display: flex;
+    height: 37px;
+    left: 568px;
+    position: absolute;
+    top: 311px;
+    width: 37px;
+}
+
+.ipad-nexus-9-5 .raggruppa-41 {
+    background-image: url(../../../../assets/images/raggruppa-37-1@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    display: flex;
+    flex: 1;
+    width: 37px;
+}
+
+.ipad-nexus-9-5 .raggruppa-40 {
+    background-image: url(../../../../assets/images/raggruppa-39@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    flex: 1;
+    width: 37px;
 }

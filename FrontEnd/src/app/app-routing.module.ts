@@ -24,6 +24,13 @@ const routes: Routes = [
             ),
     },
     {
+        path: 'vehicles-near-me',
+        loadChildren: () =>
+            import('./feature/vehicles-near-me/vehicles-near-me.module').then(
+                (m) => m.VehiclesNearMeModule
+            ),
+    },
+    {
         path: '**',
         redirectTo: '/authentication/login',
         pathMatch: 'full',
