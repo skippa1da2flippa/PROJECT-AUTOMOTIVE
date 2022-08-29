@@ -10,6 +10,13 @@ const routes: Routes = [
             ),
     },
     {
+        path: 'maps',
+        loadChildren: () =>
+            import('./feature/maps/maps.module').then(
+                (m) => m.MapsModule
+            ),
+    },
+    {
         path: 'notifications',
         loadChildren: () =>
             import('./feature/notifications/notifications.module').then(
@@ -31,7 +38,7 @@ const routes: Routes = [
             ),
     },
     {
-        path: 'vehicles-near-me',
+        path: 'vehiclesNearMe',
         loadChildren: () =>
             import('./feature/vehicles-near-me/vehicles-near-me.module').then(
                 (m) => m.VehiclesNearMeModule

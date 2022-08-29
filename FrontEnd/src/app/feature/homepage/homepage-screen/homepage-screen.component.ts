@@ -9,11 +9,17 @@ import {ErrorHandler} from "../../../core/model/errors/error-handler";
 })
 export class HomepageScreenComponent extends ErrorHandler implements OnInit {
 
-    constructor(public override router: Router) {
+    constructor(
+        public override router: Router,
+    ) {
         super(router)
     }
 
     ngOnInit(): void {
+    }
+
+    ngOnDestroy(): void {
+
     }
 
 }
