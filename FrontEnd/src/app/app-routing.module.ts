@@ -10,6 +10,13 @@ const routes: Routes = [
             ),
     },
     {
+        path: 'notifications',
+        loadChildren: () =>
+            import('./feature/notifications/notifications.module').then(
+                (m) => m.NotificationsModule
+            ),
+    },
+    {
         path: 'routines',
         loadChildren: () =>
             import('./feature/routines/routines.module').then(

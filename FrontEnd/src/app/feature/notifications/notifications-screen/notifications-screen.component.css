@@ -1,0 +1,247 @@
+/* screen - ipad-6 */
+
+.ipad-6 {
+    align-items: flex-start;
+    background-color: var(--white);
+    display: flex;
+    height: 768px;
+    width: 1024px;
+}
+
+.ipad-6 .overlap-group {
+    align-items: center;
+    background-color: var(--silver-chalice-2);
+    display: flex;
+    flex-direction: column;
+    min-height: 768px;
+    padding: 21px 41.0px;
+    width: 1024px;
+}
+
+.ipad-6 .raggruppa-33 {
+    align-items: flex-start;
+    align-self: flex-end;
+    display: flex;
+    height: 57px;
+    min-width: 942px;
+}
+
+.ipad-6 .raggruppa-25 {
+    align-self: center;
+    background-image: url(../../../../assets/images/raggruppa-24-1@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 32px;
+    margin-bottom: 4.81px;
+    width: 32px;
+}
+
+.ipad-6 .flex-col {
+    align-items: flex-end;
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    margin-left: 26px;
+    min-height: 41px;
+    width: 798px;
+}
+
+.ipad-6 .navbar {
+    align-items: flex-end;
+    display: flex;
+    height: 22px;
+    min-width: 798px;
+    opacity: 1.0;
+}
+
+.ipad-6 .navbar-link-vehicles-near-me {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    min-height: 23px;
+    min-width: 143px;
+    white-space: nowrap;
+}
+
+.ipad-6 .navbar-link-routines {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 73px;
+    white-space: nowrap;
+}
+
+.ipad-6 .navbar-link-maps {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 47px;
+    white-space: nowrap;
+}
+
+.ipad-6 .navbar-link-my-vehicles {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 97px;
+    white-space: nowrap;
+}
+
+.ipad-6 .navbar-link-enjoyed-vehicles {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 137px;
+    white-space: nowrap;
+}
+
+.ipad-6 .navbar-link-notifications {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -4px;
+    margin-left: 38px;
+    min-height: 24px;
+    min-width: 111px;
+    white-space: nowrap;
+}
+
+.ipad-6 .rettangolo-28 {
+    background-color: var(--white);
+    border-radius: 6px;
+    height: 4px;
+    margin-right: 2.02px;
+    margin-top: 15px;
+    width: 108px;
+}
+
+.ipad-6 .raggruppa-28 {
+    background-color: var(--white);
+    border-radius: 28px;
+    display: flex;
+    height: 56px;
+    margin-left: 30px;
+    width: 56px;
+}
+
+.ipad-6 .businessman-with-arm {
+    border-radius: 25.5px;
+    flex: 1;
+    margin-bottom: 2px;
+    margin-left: 3px;
+    margin-right: 2px;
+    margin-top: 3px;
+    object-fit: cover;
+    width: 51px;
+}
+
+.ipad-6 .raggruppa-container {
+    background-color: var(--granite-gray);
+    border-radius: 59px;
+    height: 73px;
+    margin-top: 64px;
+    position: relative;
+    width: 942px;
+}
+
+.ipad-6 .raggruppa-423 {
+    display: flex;
+    height: 22px;
+    justify-content: space-between;
+    left: 39px;
+    position: absolute;
+    top: 26px;
+    width: 859px;
+}
+
+.ipad-6 .award-congra {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -4px;
+    margin-top: 2px;
+    white-space: nowrap;
+    width: 613px;
+}
+
+.ipad-6 .address {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -4px;
+    margin-right: -2px;
+    margin-top: 2px;
+    white-space: nowrap;
+    width: 59px;
+}
+
+.ipad-6 .raggruppa-427 {
+    background-color: var(--canary);
+    border-radius: 5.5px;
+    height: 11px;
+    left: 813px;
+    position: absolute;
+    top: 32px;
+    width: 11px;
+}
+
+.ipad-6 .raggruppa-container-1 {
+    background-color: var(--granite-gray);
+    border-radius: 59px;
+    height: 73px;
+    margin-top: 22px;
+    position: relative;
+    width: 942px;
+}
+
+.ipad-6 .raggruppa-424 {
+    display: flex;
+    height: 21px;
+    justify-content: space-between;
+    left: 39px;
+    position: absolute;
+    top: 26px;
+    width: 857px;
+}
+
+.ipad-6 .award-congra-1 {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-top: 1.5px;
+    white-space: nowrap;
+    width: 580px;
+}
+
+.ipad-6 .address-1 {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-right: -2px;
+    margin-top: 1.5px;
+    white-space: nowrap;
+    width: 57px;
+}
+
+.ipad-6 .raggruppa-428 {
+    background-color: var(--silver-chalice);
+    border-radius: 5.5px;
+    height: 11px;
+    left: 813px;
+    position: absolute;
+    top: 31px;
+    width: 11px;
+}
+
+.ipad-6 .rettangolo-1 {
+    background-color: var(--granite-gray);
+    border-radius: 59px;
+    height: 73px;
+    margin-top: 22px;
+    width: 942px;
+}

@@ -18,8 +18,16 @@ interface SingleFriendRequestBody {
     friendId: string
 }
 
+interface OneUserRequestBody {
+    userId: string
+}
+
 interface SingleFriendRequest extends AuthenticatedRequest {
     body: SingleFriendRequestBody
+}
+
+interface OneUserRequest extends AuthenticatedRequest {
+    body: OneUserRequestBody
 }
 
 
@@ -259,6 +267,35 @@ router.patch(
             if (!flag) throw new ServerError("No friend with that identifier")
 
             tempUser = await getUserById(friendId)
+
+            return res.status(201).json({
+                userId: tempUser._id,
+                name: tempUser.name,
+                surname: tempUser.surname,
+                nickname: tempUser.nickname,
+                email: tempUser.email,
+                status: tempUser.status,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
+            })
+        } catch (err) {
+            return res.status(err.statusCode).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: err.message,
+                requestPath: req.path,
+            });
+        }
+    }
+);
+
+router.patch(
+    '/users/@meh/one',
+    authenticateToken,
+    retrieveUserId,
+    async (req: OneUserRequest, res: UserEndpointResponse) => {
+        let tempUser: UserDocument
+        try {
+            let userId = new Types.ObjectId(req.body.userId)
+            tempUser = await getUserById(userId)
 
             return res.status(201).json({
                 userId: tempUser._id,

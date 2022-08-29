@@ -82,6 +82,18 @@ export class UserApi extends BaseAuthenticatedApi {
             );
     }
 
+    public getOneUser(userId: string): Observable<User> {
+        const reqPath: string = `${this.baseUrl}/api/users/@meh/one`;
+        return this.httpClient
+            .patch<User>(reqPath, {
+                userId
+            },this.createRequestOptions())
+            .pipe(
+                catchError(this.handleError),
+                tap(accessTokenRefresher)
+            );
+    }
+
     public getMyVehicles(): Observable<ProjectVehicle[]> {
         const reqPath: string = `${this.baseUrl}/api/users/@meh/myVehicles`;
         return this.httpClient
