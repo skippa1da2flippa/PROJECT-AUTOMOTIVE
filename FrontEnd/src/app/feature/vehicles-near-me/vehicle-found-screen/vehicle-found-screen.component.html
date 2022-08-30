@@ -1,0 +1,54 @@
+<div class="container-center-horizontal">
+    <div class="ipad-nexus-9-4 screen">
+        <div class="raggruppa-container">
+            <div class="raggruppa-32">
+                <div class="raggruppa-31 pointer" (click)="redirect('/homepage')"></div>
+                <div class="flex-col">
+                    <div class="raggruppa-29">
+                        <div class="vehicles-near-me helveticaneue-bold-white-18px pointer" (click)="redirect('/vehiclesNearMe')">Vehicles near me</div>
+                        <div class="routines helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/routines')">Routines</div>
+                        <div class="maps helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/maps')">Maps</div>
+                        <div class="my-vehicles helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/myVehicles')">My vehicles</div>
+                        <div class="enjoyed-vehicles helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/enjoyedVehicles')">Enjoyed vehicles</div>
+                        <div class="notifications helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/notifications')">Notifications</div>
+                    </div>
+                    <div class="rettangolo-32"></div>
+                </div>
+                <div class="raggruppa-30 border-2px-cloud" (click)="redirect('/profile')">
+                    <img class="businessman-with-arm pointer" src="assets/images/gends%20-%20Copy.png" />
+                </div>
+            </div>
+            <div class="raggruppa-350">
+                <div class="raggruppa-224">
+                    <div class="overlap-group1">
+                        <div class="overlap-group">
+                            <div class="rettangolo-35"></div>
+                        </div>
+                        <div class="raggruppa-202">
+                            <div class="nicola-padovan">{{this.cookieVehicle.owner.name + " " + this.cookieVehicle.owner.surname}}</div>
+                            <div class="ellisse-13"></div>
+                        </div>
+                        <div class="raggruppa-201">
+                            <div class="raggruppa-200 pointer" (click)="getFriend(this.cookieVehicle.owner.userId)">
+                                <div class="raggruppa-49 "></div>
+                            </div>
+                            <div class="raggruppa-199">
+                                <div class="raggruppa-51 pointer" (click)="takeOverTheVehicle()"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="raggruppa-349">
+                    <div class="overlap-group-1">
+                        <div class="raggruppa-42">
+                            <div class="raggruppa-41">
+                                <div class="raggruppa-40"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

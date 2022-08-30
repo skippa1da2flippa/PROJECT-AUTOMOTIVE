@@ -10,6 +10,27 @@ const routes: Routes = [
             ),
     },
     {
+        path: 'myVehicles',
+        loadChildren: () =>
+            import('./feature/my-vehicles/my-vehicles.module').then(
+                (m) => m.MyVehiclesModule
+            ),
+    },
+    {
+        path: 'enjoyedVehicles',
+        loadChildren: () =>
+            import('./feature/enjoyed-vehicles/enjoyed-vehicles.module').then(
+                (m) => m.EnjoyedVehiclesModule
+            ),
+    },
+    {
+        path: 'vehicleControl',
+        loadChildren: () =>
+            import('./shared/vehicle-control/vehicle-control.module').then(
+                (m) => m.VehicleControlModule
+            ),
+    },
+    {
         path: 'maps',
         loadChildren: () =>
             import('./feature/maps/maps.module').then(

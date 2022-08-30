@@ -1,0 +1,694 @@
+/* screen - ipad-nexus-9-3 */
+
+.ipad-nexus-9-3 {
+    align-items: flex-start;
+    background-color: var(--white);
+    display: flex;
+    overflow: hidden;
+    width: 1024px;
+}
+
+.ipad-nexus-9-3 .overlap-group3 {
+    height: 768px;
+    position: relative;
+    width: 1042px;
+}
+
+.ipad-nexus-9-3 .rettangolo-4 {
+    background-color: var(--silver-chalice-2);
+    height: 768px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 1024px;
+}
+
+.ipad-nexus-9-3 .overlap-group {
+    border-radius: 39px;
+    height: 598px;
+    left: 41px;
+    position: absolute;
+    top: 124px;
+    width: 947px;
+}
+
+.ipad-nexus-9-3 .raggruppa-181 {
+    background-color: var(--white);
+    border-radius: 39px;
+    display: flex;
+    filter: blur(10px);;
+    height: 598px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 947px;
+}
+
+.ipad-nexus-9-3 .rettangolo-85 {
+    background-color: var(--granite-gray);
+    border-radius: 39px;
+    flex: 1;
+    margin-bottom: 2px;
+    margin-left: 3px;
+    margin-right: 2px;
+    margin-top: 3px;
+    width: 942px;
+}
+
+.ipad-nexus-9-3 .rettangolo-84 {
+    background-color: var(--granite-gray);
+    border-radius: 39px;
+    height: 593px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 942px;
+}
+
+.ipad-nexus-9-3 .raggruppa-33 {
+    align-items: flex-start;
+    display: flex;
+    height: 57px;
+    left: 41px;
+    min-width: 942px;
+    position: absolute;
+    top: 21px;
+}
+
+.ipad-nexus-9-3 .raggruppa-25 {
+    align-self: center;
+    background-image: url(../../../../assets/images/raggruppa-24-1@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 32px;
+    margin-bottom: 4.81px;
+    width: 32px;
+}
+
+.ipad-nexus-9-3 .flex-col {
+    align-items: center;
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    margin-left: 26px;
+    min-height: 41px;
+    width: 790px;
+}
+
+.ipad-nexus-9-3 .navbar {
+    align-items: flex-end;
+    display: flex;
+    height: 22px;
+    min-width: 790px;
+    opacity: 1.0;
+}
+
+.ipad-nexus-9-3 .navbar-link-vehicles-near-me {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    min-height: 23px;
+    min-width: 143px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-3 .navbar-link-routines {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 73px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-3 .navbar-link-maps {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 47px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-3 .navbar-link-my-vehicles {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -4px;
+    margin-left: 38px;
+    min-height: 24px;
+    min-width: 103px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-3 .navbar-link-enjoyed-vehicles {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 32px;
+    min-height: 23px;
+    min-width: 137px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-3 .navbar-link-notifications {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 103px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-3 .rettangolo-28 {
+    background-color: var(--white);
+    border-radius: 6px;
+    height: 4px;
+    margin-left: 64.96px;
+    margin-top: 15px;
+    width: 99px;
+}
+
+.ipad-nexus-9-3 .raggruppa-28 {
+    background-color: var(--white);
+    border-radius: 28px;
+    display: flex;
+    height: 56px;
+    margin-left: 38px;
+    width: 56px;
+}
+
+.ipad-nexus-9-3 .businessman-with-arm {
+    border-radius: 25.5px;
+    flex: 1;
+    margin-bottom: 2px;
+    margin-left: 3px;
+    margin-right: 2px;
+    margin-top: 3px;
+    object-fit: cover;
+    width: 51px;
+}
+
+.ipad-nexus-9-3 .raggruppa-226 {
+    align-items: flex-end;
+    display: flex;
+    height: 63px;
+    justify-content: space-between;
+    left: 110px;
+    position: absolute;
+    top: 619px;
+    width: 349px;
+}
+
+.ipad-nexus-9-3 .raggruppa-210 {
+    align-items: flex-end;
+    display: flex;
+    height: 52px;
+    margin-bottom: 0;
+    min-width: 237px;
+}
+
+.ipad-nexus-9-3 .flex-col-1 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: -4px;
+    min-height: 54px;
+    width: 123px;
+}
+
+.ipad-nexus-9-3 .license-plate {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 24px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-3 .model-number {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-top: 6px;
+    min-height: 24px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-3 .flex-col-2 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: -3.5px;
+    margin-left: 27px;
+    min-height: 53px;
+    width: 87px;
+}
+
+.ipad-nexus-9-3 .ab-564-cd {
+    letter-spacing: 0;
+    line-height: 18px;
+    min-height: 23px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-3 .xv85-r29 {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-top: 7px;
+    min-height: 23px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-3 .raggruppa-220 {
+    background-image: url(../../../../assets/images/raggruppa-219-2@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    margin-bottom: 0.3px;
+    margin-right: 0;
+    width: 40.98px;
+}
+
+.ipad-nexus-9-3 .overlap-group1 {
+    height: 454px;
+    left: 77px;
+    position: absolute;
+    top: 149px;
+    width: 406px;
+}
+
+.ipad-nexus-9-3 .full-concept-v28-_-3 {
+    height: 454px;
+    left: 99px;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 208px;
+}
+
+.ipad-nexus-9-3 .raggruppa-232 {
+    display: flex;
+    height: 98px;
+    justify-content: space-between;
+    left: 0;
+    position: absolute;
+    top: 178px;
+    width: 406px;
+}
+
+.ipad-nexus-9-3 .raggruppa-229 {
+    background-image: url(../../../../assets/images/raggruppa-228@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    width: 93.99px;
+}
+
+.ipad-nexus-9-3 .raggruppa-231 {
+    background-image: url(../../../../assets/images/raggruppa-230@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    margin-right: 0;
+    width: 93.99px;
+}
+
+.ipad-nexus-9-3 .raggruppa-253 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    left: 562px;
+    min-height: 346px;
+    position: absolute;
+    top: 336px;
+    width: 386px;
+}
+
+.ipad-nexus-9-3 .flex-row {
+    align-items: center;
+    display: flex;
+    margin-left: 0;
+    min-width: 386px;
+}
+
+.ipad-nexus-9-3 .overlap-group-1 {
+    height: 25px;
+    position: relative;
+    width: 59px;
+}
+
+.ipad-nexus-9-3 .rettangolo-72 {
+    background-color: var(--white);
+    height: 3px;
+    left: 52px;
+    position: absolute;
+    top: 11px;
+    width: 7px;
+}
+
+.ipad-nexus-9-3 .raggruppa-127 {
+    background-image: url(../../../../assets/images/raggruppa-126-1@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 25px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 59px;
+}
+
+.ipad-nexus-9-3 .overlap-group2 {
+    height: 193px;
+    margin-left: 38px;
+    position: relative;
+    width: 193px;
+}
+
+.ipad-nexus-9-3 .overlap-group1-1 {
+    height: 193px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 193px;
+}
+
+.ipad-nexus-9-3 .raggruppa-216 {
+    display: flex;
+    height: 193px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 193px;
+}
+
+.ipad-nexus-9-3 .raggruppa-215 {
+    display: flex;
+    flex: 1;
+    width: 193px;
+}
+
+.ipad-nexus-9-3 .raggruppa-214 {
+    display: flex;
+    flex: 1;
+    margin-bottom: 26.2px;
+    margin-left: 26.4px;
+    margin-right: 26.2px;
+    margin-top: 26.4px;
+    width: 140.42px;
+}
+
+.ipad-nexus-9-3 .raggruppa-213 {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    width: 140.42px;
+}
+
+.ipad-nexus-9-3 .raggruppa-212 {
+    background-image: url(../../../../assets/images/raggruppa-211@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    flex: 1;
+    margin-bottom: -26.2px;
+    margin-left: -26.4px;
+    margin-right: -26.2px;
+    margin-top: -26.4px;
+    width: 193px;
+}
+
+.ipad-nexus-9-3 .ellisse-2 {
+    background-color: var(--white);
+    border: 2px solid #b1aeae;
+    border-radius: 12.5px;
+    height: 25px;
+    left: 116px;
+    position: absolute;
+    top: 29px;
+    width: 25px;
+}
+
+.ipad-nexus-9-3 .ellisse-14 {
+    background-color: #ffff00;
+    border: 2px solid var(--silver-chalice);
+    border-radius: 26px;
+    height: 52px;
+    left: 71px;
+    position: absolute;
+    top: 71px;
+    width: 52px;
+}
+
+.ipad-nexus-9-3 .raggruppa-132 {
+    background-color: var(--canary);
+    border-radius: 13px;
+    display: flex;
+    height: 25px;
+    margin-left: 48px;
+    width: 48px;
+}
+
+.ipad-nexus-9-3 .ellisse-9 {
+    background-color: var(--white);
+    border-radius: 9.5px;
+    margin-bottom: 3px;
+    margin-left: 3px;
+    margin-top: 3px;
+    width: 19px;
+}
+
+.ipad-nexus-9-3 .flex-col-3 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    min-height: 143px;
+    width: 386px;
+}
+
+.ipad-nexus-9-3 .raggruppa-container {
+    align-items: flex-end;
+    align-self: flex-end;
+    display: flex;
+    min-width: 377px;
+}
+
+.ipad-nexus-9-3 .raggruppa-130 {
+    height: 45px;
+    object-fit: cover;
+    width: 40px;
+}
+
+.ipad-nexus-9-3 .raggruppa-134 {
+    align-items: center;
+    background-image: url(../../../../assets/images/tracciato-1606@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    display: flex;
+    height: 33px;
+    margin-bottom: 0.07px;
+    margin-left: 60px;
+    min-width: 169px;
+    padding: 5px 9.0px;
+}
+
+.ipad-nexus-9-3 .raggruppa-119 {
+    background-image: url(../../../../assets/images/raggruppa-118-1@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 2px;
+    margin-top: 0.59px;
+    width: 19px;
+}
+
+.ipad-nexus-9-3 .x21-c {
+    align-self: flex-end;
+    color: var(--white);
+    font-family: var(--font-family-helveticaneue-regular);
+    font-size: var(--font-size-s);
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 15px;
+    margin-left: 40px;
+    min-height: 19px;
+    min-width: 36px;
+    white-space: nowrap;
+}
+
+.ipad-nexus-9-3 .raggruppa-117 {
+    display: flex;
+    height: 19px;
+    margin-left: 37px;
+    margin-top: 0.59px;
+    transform: rotate(90deg);
+    width: 19px;
+}
+
+.ipad-nexus-9-3 .raggruppa-116 {
+    flex: 1;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    object-fit: cover;
+    transform: rotate(-90deg);
+    width: 18.59px;
+}
+
+.ipad-nexus-9-3 .raggruppa-135 {
+    background-color: var(--canary);
+    border-radius: 13px;
+    display: flex;
+    height: 25px;
+    margin-bottom: 4.07px;
+    margin-left: 60px;
+    width: 48px;
+}
+
+.ipad-nexus-9-3 .raggruppa-84 {
+    align-items: flex-end;
+    display: flex;
+    height: 49px;
+    margin-top: 49px;
+    width: 336px;
+}
+
+.ipad-nexus-9-3 .enjoyers {
+    height: 24px;
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -9.6px;
+    white-space: nowrap;
+    width: 74px;
+}
+
+.ipad-nexus-9-3 .raggruppa-83 {
+    align-items: flex-end;
+    display: flex;
+    flex: 1;
+    margin-left: 26.0px;
+    min-width: calc(100.00% - 100px);
+    padding: 0 0.0px;
+}
+
+.ipad-nexus-9-3 .raggruppa-65 {
+    background-image: url(../../../../assets/images/raggruppa-64-4@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 49px;
+    margin-bottom: 0;
+    width: 54px;
+}
+
+.ipad-nexus-9-3 .raggruppa-7 {
+    background-image: url(../../../../assets/images/raggruppa-64-4@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 49px;
+    margin-bottom: 0;
+    margin-left: 6px;
+    width: 54px;
+}
+
+.ipad-nexus-9-3 .raggruppa-80 {
+    align-self: flex-start;
+    background-image: url(../../../../assets/images/raggruppa-64-4@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 49px;
+    margin-left: 6px;
+    margin-top: 0;
+    width: 54px;
+}
+
+.ipad-nexus-9-3 .raggruppa-309 {
+    display: flex;
+    height: 277px;
+    left: 482px;
+    position: absolute;
+    top: 99px;
+    width: 560px;
+}
+
+.ipad-nexus-9-3 .raggruppa-306 {
+    align-items: flex-start;
+    display: flex;
+    flex: 1;
+    min-width: 560px;
+}
+
+.ipad-nexus-9-3 .custom_seat_-aug-container {
+    height: 277px;
+    position: relative;
+    width: 560px;
+}
+
+.ipad-nexus-9-3 .custom_-seat_2022-au {
+    height: 277px;
+    left: 0;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 433px;
+}
+
+.ipad-nexus-9-3 .custom_-seat_2022-au-1 {
+    height: 277px;
+    left: 127px;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 433px;
+}
+
+.ipad-nexus-9-3 .raggruppa-322 {
+    align-items: flex-end;
+    display: flex;
+    height: 143px;
+    justify-content: space-between;
+    left: 562px;
+    position: absolute;
+    top: 161px;
+    width: 63px;
+}
+
+.ipad-nexus-9-3 .raggruppa-318 {
+    background-image: url(../../../../assets/images/raggruppa-317@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 18.42px;
+    width: 29.28px;
+}
+
+.ipad-nexus-9-3 .raggruppa-308 {
+    background-image: url(../../../../assets/images/raggruppa-307-1@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    margin-bottom: 0;
+    margin-right: 0;
+    width: 26.79px;
+}
+
+.ipad-nexus-9-3 .raggruppa-321 {
+    align-items: flex-end;
+    display: flex;
+    height: 143px;
+    justify-content: space-between;
+    left: 885px;
+    position: absolute;
+    top: 161px;
+    width: 63px;
+}
+
+.ipad-nexus-9-3 .raggruppa-320 {
+    background-image: url(../../../../assets/images/raggruppa-307-2@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    margin-bottom: 0;
+    width: 26.79px;
+}
+
+.ipad-nexus-9-3 .raggruppa-319 {
+    background-image: url(../../../../assets/images/raggruppa-317-1@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 18.42px;
+    margin-right: 0;
+    width: 29.28px;
+}

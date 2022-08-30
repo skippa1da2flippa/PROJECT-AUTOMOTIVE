@@ -2,7 +2,7 @@
     <div class="ipad-nexus-9-5 screen">
         <div class="overlap-group">
             <div class="raggruppa-32">
-                <div class="raggruppa-31 pointer" (click)="redirect('/profile')"></div>
+                <div class="raggruppa-31 pointer" (click)="redirect('/homepage')"></div>
                 <div class="flex-col">
                     <div class="raggruppa-29">
                         <div class="vehicles-near-me helveticaneue-bold-white-18px pointer" (click)="redirect('/vehiclesNearMe')">Vehicles near me</div>
@@ -20,11 +20,11 @@
             </div>
             <div class="raggruppa-container">
                 <div class="raggruppa-270">
-                    <img class="dark-map" src="assets/images/dark-map@1x.png" />
+                    <img class="dark-map" src="assets/images/dark-map@1x.png"/>
                 </div>
                 <div class="raggruppa-42">
                     <div class="raggruppa-41">
-                        <div class="raggruppa-40"></div>
+                        <div class="raggruppa-40 pointer" (click)="redirect('/vehiclesNearMe/gotOne')"></div>
                     </div>
                 </div>
             </div>

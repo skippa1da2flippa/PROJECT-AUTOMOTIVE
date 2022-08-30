@@ -133,3 +133,9 @@
 body {
     background-color: #696969;
 }
+
+.project-automotive-font{
+    font-family: var(--font-family-helveticaneue-bold);
+    color: white;
+    font-size: 18px;
+}
