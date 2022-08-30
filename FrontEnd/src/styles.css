@@ -129,3 +129,7 @@
 .pointer {
     cursor: pointer;
 }
+
+body {
+    background-color: #696969;
+}

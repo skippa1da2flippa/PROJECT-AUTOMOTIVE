@@ -1,15 +1,29 @@
 import {Router} from "@angular/router";
 import {HtmlErrorMessage} from "./html-error";
+import {EnjoyerMessage} from "../events-data/enjoyer-message";
+import {ModelTypes} from "../response-data/project-vehicle";
 
 export class ErrorHandler {
+    public popUpMessage: EnjoyerMessage
     public router: Router
     public userMessage: HtmlErrorMessage = new HtmlErrorMessage();
     constructor(router: Router) {
         this.router = router
+        this.popUpMessage = {
+            enjoyerId: "",
+            enjoyerName: "",
+            enjoyerSurname: "",
+            vehicleId: "",
+            vehicleModel: ModelTypes.projectZ
+        }
     }
 
     public async redirect(where: string) {
         await this.router.navigate([where])
+    }
+
+    protected addPopUpInfo(data: EnjoyerMessage): void {
+        this.popUpMessage = data
     }
 
     protected errorHandler = async (err: any) => {

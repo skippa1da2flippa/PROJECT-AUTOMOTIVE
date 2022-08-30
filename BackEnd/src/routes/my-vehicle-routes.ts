@@ -13,15 +13,15 @@ import {
     addEnjoyer,
     removeEnjoyer,
     changeOwner,
-    updateVehiclePsw
+    updateVehiclePsw, VehicleModel
 } from '../model/database/my-vehicle'
 import {LegalInfos} from "../model/database/legalInfos";
 import {ioServer} from "../index";
 import {addRoutine, getSaltNdHash, getUserById, updatePsw, UserDocument} from "../model/database/user";
 import {UpdatePasswordRequest} from "./user-routes";
 import {Routine} from "../model/database/routine";
+import {ServerError} from "../model/errors/server-error";
 
-// TODO add || "" to every invocation of: new Types.ObjectId(req.body.wht)
 // TODO add accessToken to all the @it endpoints
 
 interface UserVehicleEndpointLocals {
@@ -278,6 +278,66 @@ router.patch(
         }
     }
 );
+
+// TODO delete this endpoint,
+router.get(
+    "/myVehicles/allVehicles",
+    authenticateToken,
+    async (req:AuthenticatedRequest, res: UserVehicleEndPointResponse) => {
+        try {
+            let collection = []
+
+            const vehicles = await VehicleModel.find().catch((err) => {
+                return Promise.reject(new ServerError("No vehicles found"))
+            })
+
+            for (const vehicle of vehicles) {
+                let enjoyers = []
+                let user = await getUserById(vehicle.owner)
+                let owner = {
+                    name: user.name,
+                    status: user.status,
+                    surname:user.surname,
+                    userId: user._id,
+                    email: user.email,
+                    nickname: user.nickname
+                }
+
+                for(let idx in vehicle.enjoyers){
+                    let enjoyer = await getUserById(vehicle.enjoyers[idx])
+                    enjoyers.push({
+                        name: enjoyer.name,
+                        surname:enjoyer.surname,
+                        status: user.status,
+                        userId: enjoyer._id,
+                        email: enjoyer.email,
+                        nickname: enjoyer.nickname
+                    })
+                }
+
+                collection.push({
+                    vehicleId: vehicle._id,
+                    type: vehicle.type,
+                    owner: owner,
+                    enjoyers: enjoyers,
+                    legalInfos: vehicle.legalInfos,
+                })
+            }
+
+            return res.status(201).json({
+                vehicles: collection,
+                accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
+            })
+
+        } catch(err) {
+            return res.status(err.statusCode).json({
+                timestamp: toUnixSeconds(new Date()),
+                errorMessage: err.message,
+                requestPath: req.path,
+            });
+        }
+    }
+)
 
 
 router.patch(

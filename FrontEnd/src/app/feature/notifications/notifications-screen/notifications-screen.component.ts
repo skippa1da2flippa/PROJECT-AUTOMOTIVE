@@ -44,14 +44,13 @@ export class NotificationsScreenComponent extends ErrorHandler implements OnInit
         };
 
         const pollingNewNotifications = (notification: Notification) => {
-            this.interactiveNotification.getWholeNotification(notification.type, notification.sender)
+            this.notifications.push(
+                this.interactiveNotification.getWholeNotification(notification.type, notification.sender)
+            )
         };
 
         pollingDeletedNotifications.bind(this);
         pollingNewNotifications.bind(this);
-
-        this.notificationReceivedListener.listen(pollingNewNotifications)
-        this.notificationDeletedListener.listen(pollingDeletedNotifications)
 
         this.notificationApi.getMyNotifications().subscribe({
             next: (data: Notification[]) => {
@@ -63,6 +62,9 @@ export class NotificationsScreenComponent extends ErrorHandler implements OnInit
             },
             error: super.errorHandler
         })
+
+        this.notificationReceivedListener.listen(pollingNewNotifications)
+        this.notificationDeletedListener.listen(pollingDeletedNotifications)
 
         this.userApi.getMeh().subscribe({
             next: (data: User) => {
@@ -82,8 +84,6 @@ export class NotificationsScreenComponent extends ErrorHandler implements OnInit
             receiverId: senderId,
             senderId: this.meh.userId
         })
-
-        this.notifications.forEach(this.forEachNotificationDeleter(senderId))
     }
 
     public deleteNotification(data: Notification) {

@@ -80,6 +80,6 @@ table th:nth-of-type(3) {
 
 ### Enjoyer Request
 
-| Event name        | Description                                                                                            | Event Data                                                                       |
-|:------------------|:-------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------|
-| enjoyer-request   | Every time a user (client-side) emit a socket with this event name,the vehicle owner receive some data | With this event, a [EnjoyerMessage](#enjoyer-Message) is expected to be received |
+| Event name        | Description                                                                                               | Event Data                                                                       |
+|:------------------|:----------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------|
+| enjoyer-request   | Every time a it's emitted (server-side) a socket with this event name,the vehicle owner receive some data | With this event, a [EnjoyerMessage](#enjoyer-Message) is expected to be received |

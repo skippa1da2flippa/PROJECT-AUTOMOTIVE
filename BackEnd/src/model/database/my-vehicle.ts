@@ -218,7 +218,7 @@ export async function getVehiclesByUserId(userId: Types.ObjectId): Promise<MyVeh
     try {
         vehicles = await VehicleModel.find()
 
-        // TO DO un giorno forse si mettera meglio
+        // TODO un giorno forse si mettera meglio
         vehicles = vehicles.filter(elem => elem.owner.toString() === userId.toString())
 
         for (const vehicle of vehicles) {

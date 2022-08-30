@@ -4,6 +4,7 @@ const msgs404: string[] = [
     'Notification not found', 
     "No vehicle with that identifier", 
     "No vehicles related to the user",
+    "No vehicles found",
     "No enjoyed vehicles related to this user",
     "No user routine found matching the id",
     "No user/notification with that identifier",

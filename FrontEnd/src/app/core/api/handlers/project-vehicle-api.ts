@@ -8,6 +8,10 @@ import {accessTokenRefresher, User} from "../../model/response-data/user";
 import {BaseResponse} from "./user-api";
 
 
+interface AllVehiclesResponse extends BaseResponse {
+    vehicles: ProjectVehicle[]
+}
+
 interface VehicleEnjoyerResponse extends BaseResponse {
     enjoyers: User[]
 }
@@ -37,6 +41,21 @@ export class ProjectVehicleApi extends BaseAuthenticatedApi {
             .pipe(catchError(this.handleError), tap(accessTokenRefresher));
     }
 
+    //TODO to check if it work
+    //TODO delete later
+    public getAllVehicles(): Observable<ProjectVehicle[]> {
+        const reqPath: string = "/myVehicles/allVehicles"
+        return this.httpClient
+            .get<AllVehiclesResponse>(reqPath, this.createRequestOptions())
+            .pipe(
+                catchError(this.handleError),
+                tap(accessTokenRefresher),
+                map<AllVehiclesResponse, ProjectVehicle[]>((res) => {
+                    return res.vehicles
+                })
+            )
+    }
+
     public getVehicleOwner(vehicleId: string): Observable<User> {
         const reqPath: string = `${this.baseUrl}/api/myVehicle/vehicleId/owner`
         return this.httpClient
@@ -62,7 +81,6 @@ export class ProjectVehicleApi extends BaseAuthenticatedApi {
     }
 
     public removeVehicleEnjoyer(vehicleId: string, enjoyerId: string): Observable<void> {
-        const queryParams: string = `action=remove`
         const reqPath: string = `${this.baseUrl}/api/myVehicle/vehicleId/enjoyers`
         return this.httpClient
             .put<RemoveVehicleEnjoyerResponse>(reqPath, {
