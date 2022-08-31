@@ -227,7 +227,7 @@ router.post(
         };
         // Refresh token generation with 2 h duration, allow a user to maintain a session and be issued with access tokens
         const refreshToken = jsonwebtoken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
-            expiresIn: '30m',
+            expiresIn: '10m',
         });
 
         const accessToken = generateAccessToken(tokensData.Id);

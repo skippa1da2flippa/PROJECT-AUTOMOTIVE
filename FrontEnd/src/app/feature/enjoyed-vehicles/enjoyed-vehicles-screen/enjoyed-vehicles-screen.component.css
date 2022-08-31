@@ -116,9 +116,9 @@
     background-color: var(--white);
     border-radius: 6px;
     height: 4px;
-    margin-right: 351.0px;
+    margin-right: -351.0px;
     margin-top: 15px;
-    width: 75px;
+    width: 175px;
 }
 
 .ipad-15 .raggruppa-28 {

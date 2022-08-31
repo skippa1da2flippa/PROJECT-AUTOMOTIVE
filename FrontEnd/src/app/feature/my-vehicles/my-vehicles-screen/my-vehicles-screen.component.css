@@ -1,113 +1,33 @@
-/* screen - ipad-1 */
+/* screen - ipad-15 */
 
-.ipad-1 {
+.ipad-15 {
     align-items: flex-start;
     background-color: var(--white);
     display: flex;
-    overflow: hidden;
+    height: 1492px;
     width: 1024px;
 }
 
-.ipad-1 .overlap-group4 {
-    height: 768px;
-    margin-left: -39px;
-    position: relative;
-    width: 1063px;
-}
-
-.ipad-1 .rettangolo-4 {
-    background-color: var(--silver-chalice-2);
-    height: 768px;
-    left: 39px;
-    position: absolute;
-    top: 0;
+.ipad-15 .overlap-group1 {
+    background-color: var(--silver-chalice);
+    display: flex;
+    flex-direction: column;
+    min-height: 1491px;
+    padding: 21px 41.0px;
     width: 1024px;
 }
 
-.ipad-1 .overlap-group {
-    border-radius: 39px;
-    height: 278px;
-    left: 80px;
-    position: absolute;
-    top: 316px;
-    width: 947px;
-}
-
-.ipad-1 .raggruppa-181 {
-    background-color: var(--white);
-    border-radius: 39px;
-    display: flex;
-    height: 278px;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 947px;
-}
-
-.ipad-1 .rettangolo-85 {
-    background-color: var(--granite-gray);
-    border-radius: 39px;
-    flex: 1;
-    margin-bottom: 2px;
-    margin-left: 3px;
-    margin-right: 2px;
-    margin-top: 3px;
-    width: 942px;
-}
-
-.ipad-1 .rettangolo-84 {
-    background-color: var(--granite-gray);
-    border-radius: 39px;
-    height: 273px;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 942px;
-}
-
-.ipad-1 .overlap-group1 {
-    border-radius: 39px;
-    height: 120px;
-    left: 80px;
-    position: absolute;
-    top: 141px;
-    width: 947px;
-}
-
-.ipad-1 .raggruppa-181-1 {
-    background-color: var(--white);
-    border-radius: 39px;
-    display: flex;
-    height: 120px;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 947px;
-}
-
-.ipad-1 .rettangolo-84-1 {
-    background-color: var(--granite-gray);
-    border-radius: 39px;
-    height: 115px;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 942px;
-}
-
-.ipad-1 .raggruppa-33 {
+.ipad-15 .raggruppa-324 {
     align-items: flex-start;
     display: flex;
     height: 57px;
-    left: 80px;
+    justify-content: flex-end;
     min-width: 942px;
-    position: absolute;
-    top: 21px;
 }
 
-.ipad-1 .raggruppa-25 {
+.ipad-15 .raggruppa-25 {
     align-self: center;
-    background-image: url(../../../../assets/images/raggruppa-24-1@1x.png);
+    background-image: url(https://anima-uploads.s3.amazonaws.com/projects/62f90f12e2894db8bf01d639/releases/62f90f37f5e0f8f0397614fc/img/raggruppa-24-1@1x.png);
     background-position: 50% 50%;
     background-size: cover;
     height: 32px;
@@ -115,8 +35,8 @@
     width: 32px;
 }
 
-.ipad-1 .flex-col {
-    align-items: flex-end;
+.ipad-15 .flex-col {
+    align-items: center;
     align-self: flex-end;
     display: flex;
     flex-direction: column;
@@ -125,7 +45,7 @@
     width: 790px;
 }
 
-.ipad-1 .navbar {
+.ipad-15 .raggruppa-26 {
     align-items: flex-end;
     display: flex;
     height: 22px;
@@ -133,7 +53,7 @@
     opacity: 1.0;
 }
 
-.ipad-1 .navbar-link-vehicles-near-me {
+.ipad-15 .vehicles-near-me {
     letter-spacing: 0;
     line-height: 18px;
     margin-bottom: -3.5px;
@@ -142,27 +62,27 @@
     white-space: nowrap;
 }
 
-.ipad-1 .navbar-link-routines {
+.ipad-15 .routines {
     letter-spacing: 0;
     line-height: 18px;
-    margin-bottom: -3.5px;
+    margin-bottom: -4px;
     margin-left: 38px;
-    min-height: 23px;
-    min-width: 73px;
+    min-height: 24px;
+    min-width: 78px;
     white-space: nowrap;
 }
 
-.ipad-1 .navbar-link-maps {
+.ipad-15 .maps {
     letter-spacing: 0;
     line-height: 18px;
     margin-bottom: -3.5px;
-    margin-left: 38px;
+    margin-left: 33px;
     min-height: 23px;
     min-width: 47px;
     white-space: nowrap;
 }
 
-.ipad-1 .navbar-link-my-vehicles {
+.ipad-15 .my-vehicles {
     letter-spacing: 0;
     line-height: 18px;
     margin-bottom: -3.5px;
@@ -172,36 +92,36 @@
     white-space: nowrap;
 }
 
-.ipad-1 .navbar-link-enjoyed-vehicles {
-    letter-spacing: 0;
-    line-height: 18px;
-    margin-bottom: -4px;
-    margin-left: 38px;
-    min-height: 24px;
-    min-width: 146px;
-    white-space: nowrap;
-}
-
-.ipad-1 .navbar-link-notifications {
+.ipad-15 .enjoyed-vehicles {
     letter-spacing: 0;
     line-height: 18px;
     margin-bottom: -3.5px;
-    margin-left: 29px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 137px;
+    white-space: nowrap;
+}
+
+.ipad-15 .notifications {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
     min-height: 23px;
     min-width: 103px;
     white-space: nowrap;
 }
 
-.ipad-1 .rettangolo-28 {
+.ipad-15 .rettangolo-28 {
     background-color: var(--white);
     border-radius: 6px;
     height: 4px;
-    margin-right: 134.02px;
+    margin-right: -71.0px;
     margin-top: 15px;
-    width: 143px;
+    width: 135px;
 }
 
-.ipad-1 .raggruppa-28 {
+.ipad-15 .raggruppa-28 {
     background-color: var(--white);
     border-radius: 28px;
     display: flex;
@@ -210,7 +130,7 @@
     width: 56px;
 }
 
-.ipad-1 .businessman-with-arm {
+.ipad-15 .businessman-with-arm {
     border-radius: 25.5px;
     flex: 1;
     margin-bottom: 2px;
@@ -221,199 +141,53 @@
     width: 51px;
 }
 
-.ipad-1 .full-concept-v28-_-2 {
-    height: 290px;
-    left: 0;
-    object-fit: cover;
-    position: absolute;
-    top: 304px;
-    width: 635px;
+.ipad-15 .overlap-group {
+    align-self: center;
+    border-radius: 17.5px;
+    height: 35px;
+    margin-left: 3.0px;
+    margin-top: 39px;
+    position: relative;
+    width: 35px;
 }
 
-.ipad-1 .raggruppa-container {
-    height: 82px;
-    left: 669px;
+.ipad-15 .raggruppa-117 {
+    background-image: url(https://anima-uploads.s3.amazonaws.com/projects/62f90f12e2894db8bf01d639/releases/62f90f37f5e0f8f0397614fc/img/raggruppa-116@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 22px;
+    left: 7px;
     position: absolute;
-    top: 414px;
-    width: 279px;
+    top: 7px;
+    width: 22px;
 }
 
-.ipad-1 .raggruppa-243 {
-    align-items: flex-end;
-    display: flex;
-    height: 82px;
+.ipad-15 .ellisse-12 {
+    border-radius: 17.5px;
+    height: 35px;
     left: 0;
-    min-width: 279px;
     position: absolute;
     top: 0;
+    width: 35px;
 }
 
-.ipad-1 .flex-col-1 {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: -4px;
-    min-height: 84px;
-    width: 123px;
+.routine-container{
+    width:80%;
+    height:270px;
+    background-color: #696969;
+    margin: 20px auto;
+    border-radius: 50px;
 }
 
-.ipad-1 .owner {
-    letter-spacing: 0;
-    line-height: 18px;
-    min-height: 24px;
-    white-space: nowrap;
+.option-container{
+    width: 6%;
+    height: 30px;
+    text-align: center;
+    margin: 0 auto;
 }
 
-.ipad-1 .flex-col-item {
-    letter-spacing: 0;
-    line-height: 18px;
-    margin-top: 6px;
-    min-height: 24px;
-    white-space: nowrap;
-}
-
-.ipad-1 .flex-col-2 {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: -3.5px;
-    margin-left: 27px;
-    min-height: 83px;
-    width: 129px;
-}
-
-.ipad-1 .nicola-padovan {
-    letter-spacing: 0;
-    line-height: 18px;
-    min-height: 23px;
-    white-space: nowrap;
-}
-
-.ipad-1 .flex-col-item-1 {
-    letter-spacing: 0;
-    line-height: 18px;
-    margin-top: 7px;
-    min-height: 23px;
-    white-space: nowrap;
-}
-
-.ipad-1 .raggruppa-244 {
-    background-color: var(--green);
-    border-radius: 5.5px;
-    height: 11px;
-    left: 65px;
-    position: absolute;
-    top: 8px;
-    width: 11px;
-}
-
-.ipad-1 .raggruppa-247 {
-    align-items: center;
-    display: flex;
-    height: 45px;
-    left: 154px;
-    min-width: 407px;
-    position: absolute;
-    top: 179px;
-}
-
-.ipad-1 .add-friends {
-    letter-spacing: 0;
-    line-height: 18px;
-    margin-top: 7.0px;
-    min-height: 24px;
-    min-width: 103px;
-    white-space: nowrap;
-}
-
-.ipad-1 .overlap-group3 {
-    align-items: flex-end;
-    border-radius: 23px;
-    display: flex;
-    height: 45px;
-    margin-left: 16px;
-    min-width: 288px;
-    padding: 9.5px 21px;
-}
-
-.ipad-1 .search {
-    letter-spacing: 0;
-    line-height: 18px;
-    min-height: 23px;
-    min-width: 58px;
-    white-space: nowrap;
-}
-
-.ipad-1 .raggruppa-84 {
-    display: flex;
-    height: 49px;
-    left: 689px;
-    position: absolute;
-    top: 177px;
-    width: 236px;
-}
-
-.ipad-1 .raggruppa-83 {
-    align-items: flex-end;
-    display: flex;
-    flex: 1;
-    min-width: 235.94px;
-    padding: 0.0px 0.0px;
-}
-
-.ipad-1 .raggruppa-65 {
-    background-image: url(../../../../assets/images/raggruppa-64-4@1x.png);
-    background-position: 50% 50%;
-    background-size: cover;
-    height: 49px;
-    margin-bottom: 0;
-    width: 54px;
-}
-
-.ipad-1 .raggruppa-7 {
-    background-image: url(../../../../assets/images/raggruppa-64-4@1x.png);
-    background-position: 50% 50%;
-    background-size: cover;
-    height: 49px;
-    margin-bottom: 0;
-    margin-left: 6px;
-    width: 54px;
-}
-
-.ipad-1 .raggruppa-80 {
-    align-self: flex-start;
-    background-image: url(../../../../assets/images/raggruppa-64-4@1x.png);
-    background-position: 50% 50%;
-    background-size: cover;
-    height: 49px;
-    margin-left: 6px;
-    width: 54px;
-}
-
-.ipad-1 .raggruppa-426 {
-    align-items: flex-end;
-    display: flex;
-    height: 22px;
-    justify-content: space-between;
-    left: 279px;
-    position: absolute;
-    top: 547px;
-    width: 78px;
-}
-
-.ipad-1 .vehicle {
-    letter-spacing: 0;
-    line-height: 18px;
-    margin-bottom: -4px;
-    margin-top: 2px;
-    white-space: nowrap;
-    width: 61px;
-}
-
-.ipad-1 .raggruppa-425 {
-    background-color: var(--green);
-    border-radius: 5.5px;
-    height: 11px;
-    margin-bottom: 3px;
-    width: 11px;
+.image-container{
+    height: 100%;
+    width: 50px;
+    background-color: #696969;
 }

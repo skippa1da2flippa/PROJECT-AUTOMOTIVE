@@ -6,7 +6,7 @@
                 <div class="flex-col">
                     <div class="raggruppa-26">
                         <div class="vehicles-near-me helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/vehiclesNearMe')">Vehicles near me</div>
-                        <div class="routines helveticaneue-normal-white-18px pointer" (click)="redirect('/routines')">Routines</div>
+                        <div class="routines helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/routines')">Routines</div>
                         <div class="maps helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/maps')">Maps</div>
                         <div class="my-vehicles helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/myVehicles')">My vehicles</div>
                         <div class="enjoyed-vehicles helveticaneue-bold-white-18px pointer" (click)="redirect('/enjoyedVehicles')">Enjoyed vehicles</div>
@@ -21,9 +21,61 @@
                     />
                 </div>
             </div>
-            <!--scrivi qui-->
+            <div class="overlap-group">
+                <div class="raggruppa-117"></div>
+                <div class="ellisse-12 border-2px-canary pointer"></div>
+            </div>
+
+
+
+
+            <div class="routine-container"> <!-- to transform in a *ngFor -->
+
+                <div  class="option-container mt-5">
+                    <div class="image-container columns">
+                        <img src="assets/images/minus_icon_routine.png" class="ml-5 pointer">
+
+                    </div>
+                </div>
+
+                <div class="routine columns">
+                    <div class="column is-half pl-6 pt-4">
+                        <strong class="project-automotive-font">ESTATE</strong>
+                        <div class="columns mt-3">
+                            <div class="column is-half">
+                                <strong class="project-automotive-font">light_color</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">Temperature</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">Destination</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">Music</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">Timing</strong>
+                            </div>
+                            <div class="column">
+                                <strong class="project-automotive-font">blieue</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">v1</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">v1</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">v1</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">v1</strong>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="column">
+                        <img src="assets/images/unnamed--5--1@1x.png" alt="macchina">
+                    </div>
+                </div>
+            </div>
+
+
+
         </div>
     </div>
 </div>
-
 

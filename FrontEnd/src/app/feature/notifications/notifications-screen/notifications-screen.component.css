@@ -24,6 +24,7 @@
     display: flex;
     height: 57px;
     min-width: 942px;
+
 }
 
 .ipad-6 .raggruppa-25 {
@@ -244,4 +245,11 @@
     height: 73px;
     margin-top: 22px;
     width: 942px;
+}
+
+.notification-container{
+    border-radius: 30px;
+    background-color: #696969;
+    width:85%;
+    color: black;
 }

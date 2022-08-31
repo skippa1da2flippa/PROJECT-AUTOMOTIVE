@@ -42,9 +42,8 @@ export class BanListPool {
                 toUnixSeconds(new Date()) - this.bannedReferences[idx].insertedIn
             );
 
-            let hDuration = Math.floor(duration / 60)
 
-            if (hDuration >= 2) await tedisConn.del(this.bannedReferences[idx].tokenKey)
+            if (duration >= 15) await tedisConn.del(this.bannedReferences[idx].tokenKey)
         }
 
         return Promise.resolve()

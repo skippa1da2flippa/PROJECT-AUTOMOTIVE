@@ -1,25 +1,78 @@
-
 <div class="container-center-horizontal">
-    <div class="ipad-1 screen">
-        <div class="overlap-group4">
-            <div class="rettangolo-4"></div>
-            <div class="raggruppa-33">
-                <div class="raggruppa-25"></div>
+    <div class="ipad-15 screen">
+        <div class="overlap-group1">
+            <div class="raggruppa-324 mb-3">
+                <div class="raggruppa-25 pointer" (click)="redirect('/homepage')"></div>
                 <div class="flex-col">
-                    <div class="navbar">
-                        <div class="navbar-link-vehicles-near-me helveticaneue-regular-normal-white-18px">Vehicles near me</div>
-                        <div class="navbar-link-routines helveticaneue-regular-normal-white-18px">Routines</div>
-                        <div class="navbar-link-maps helveticaneue-regular-normal-white-18px">Maps</div>
-                        <div class="navbar-link-my-vehicles helveticaneue-regular-normal-white-18px">My vehicles</div>
-                        <div class="navbar-link-enjoyed-vehicles helveticaneue-bold-white-18px">Enjoyed vehicles</div>
-                        <div class="navbar-link-notifications helveticaneue-regular-normal-white-18px">Notifications</div>
+                    <div class="raggruppa-26">
+                        <div class="vehicles-near-me helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/vehiclesNearMe')">Vehicles near me</div>
+                        <div class="routines helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/routines')">Routines</div>
+                        <div class="maps helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/maps')">Maps</div>
+                        <div class="my-vehicles  helveticaneue-bold-white-18px pointer" (click)="redirect('/myVehicles')">My vehicles</div>
+                        <div class="enjoyed-vehicles helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/enjoyedVehicles')">Enjoyed vehicles</div>
+                        <div class="notifications helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/notifications')">Notifications</div>
                     </div>
                     <div class="rettangolo-28"></div>
                 </div>
-                <div class="raggruppa-28 border-2px-cloud">
-                    <img class="businessman-with-arm" src="assets/images/gends%20-%20Copy.png" />
+                <div class="raggruppa-28 border-2px-cloud" (click)="redirect('/profile')">
+                    <img
+                        class="businessman-with-arm pointer"
+                        src="assets/images/gends%20-%20Copy.png"
+                    />
                 </div>
             </div>
+
+
+
+
+
+            <div class="routine-container"> <!-- to transform in a *ngFor -->
+
+                <div  class="option-container mt-5">
+                    <div class="image-container columns">
+
+                    </div>
+                </div>
+
+                <div class="routine columns">
+                    <div class="column is-half">
+                        <img src="assets/images/unnamed--5--1@1x.png" alt="macchina">
+                    </div>
+
+                    <div class="column is-half pl-6 pt-4">
+                        <strong class="project-automotive-font">ESTATE</strong>
+                        <div class="columns mt-3">
+                            <div class="column is-half">
+                                <strong class="project-automotive-font">light_color</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">Temperature</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">Destination</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">Music</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">Timing</strong>
+                            </div>
+                            <div class="column">
+                                <strong class="project-automotive-font">blieue</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">v1</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">v1</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">v1</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">v1</strong>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
         </div>
     </div>
 </div>

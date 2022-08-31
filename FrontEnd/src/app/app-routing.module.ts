@@ -10,6 +10,13 @@ const routes: Routes = [
             ),
     },
     {
+        path: 'connectionRequest',
+        loadChildren: () =>
+            import('./shared/pop-up/pop-up.module').then(
+                (m) => m.PopUpModule
+            ),
+    },
+    {
         path: 'profile',
         loadChildren: () =>
             import('./feature/profile/profile.module').then(
