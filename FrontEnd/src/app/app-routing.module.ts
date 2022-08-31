@@ -10,6 +10,13 @@ const routes: Routes = [
             ),
     },
     {
+        path: 'profile',
+        loadChildren: () =>
+            import('./feature/profile/profile.module').then(
+                (m) => m.ProfileModule
+            ),
+    },
+    {
         path: 'myVehicles',
         loadChildren: () =>
             import('./feature/my-vehicles/my-vehicles.module').then(
