@@ -29,19 +29,19 @@
 
 
 
-            <div class="routine-container"> <!-- to transform in a *ngFor -->
+            <div class="routine-container" *ngFor="let routine of routines">
 
                 <div  class="option-container mt-5">
                     <div class="image-container columns">
-                        <img src="assets/images/minus_icon_routine.png" class="mr-3 pointer">
+                        <img src="assets/images/minus_icon_routine.png" class="mr-3 pointer" (click)="deleteRoutine(routine.name)">
 
-                        <img src="assets/images/settings_icon_routine.png" class="pointer">
+                        <img src="assets/images/settings_icon_routine.png" class="pointer" (click)="redirect('/homepage')">
                     </div>
                 </div>
 
                 <div class="routine columns">
                     <div class="column is-half pl-6 pt-4">
-                        <strong class="project-automotive-font">ESTATE</strong>
+                        <strong class="project-automotive-font">{{routine.name}}</strong>
                         <div class="columns mt-3">
                             <div class="column is-half">
                                 <strong class="project-automotive-font">light_color</strong>
@@ -55,13 +55,13 @@
                                 <strong class="project-automotive-font">Timing</strong>
                             </div>
                             <div class="column">
-                                <strong class="project-automotive-font">blieue</strong>
+                                <strong class="project-automotive-font">{{routine.lightsColor}}</strong>
                                 <br><br>
-                                <strong class="project-automotive-font">v1</strong>
+                                <strong class="project-automotive-font">{{routine.temperature}}°</strong>
                                 <br><br>
-                                <strong class="project-automotive-font">v1</strong>
+                                <strong class="project-automotive-font">Via spalti</strong>
                                 <br><br>
-                                <strong class="project-automotive-font">v1</strong>
+                                <strong class="project-automotive-font">{{routine.music}}</strong>
                                 <br><br>
                                 <strong class="project-automotive-font">v1</strong>
                             </div>

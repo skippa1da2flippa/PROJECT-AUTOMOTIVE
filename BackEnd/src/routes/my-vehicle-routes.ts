@@ -281,7 +281,7 @@ router.patch(
 
 // TODO delete this endpoint,
 router.get(
-    "/myVehicles/allVehicles",
+    "/myVehicle/allVehicles",
     authenticateToken,
     async (req:AuthenticatedRequest, res: UserVehicleEndPointResponse) => {
         try {
@@ -507,36 +507,43 @@ router.put(
     '/myVehicle/vehicleId/enjoyers',
     authenticateToken,
     async (req: UpdateEnjoyerRequest, res: UserVehicleEndPointResponse) => {
+        console.log("Sono nella route add/remove enoyer")
         const { vehicleId, enjoyerId, enjoyerName, enjoyerSurname } = req.body;
         if (enjoyerId) {
             try {
                 if (req.query.action === "add") {
                     const onComplete = (result: string) => {
-                        if (result === "false") return res.sendStatus(403).json();
-                        else return res.sendStatus(204)
+                        if (result === "false") res.sendStatus(403);
+                        else res.sendStatus(204)
                     }
 
                     // TODO add check if they friend
-                    return await addEnjoyer(
+                    await addEnjoyer(
                         retrieveId(vehicleId, false),
                         retrieveId(enjoyerId),
                         enjoyerName,
                         enjoyerSurname,
                         ioServer,
                         onComplete
-                    );
+                    ).catch(err => {
+                        console.log("ERRORE LANCIATO DALL ADD ENJOYER")
+                    });
                 }
                 else {
+                    console.log("Sono al remove")
                     await removeEnjoyer(
                         retrieveId(vehicleId, false),
                         retrieveId(enjoyerId),
-                    );
+                    ).catch(err => {
+                        console.log("ERRORE LANCIATO DALL REMOVE ENJOYER")
+                    });
                     return res.status(200).json({
                         removed: enjoyerId,
                         accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
                     });
                 }
             } catch (err) {
+                console.log("sono dentro al catch più interno ")
                 return res.status(err.statusCode).json({
                     timestamp: toUnixSeconds(new Date()),
                     errorMessage: err.message,
@@ -544,6 +551,7 @@ router.put(
                 });
             }
         } else {
+            console.log("dentro al catch più esterno")
             return res.status(400).json({
                 timestamp: toUnixSeconds(new Date()),
                 errorMessage: 'Wrong parameters',

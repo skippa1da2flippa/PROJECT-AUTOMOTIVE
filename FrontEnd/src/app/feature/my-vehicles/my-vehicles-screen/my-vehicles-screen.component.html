@@ -26,7 +26,7 @@
 
 
 
-            <div class="routine-container"> <!-- to transform in a *ngFor -->
+            <div class="routine-container" *ngFor="let vehicle of vehicles"> <!-- to transform in a *ngFor -->
 
                 <div  class="option-container mt-5">
                     <div class="image-container columns">
@@ -35,34 +35,34 @@
                 </div>
 
                 <div class="routine columns">
-                    <div class="column is-half">
-                        <img src="assets/images/unnamed--5--1@1x.png" alt="macchina">
+                    <div class="column is-half pointer">
+                        <img src="assets/images/unnamed--5--1@1x.png" alt="macchina" (click)="redirect('/vehicleControl')">
                     </div>
 
                     <div class="column is-half pl-6 pt-4">
-                        <strong class="project-automotive-font">ESTATE</strong>
+                        <strong class="project-automotive-font"></strong>
                         <div class="columns mt-3">
                             <div class="column is-half">
-                                <strong class="project-automotive-font">light_color</strong>
+                                <strong class="project-automotive-font">model</strong>
                                 <br><br>
-                                <strong class="project-automotive-font">Temperature</strong>
+                                <strong class="project-automotive-font">plate</strong>
                                 <br><br>
-                                <strong class="project-automotive-font">Destination</strong>
+                                <strong class="project-automotive-font">enjoyers</strong>
                                 <br><br>
-                                <strong class="project-automotive-font">Music</strong>
+                                <strong class="project-automotive-font">legalInfo</strong>
                                 <br><br>
-                                <strong class="project-automotive-font">Timing</strong>
+                                <strong class="project-automotive-font">hydrogen</strong>
                             </div>
                             <div class="column">
-                                <strong class="project-automotive-font">blieue</strong>
+                                <strong class="project-automotive-font">{{ vehicle.type }}</strong>
                                 <br><br>
-                                <strong class="project-automotive-font">v1</strong>
+                                <strong class="project-automotive-font">LP1629</strong>
                                 <br><br>
-                                <strong class="project-automotive-font">v1</strong>
+                                <strong class="project-automotive-font pointer" (click)="goToEnjoyers(vehicle.vehicleId)">enjoyers</strong>
                                 <br><br>
-                                <strong class="project-automotive-font">v1</strong>
+                                <strong class="project-automotive-font">empty</strong>
                                 <br><br>
-                                <strong class="project-automotive-font">v1</strong>
+                                <strong class="project-automotive-font">45%</strong>
                             </div>
                         </div>
 

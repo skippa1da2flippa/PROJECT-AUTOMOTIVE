@@ -24,6 +24,7 @@ export class SignUpScreenComponent implements OnInit {
 
     public signup(email: string, fullName: string, password: string, nickName?: string) {
         this.userMessage.error = false;
+        console.log(fullName)
         let name = fullName.split(" ")[0]
         let surname = fullName.split(" ")[1]
         this.authClient.signUp(name, surname, email, password, nickName).subscribe({

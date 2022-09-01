@@ -7,22 +7,22 @@
                     <div class="raggruppa-583">
                         <div class="raggruppa-582">
                             <div class="name-container">
-                                <div class="name helveticaneue-regular-normal-white-18px">Mario Rossi</div>
+                                <div class="name helveticaneue-regular-normal-white-18px">{{enjoyerName + " " + enjoyerSurname}}</div>
                                 <div class="full-name">Full name</div>
                             </div>
                         </div>
                         <div class="raggruppa-581">
                             <div class="overlap-group1">
-                                <div class="xb76-r29 helveticaneue-regular-normal-white-18px">XB76R29</div>
-                                <div class="model-number">Model number</div>
+                                <div class="xb76-r29 helveticaneue-regular-normal-white-18px">{{vehicleModel}}</div>
+                                <div class="model-number">vehicle model</div>
                             </div>
                         </div>
                     </div>
                     <div class="raggruppa-585">
                         <div class="overlap-group2">
                             <div class="raggruppa-584">
-                                <div class="accept">Accept</div>
-                                <div class="decline">Decline</div>
+                                <div class="accept pointer" (click)="ownerResponse(true)">Accept</div>
+                                <div class="decline pointer" (click)="ownerResponse(false)">Decline</div>
                             </div>
                             <div class="rettangolo-259"></div>
                         </div>

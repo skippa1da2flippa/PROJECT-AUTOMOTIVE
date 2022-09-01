@@ -323,16 +323,26 @@ export async function addEnjoyer(
         }
     }, 5000)
 
-    setTimeout(async () => {
-        clearInterval(interval)
-        if (res === "") onComplete("false")
+    try {
+        setTimeout(async () => {
+            clearInterval(interval)
+            if (res === "") onComplete("false")
+            //pop the pair
+            await tedis.del(vehicle.owner.toString()).catch(err => {
+                console.log("tedis sbanfa")
+            })
 
-        //pop the pair
-        await tedis.del(vehicle.owner.toString())
+            // gives back the connection
+            try {
+                pool.putTedis(tedis)
+            } catch(err) {
+                console.log("Teuds sbanfa2")
+            }
 
-        // gives back the connection
-        pool.putTedis(tedis)
-    }, 60000)
+        }, 60000)
+    } catch(err) {
+        console.log("si spacca neol tru")
+    }
 }
 
 export async function updateVehiclePsw(vehicleId: Types.ObjectId, psw: string) {
@@ -373,13 +383,15 @@ export async function changeOwner(vehicleId: Types.ObjectId, ownerId: Types.Obje
 
 
 export async function removeEnjoyer(vehicleId: Types.ObjectId, enjoyerId: Types.ObjectId) : Promise<void> {
-
+    console.log("sono dentro la remove")
     let result = await VehicleModel.findByIdAndUpdate(vehicleId, {
         $pull: { enjoyers: enjoyerId }
     }).catch(err => Promise.reject(new ServerError("Internal server error")))
 
     if (!result) return Promise.reject(new ServerError("No vehicle with that identifier"))
-    await removeUserEnjoyedVehicle(enjoyerId, vehicleId)
+
+    await removeUserEnjoyedVehicle(enjoyerId, vehicleId).catch(err => err)
+
     return Promise.resolve()
 }
 

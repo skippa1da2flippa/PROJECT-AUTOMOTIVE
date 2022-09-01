@@ -41,10 +41,10 @@ export class ProjectVehicleApi extends BaseAuthenticatedApi {
             .pipe(catchError(this.handleError), tap(accessTokenRefresher));
     }
 
-    //TODO to check if it work
+
     //TODO delete later
     public getAllVehicles(): Observable<ProjectVehicle[]> {
-        const reqPath: string = "/myVehicles/allVehicles"
+        const reqPath: string = `${this.baseUrl}/api/myVehicle/allVehicles`
         return this.httpClient
             .get<AllVehiclesResponse>(reqPath, this.createRequestOptions())
             .pipe(

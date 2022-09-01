@@ -53,8 +53,17 @@ router.get(
         let user: UserDocument
         try {
             user = await getUserById(userId)
+            const routines: Routine[] = user.routines.map(elem => {
+                return {
+                    lightsColor: elem.lightsColor,
+                    name: elem.name.split("/")[0],
+                    temperature: elem.temperature ,
+                    music: elem.music,
+                    path: "chilling"
+                }
+            })
             return res.status(201).json({
-                routines: user.routines,
+                routines: routines,
                 accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
             })
         } catch (err) {

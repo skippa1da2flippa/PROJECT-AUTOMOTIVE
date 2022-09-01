@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {ErrorHandler} from "../../../core/model/errors/error-handler";
 import {EnjoyerRequestListener} from "../../../core/events/listeners/enjoyer-request";
-import {OwnerResponseEmitter} from "../../../core/events/emitters/owner-response";
+import {EnjoyerMessage} from "../../../core/model/events-data/enjoyer-message";
+import {EnjoyerRequestStorage} from "../../../core/api/enjoyer-request/enjoyer-request-storer";
 
 @Component({
   selector: 'app-homepage-screen',
@@ -13,18 +14,31 @@ export class HomepageScreenComponent extends ErrorHandler implements OnInit {
 
     constructor(
         public override router: Router,
-        private enjoyerRequest: EnjoyerRequestListener,
-        private ownerResponseEmitter: OwnerResponseEmitter
+        private enjoyerRequestListener: EnjoyerRequestListener,
+        private enjoyerRequestStorage: EnjoyerRequestStorage
     ) {
         super(router)
     }
 
     ngOnInit(): void {
-        this.enjoyerRequest.listen(super.addPopUpInfo)
+        const enjoyerRequestPolling = async (data: EnjoyerMessage) => {
+            this.enjoyerRequestStorage.store(
+                data.enjoyerSurname,
+                data.enjoyerName,
+                data.enjoyerId,
+                data.vehicleId,
+                data.vehicleModel
+            )
+
+            await this.router.navigate(['connectionRequest'])
+        }
+
+        enjoyerRequestPolling.bind(this)
+
+        this.enjoyerRequestListener.listen(enjoyerRequestPolling)
     }
 
     ngOnDestroy(): void {
-        this.enjoyerRequest.unListen()
     }
 
 }

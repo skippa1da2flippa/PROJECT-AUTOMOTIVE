@@ -1,19 +1,23 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 import * as http from 'http';
-import express, { Express } from 'express';
-import { registerRoutes } from './routes/utils/register-routes';
+import express, {Express} from 'express';
+import {registerRoutes} from './routes/utils/register-routes';
 import cors from 'cors';
 import * as io from 'socket.io';
-import mongoose = require('mongoose');
-import filter = require('content-filter');
 import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
 import chalk from 'chalk';
-import { ServerJoinedListener } from "./events/client-listeners/server-joined"
-import { OwnerResponseListener } from "./events/client-listeners/owner-response-listener"
-import { TedisPool } from "tedis";
+import {ServerJoinedListener} from "./events/client-listeners/server-joined"
+import {OwnerResponseListener} from "./events/client-listeners/owner-response-listener"
+import {TedisPool} from "tedis";
 import {FriendRequestAcceptedListener} from "./events/client-listeners/friend-request-accepted";
+import {createUser, UserDocument} from "./model/database/user";
+import {createVehicle, ModelTypes} from "./model/database/my-vehicle";
+import {Notification, NotTypes} from "./model/database/notification";
+import mongoose = require('mongoose');
+import filter = require('content-filter');
+import {Types} from "mongoose";
 
 
 // Remember that the runtime working dir is <root>/dist/src
@@ -33,14 +37,46 @@ const serverPort: number = parseInt(process.env.PORT, 10);
 
 const serverHost: string = process.env.HOST as string ;
 
+
 /* Database Connection */
 console.log('Demanding the sauce...');
 
 (
     mongoose
     .connect(dbUri, {})
-    .then(() => {
+    .then(async () => {
         console.log('Sauce received!');
+        try {
+            let data: UserDocument = await createUser({
+                name: "ash",
+                surname: "catchEm",
+                email: "mew@pokemon.com",
+                nickname: "All",
+                salt: '$2b$10$u4YAbPtjj2oCbZWKgFi1Nu',
+                pwd_hash: '$2b$10$u4YAbPtjj2oCbZWKgFi1NuTqpvHlj2.A7ATGkEy8PM5eSCbZdK/Da',
+                notifications: [
+                    {
+                        sender: new Types.ObjectId(),
+                        type: NotTypes.carOccupied
+                    }
+                ]
+
+            })
+            const vehicleData = await createVehicle({
+                type: ModelTypes.projectZ,
+                pwd_hash: '$2b$10$u4YAbPtjj2oCbZWKgFi1NuTqpvHlj2.A7ATGkEy8PM5eSCbZdK/Da',
+                salt: '$2b$10$u4YAbPtjj2oCbZWKgFi1Nu',
+                owner: data.id
+            })
+
+            console.log("user: ")
+            console.log(data._id)
+            console.log("and his vehicle: ")
+            console.log(vehicleData._id)
+        } catch(err) {
+            console.log("errore o della create user o della vehicle")
+        }
+
     })
     .catch((err) => {
         console.log('Error Occurred during Mongoose Connection');

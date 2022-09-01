@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import {UsersModule} from "./shared/users/users.module";
 
 const routes: Routes = [
     {
@@ -7,6 +8,13 @@ const routes: Routes = [
         loadChildren: () =>
             import('./feature/authentication/authentication.module').then(
                 (m) => m.AuthenticationModule
+            ),
+    },
+    {
+        path: 'users',
+        loadChildren: () =>
+            import('./shared/users/users.module').then(
+                (m) => m.UsersModule
             ),
     },
     {

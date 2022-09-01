@@ -20,15 +20,15 @@
             </div>
 
 
-            <div class="columns notification-container mt-2 is-vcentered" *ngFor="let notification of notifications">
+            <div class="columns notification-container mt-2 is-vcentered" *ngFor="let user of users">
 
                 <div class="column is-one-fifth ">
-                    <p>{{notification.type}}</p>
+                    <p>{{user.name + " " + user.surname}}</p>
                 </div>
                 <div class="column is-one-half ">
                     <div class="columns">
-                        <div class="column is-half">You received a friend request from {{notification.name + " " + notification.surname}}</div>
-                        <div class="p-5"><button class="button mr-1 is-rounded is-small" (click)="acceptFriendRequest(notification.id)">accept</button><button class="button is-rounded is-small" (click)="deleteNotification(notification)">refuse</button></div>
+                        <div class="column is-half">Status: {{user.status}}</div>
+                        <div class="p-5"></div>
                     </div>
                 </div>
 
@@ -46,3 +46,4 @@
 
     </div>
 </div>
+

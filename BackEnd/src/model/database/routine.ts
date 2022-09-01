@@ -27,8 +27,7 @@ export const RoutineSchema = new Schema<RoutineSubDocument>(
     {
         name: {
             type: String,
-            required: true, 
-            unique: true
+            required: true
         }, 
         temperature: {
             type: Number,

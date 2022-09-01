@@ -21,9 +21,20 @@ export const environment = {
     localStorageRefreshTokenKey: 'refreshToken',
 
     /**
-     * Key by which the userId stored in the browser local storage
+     * Keys by which the EnjoyerMessage properties are stored in the browser local storage
      */
-    localStorageUserIdKey: 'userId',
+
+    localStorageEnjoyerName: 'enjoyerName',
+
+    localStorageEnjoyerSurname: 'enjoyerSurname',
+
+    localStorageVehicleModel: 'vehicleModel',
+
+    localStorageVehicleId: 'vehicleId',
+
+    localStorageEnjoyerId: 'enjoyerId',
+
+    localStorageUsersData: 'usersData'
 };
 
 /*

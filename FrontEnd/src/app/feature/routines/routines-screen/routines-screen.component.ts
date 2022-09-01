@@ -33,6 +33,9 @@ export class RoutinesScreenComponent extends ErrorHandler implements OnInit {
     }
 
     public deleteRoutine(name: string){
+        this.routines = this.routines.filter(elem => {
+            return elem.name !== name
+        })
         this.userRoutine.deleteRoutine(name).subscribe({
             error: super.errorHandler,
         })

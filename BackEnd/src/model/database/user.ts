@@ -520,9 +520,6 @@ export async function removeFriendship(userId: Types.ObjectId, friendId: Types.O
 }
 
 export async function createUser(data: AnyKeys<UserDocument>): Promise<UserDocument> {
-    console.log("dentro la craeate")
-    console.log(data)
-
     let result = await UserModel.insertMany([data]).catch((err) =>
         Promise.reject(new ServerError(err.message))
     );

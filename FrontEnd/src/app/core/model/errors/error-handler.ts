@@ -22,9 +22,6 @@ export class ErrorHandler {
         await this.router.navigate([where])
     }
 
-    protected addPopUpInfo(data: EnjoyerMessage): void {
-        this.popUpMessage = data
-    }
 
     protected errorHandler = async (err: any) => {
         this.userMessage.error = true;

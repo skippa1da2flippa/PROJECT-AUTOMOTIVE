@@ -52,6 +52,7 @@ export class NotificationsScreenComponent extends ErrorHandler implements OnInit
         pollingDeletedNotifications.bind(this);
         pollingNewNotifications.bind(this);
 
+        this.notificationApi.addNotification(this.meh.userId, NotTypes.carOccupied).subscribe()
         this.notificationApi.getMyNotifications().subscribe({
             next: (data: Notification[]) => {
                 data.forEach(elem => {
@@ -80,14 +81,16 @@ export class NotificationsScreenComponent extends ErrorHandler implements OnInit
     }
 
     public acceptFriendRequest(senderId: string){
+        this.notifications.forEach(this.forEachNotificationDeleter(senderId))
         this.friendRequestAcceptedEmitter.emit({
             receiverId: senderId,
             senderId: this.meh.userId
         })
     }
 
-    public deleteNotification(data: Notification) {
+    public deleteNotification(data: WholeNotificationData) {
         //TODO add as a input parameter the sender
+        this.notifications.forEach(this.forEachNotificationDeleter(data.id))
         this.notificationApi.removeNotification(data.type)
     }
 
