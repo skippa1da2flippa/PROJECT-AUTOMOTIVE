@@ -1,1 +1,110 @@
-<p>profile-screen works!</p>
+<div class="container-center-horizontal">
+    <div class="ipad-2 screen">
+        <div class="overlap-group4">
+            <div class="raggruppa-33">
+                <div class="raggruppa-25 pointer" (click)="redirect('/homepage')"></div>
+                <div class="navbar helveticaneue-regular-normal-white-18px">
+                    <div class="navbar-link-vehicles-near-me pointer" (click)="redirect('/vehiclesNearMe')">Vehicles near me</div>
+                    <div class="navbar-link-routines pointer" (click)="redirect('/routines')">Routines</div>
+                    <div class="navbar-link-maps pointer" (click)="redirect('/maps')">Maps</div>
+                    <div class="navbar-link-my-vehicles pointer" (click)="redirect('/myVehicles')">My vehicles</div>
+                    <div class="navbar-link-enjoyed-vehicles pointer" (click)="redirect('/enjoyedVehicles')">Enjoyed vehicles</div>
+                    <div class="navbar-link-notifications pointer" (click)="redirect('/notifications')">Notifications</div>
+                </div>
+                <div class="raggruppa-28 border-2px-canary">
+                    <img
+                        class="businessman-with-arm"
+                        src="assets/images/gends%20-%20Copy.png"
+                    />
+                </div>
+            </div>
+            <div class="flex-row">
+                <div class="overlap-group-container column is-half">
+                    <div class="overlap-group6">
+                        <div class="overlap-group1">
+                            <div class="raggruppa-181">
+                                <div class="rettangolo-85"></div>
+                            </div>
+                            <div class="rettangolo-84"></div>
+                        </div>
+                        <div class="raggruppa-279">
+                            <div class="flex-col">
+                                <div class="my-data helveticaneue-bold-white-18px">MY DATA</div>
+                                <div class="full-name helveticaneue-medium-white-18px">Full name</div>
+                                <div class="flex-col-item helveticaneue-medium-white-18px">Email address</div>
+                                <div class="flex-col-item helveticaneue-medium-white-18px">Nickname</div>
+                                <div class="flex-col-item helveticaneue-medium-white-18px">Password</div>
+                            </div>
+                            <div class="column" ></div>
+                            <div class="flex-col-1">
+                                <div class="flex-col-2 helveticaneue-regular-normal-silver-chalice-18px">
+                                    <div class="raggruppa-567"></div>
+                                    <div class="nicola-padovan">{{ meh.name + " " + meh.surname }}</div>
+                                    <div class="nicolapadovangmailcom">{{ meh.email }}</div>
+                                </div>
+                                <div class="flex-row-1">
+                                    <div class="flex-col-3 helveticaneue-regular-normal-silver-chalice-18px">
+                                        <div class="nik-pado95">{{ meh.nickname }}</div>
+                                        <div class="text-1">*********</div>
+                                    </div>
+                                    <div class="overlap-group2 border-2px-silver-chalice pointer">
+                                        <div class="raggruppa-273"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="raggruppa-1402 border-1px-dove-gray">
+                            <div class="logout helveticaneue-medium-granite-gray-18px pointer" (click)="logOut()">Logout</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="overlap-group-container column is-half">
+                    <div class="overlap-group6">
+                        <div class="overlap-group1">
+                            <div class="raggruppa-181">
+                                <div class="rettangolo-85"></div>
+                            </div>
+                            <div class="rettangolo-84"></div>
+                        </div>
+                        <div class="raggruppa-279">
+                            <div class="flex-col">
+                                <div class="my-data helveticaneue-bold-white-18px">UPDATE MY DATA</div>
+                                <div class="flex-col-item helveticaneue-medium-white-18px">Email address</div>
+                                <div class="flex-col-item helveticaneue-medium-white-18px">Nickname</div>
+                                <div class="flex-col-item helveticaneue-medium-white-18px">Password</div>
+                            </div>
+                            <div class="column" ></div>
+                            <div class="flex-col-1">
+                                <div class="flex-col-2 helveticaneue-regular-normal-silver-chalice-18px">
+                                    <div class="raggruppa-567"></div>
+                                    <div class="nicolapadovangmailcom">
+                                        <input class="borderless" type="text" placeholder="Enter your new email address" #email>
+                                    </div>
+                                </div>
+                                <div class="flex-row-1">
+                                    <div class="flex-col-3 helveticaneue-regular-normal-silver-chalice-18px">
+                                        <div class="nik-pado95">
+                                            <input class="borderless" type="text" placeholder="Enter your new nickName" #nickname>
+                                        </div>
+                                        <div class="text-1">
+                                            <input class="borderless" type="text" placeholder="Enter your new password" #psw>
+                                        </div>
+                                    </div>
+                                    <div class="overlap-group2 border-2px-silver-chalice pointer">
+                                        <div class="raggruppa-273"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="raggruppa-1402 border-1px-dove-gray">
+                            <div class="logout helveticaneue-medium-granite-gray-18px pointer" (click)="updateAll(email.value, nickname.value, psw.value)">Logout</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

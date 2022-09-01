@@ -16,12 +16,12 @@ export enum UserStatus {
 }
 
 export class User extends BaseData {
-    public readonly userId: string
-    public readonly email: string
-    public readonly nickname: string
-    public readonly name: string
-    public readonly surname: string
-    public readonly status?: UserStatus
+    public  userId: string
+    public  email: string
+    public  nickname: string
+    public  name: string
+    public surname: string
+    public status?: UserStatus
 
     constructor(
         userId: string = "",
