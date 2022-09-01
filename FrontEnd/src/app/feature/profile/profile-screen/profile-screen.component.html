@@ -3,7 +3,7 @@
         <div class="overlap-group4">
             <div class="raggruppa-33">
                 <div class="raggruppa-25 pointer" (click)="redirect('/homepage')"></div>
-                <div class="navbar helveticaneue-regular-normal-white-18px">
+                <div class="my-navbar helveticaneue-regular-normal-white-18px">
                     <div class="navbar-link-vehicles-near-me pointer" (click)="redirect('/vehiclesNearMe')">Vehicles near me</div>
                     <div class="navbar-link-routines pointer" (click)="redirect('/routines')">Routines</div>
                     <div class="navbar-link-maps pointer" (click)="redirect('/maps')">Maps</div>
@@ -33,7 +33,6 @@
                                 <div class="full-name helveticaneue-medium-white-18px">Full name</div>
                                 <div class="flex-col-item helveticaneue-medium-white-18px">Email address</div>
                                 <div class="flex-col-item helveticaneue-medium-white-18px">Nickname</div>
-                                <div class="flex-col-item helveticaneue-medium-white-18px">Password</div>
                             </div>
                             <div class="column" ></div>
                             <div class="flex-col-1">
@@ -45,10 +44,10 @@
                                 <div class="flex-row-1">
                                     <div class="flex-col-3 helveticaneue-regular-normal-silver-chalice-18px">
                                         <div class="nik-pado95">{{ meh.nickname }}</div>
-                                        <div class="text-1">*********</div>
+
                                     </div>
                                     <div class="overlap-group2 border-2px-silver-chalice pointer">
-                                        <div class="raggruppa-273"></div>
+
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +68,7 @@
                         </div>
                         <div class="raggruppa-279">
                             <div class="flex-col">
-                                <div class="my-data helveticaneue-bold-white-18px">UPDATE MY DATA</div>
+                                <div class="my-data helveticaneue-bold-white-18px mb-2">UPDATE DATA</div>
                                 <div class="flex-col-item helveticaneue-medium-white-18px">Email address</div>
                                 <div class="flex-col-item helveticaneue-medium-white-18px">Nickname</div>
                                 <div class="flex-col-item helveticaneue-medium-white-18px">Password</div>
@@ -92,17 +91,33 @@
                                         </div>
                                     </div>
                                     <div class="overlap-group2 border-2px-silver-chalice pointer">
-                                        <div class="raggruppa-273"></div>
                                     </div>
                                 </div>
                             </div>
 
                         </div>
                         <div class="raggruppa-1402 border-1px-dove-gray">
-                            <div class="logout helveticaneue-medium-granite-gray-18px pointer" (click)="updateAll(email.value, nickname.value, psw.value)">Logout</div>
+                            <div class="logout helveticaneue-medium-granite-gray-18px pointer" (click)="updateAll(email.value, nickname.value, psw.value)">Update</div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div style="width: 100%" >
+                <p class="has-text-centered is-size-1 has-text-weight-semibold helveticaneue-bold-white-18px mb-2" >Friends</p>
+
+            </div>
+            <div class="columns notification-container mt-2 is-vcentered" *ngFor="let friend of users">
+
+                <div class="column is-one-third ml-3">
+                    <p>{{ friend.name }}</p>
+                </div>
+                <div class="column is-one-third ">
+                    <p>{{ friend.surname }}</p>
+                </div>
+                <div class="column is-one-third ">
+                    <p>{{ friend.email }}</p>
+                </div>
+
             </div>
         </div>
     </div>

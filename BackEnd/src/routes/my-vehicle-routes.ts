@@ -513,6 +513,7 @@ router.put(
             try {
                 if (req.query.action === "add") {
                     const onComplete = (result: string) => {
+                        console.log("SONO NELLA ON COMPLETE RES: " + result)
                         if (result === "false") res.sendStatus(403);
                         else res.sendStatus(204)
                     }
@@ -526,24 +527,20 @@ router.put(
                         ioServer,
                         onComplete
                     ).catch(err => {
-                        console.log("ERRORE LANCIATO DALL ADD ENJOYER")
+                        console.log(err.message)
                     });
                 }
                 else {
-                    console.log("Sono al remove")
                     await removeEnjoyer(
                         retrieveId(vehicleId, false),
                         retrieveId(enjoyerId),
-                    ).catch(err => {
-                        console.log("ERRORE LANCIATO DALL REMOVE ENJOYER")
-                    });
+                    )
                     return res.status(200).json({
                         removed: enjoyerId,
                         accessToken: res.locals.newAccessToken ? res.locals.newAccessToken : ""
                     });
                 }
             } catch (err) {
-                console.log("sono dentro al catch più interno ")
                 return res.status(err.statusCode).json({
                     timestamp: toUnixSeconds(new Date()),
                     errorMessage: err.message,

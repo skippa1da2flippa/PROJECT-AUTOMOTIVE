@@ -29,7 +29,7 @@ export class RoutinesScreenComponent extends ErrorHandler implements OnInit {
     }
 
     public addRoutineDiv() {
-        //do something to add a div (for retrieving the up to be inserted routine data)
+        this.router.navigate(["/routines/creation"])
     }
 
     public deleteRoutine(name: string){

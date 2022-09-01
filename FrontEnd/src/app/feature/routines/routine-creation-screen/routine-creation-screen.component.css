@@ -1,0 +1,202 @@
+/* screen - ipad-15 */
+
+.ipad-15 {
+    align-items: flex-start;
+    background-color: var(--white);
+    display: flex;
+    height: 1492px;
+    width: 1024px;
+}
+
+.ipad-15 .overlap-group1 {
+    background-color: var(--silver-chalice);
+    display: flex;
+    flex-direction: column;
+    min-height: 1491px;
+    padding: 21px 41.0px;
+    width: 1024px;
+}
+
+.ipad-15 .raggruppa-324 {
+    align-items: flex-start;
+    display: flex;
+    height: 57px;
+    justify-content: flex-end;
+    min-width: 942px;
+}
+
+.ipad-15 .raggruppa-25 {
+    align-self: center;
+    background-image: url(https://anima-uploads.s3.amazonaws.com/projects/62f90f12e2894db8bf01d639/releases/62f90f37f5e0f8f0397614fc/img/raggruppa-24-1@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 32px;
+    margin-bottom: 4.81px;
+    width: 32px;
+}
+
+.ipad-15 .flex-col {
+    align-items: center;
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    margin-left: 26px;
+    min-height: 41px;
+    width: 790px;
+}
+
+.ipad-15 .raggruppa-26 {
+    align-items: flex-end;
+    display: flex;
+    height: 22px;
+    min-width: 790px;
+    opacity: 1.0;
+}
+
+.ipad-15 .vehicles-near-me {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    min-height: 23px;
+    min-width: 143px;
+    white-space: nowrap;
+}
+
+.ipad-15 .routines {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -4px;
+    margin-left: 38px;
+    min-height: 24px;
+    min-width: 78px;
+    white-space: nowrap;
+}
+
+.ipad-15 .maps {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 33px;
+    min-height: 23px;
+    min-width: 47px;
+    white-space: nowrap;
+}
+
+.ipad-15 .my-vehicles {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 97px;
+    white-space: nowrap;
+}
+
+.ipad-15 .enjoyed-vehicles {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 137px;
+    white-space: nowrap;
+}
+
+.ipad-15 .notifications {
+    letter-spacing: 0;
+    line-height: 18px;
+    margin-bottom: -3.5px;
+    margin-left: 38px;
+    min-height: 23px;
+    min-width: 103px;
+    white-space: nowrap;
+}
+
+.ipad-15 .rettangolo-28 {
+    background-color: var(--white);
+    border-radius: 6px;
+    height: 4px;
+    margin-right: 351.0px;
+    margin-top: 15px;
+    width: 75px;
+}
+
+.ipad-15 .raggruppa-28 {
+    background-color: var(--white);
+    border-radius: 28px;
+    display: flex;
+    height: 56px;
+    margin-left: 38px;
+    width: 56px;
+}
+
+.ipad-15 .businessman-with-arm {
+    border-radius: 25.5px;
+    flex: 1;
+    margin-bottom: 2px;
+    margin-left: 3px;
+    margin-right: 2px;
+    margin-top: 3px;
+    object-fit: cover;
+    width: 51px;
+}
+
+.ipad-15 .overlap-group {
+    align-self: center;
+    border-radius: 17.5px;
+    height: 35px;
+    margin-left: 3.0px;
+    margin-top: 39px;
+    position: relative;
+    width: 35px;
+}
+
+.ipad-15 .raggruppa-117 {
+    background-image: url(https://anima-uploads.s3.amazonaws.com/projects/62f90f12e2894db8bf01d639/releases/62f90f37f5e0f8f0397614fc/img/raggruppa-116@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 22px;
+    left: 7px;
+    position: absolute;
+    top: 7px;
+    width: 22px;
+}
+
+.ipad-15 .ellisse-12 {
+    border-radius: 17.5px;
+    height: 35px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 35px;
+}
+
+.routine-container{
+    width:80%;
+    height:380px;
+    background-color: #696969;
+    margin: 20px auto;
+    border-radius: 50px;
+}
+
+.option-container{
+    width: 6%;
+    height: 30px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.image-container{
+    height: 100%;
+    width: 50px;
+    background-color: #696969;
+}
+
+.rockets{
+    width: 250px;
+    height: 250px;
+}
+
+.border-white{
+    border: 1px solid white
+}

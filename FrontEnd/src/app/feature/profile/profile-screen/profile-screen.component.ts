@@ -14,6 +14,7 @@ import {User} from "../../../core/model/response-data/user";
 export class ProfileScreenComponent extends ErrorHandler implements OnInit {
 
     public meh: User = new User()
+    public users: User[] = []
 
     constructor(
         public override router: Router,
@@ -31,10 +32,21 @@ export class ProfileScreenComponent extends ErrorHandler implements OnInit {
 
             error: super.errorHandler
         })
+
+        this.userApi.getFriends().subscribe({
+            next: (data: User[]) => {
+                this.users = data
+            },
+
+            error: super.errorHandler
+        })
     }
 
     public logOut() {
         this.authApi.logOut().subscribe({
+            next: async () => {
+                await this.router.navigate(["/login"])
+            },
             error: (err) => {
                 console.log("logging out should not cause error, anyway it happened")
                 JwtStorage.drop()

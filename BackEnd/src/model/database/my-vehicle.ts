@@ -309,40 +309,55 @@ export async function addEnjoyer(
         if (!flag) {
             res = !(temp = await tedis.get(vehicle.owner.toString())) ? "" : temp as string
             if (res === "true") {
+
                 await VehicleModel.findByIdAndUpdate(vehicleId, {
                     $push: { enjoyers: enjoyerId }
                 }).catch(err => Promise.reject(new ServerError("Internal server error")))
-                await updateUserEnjoyedVehicle(enjoyerId, vehicleId)
-                onComplete(res)
+                await updateUserEnjoyedVehicle(enjoyerId, vehicleId).catch(err => { console.log("update user sbanfa")})
                 flag = true
+                await tedis.del(vehicle.owner.toString()).catch(err => {
+                    console.log("tedis sbanfa")
+                })
+                pool.putTedis(tedis)
+                onComplete(res)
             }
             else if (res === "false") {
-                onComplete(res)
                 flag = true
+                await tedis.del(vehicle.owner.toString()).catch(err => {
+                    console.log("tedis sbanfa")
+                })
+                pool.putTedis(tedis)
+                onComplete(res)
             }
         }
     }, 5000)
 
-    try {
-        setTimeout(async () => {
-            clearInterval(interval)
-            if (res === "") onComplete("false")
-            //pop the pair
-            await tedis.del(vehicle.owner.toString()).catch(err => {
-                console.log("tedis sbanfa")
-            })
+    setTimeout(() => {
+        clearInterval(interval)
+    }, 15000)
 
-            // gives back the connection
-            try {
-                pool.putTedis(tedis)
-            } catch(err) {
-                console.log("Teuds sbanfa2")
-            }
-
-        }, 60000)
-    } catch(err) {
-        console.log("si spacca neol tru")
-    }
+    /**
+     * try {
+     *         setTimeout(async () => {
+     *             clearInterval(interval)
+     *             if (res === "") onComplete("false")
+     *             //pop the pair
+     *             await tedis.del(vehicle.owner.toString()).catch(err => {
+     *                 console.log("tedis sbanfa")
+     *             })
+     *
+     *             // gives back the connection
+     *             try {
+     *                 pool.putTedis(tedis)
+     *             } catch(err) {
+     *                 console.log("Teuds sbanfa2")
+     *             }
+     *
+     *         }, 60000)
+     *     } catch(err) {
+     *         console.log("si spacca neol tru")
+     *     }
+     * */
 }
 
 export async function updateVehiclePsw(vehicleId: Types.ObjectId, psw: string) {

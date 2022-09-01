@@ -1,1 +1,88 @@
-<p>routine-creation-screen works!</p>
+<div class="container-center-horizontal">
+    <div class="ipad-15 screen">
+        <div class="overlap-group1">
+            <div class="raggruppa-324">
+                <div class="raggruppa-25 pointer" (click)="redirect('/homepage')"></div>
+                <div class="flex-col">
+                    <div class="raggruppa-26">
+                        <div class="vehicles-near-me helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/vehiclesNearMe')">Vehicles near me</div>
+                        <div class="routines helveticaneue-bold-white-18px pointer" (click)="redirect('/routines')">Routines</div>
+                        <div class="maps helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/maps')">Maps</div>
+                        <div class="my-vehicles helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/myVehicles')">My vehicles</div>
+                        <div class="enjoyed-vehicles helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/enjoyedVehicles')">Enjoyed vehicles</div>
+                        <div class="notifications helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/notifications')">Notifications</div>
+                    </div>
+                    <div class="rettangolo-28"></div>
+                </div>
+                <div class="raggruppa-28 border-2px-cloud" (click)="redirect('/profile')">
+                    <img
+                        class="businessman-with-arm pointer"
+                        src="assets/images/gends%20-%20Copy.png"
+                    />
+                </div>
+            </div>
+            <div class="overlap-group">
+                <div class="raggruppa-117"></div>
+            </div>
+
+
+
+
+            <div class="routine-container" >
+
+
+
+                <div class="routine columns mt-5">
+                    <div class="column is-half pl-6 pt-4">
+
+                        <div class="columns mt-3">
+                            <div class="column is-half">
+                                <strong class="project-automotive-font">Insert routine's name</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">light_color</strong>
+                                <br><br><br>
+                                <strong class="project-automotive-font">Temperature</strong>
+                                <br><br><br>
+                                <strong class="project-automotive-font">Destination</strong>
+                                <br><br>
+                                <strong class="project-automotive-font">Music</strong>
+                                <br><br><br>
+                                <strong class="project-automotive-font">Timing</strong>
+                            </div>
+                            <div class="column">
+                                <input type="text" class="input is-small borderless border-white" placeholder="Insert new name" #name>
+                                <br><br>
+                                <input type="color" class="input is-small borderless border-white" placeholder="Insert preferred color" #color>
+                                <br><br>
+                                <input type="text" class="input is-small borderless border-white" placeholder="Insert temperature" #temperature>
+                                <br><br>
+                                <input type="text" class="input is-small borderless border-white" placeholder="Insert destination of the routine" #destination>
+                                <br><br>
+                                <input type="text" class="input is-small borderless border-white" placeholder="Insert new music" #music>
+                                <br><br>
+                                <input type="number" class="input is-small borderless border-white" placeholder="Insert timing" #timing>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="column mt-6 pointer" (click)="addRoutine(
+                        temperature.value,
+                        name.value,
+                        music.value,
+                        color.value,
+                        destination.value
+                    )">
+                        <img src="assets/images/rocket.png"  class="mt-0 ml-6 rockets" alt="macchina">
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+

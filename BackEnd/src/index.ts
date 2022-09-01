@@ -12,7 +12,7 @@ import {ServerJoinedListener} from "./events/client-listeners/server-joined"
 import {OwnerResponseListener} from "./events/client-listeners/owner-response-listener"
 import {TedisPool} from "tedis";
 import {FriendRequestAcceptedListener} from "./events/client-listeners/friend-request-accepted";
-import {createUser, UserDocument} from "./model/database/user";
+import {createUser, UserDocument, UserModel, UserSchema} from "./model/database/user";
 import {createVehicle, ModelTypes} from "./model/database/my-vehicle";
 import {Notification, NotTypes} from "./model/database/notification";
 import mongoose = require('mongoose');
@@ -38,6 +38,15 @@ const serverPort: number = parseInt(process.env.PORT, 10);
 const serverHost: string = process.env.HOST as string ;
 
 
+const redisPort = parseInt(process.env.REDIS_PORT)
+// Redis pool set-up
+export const pool = new TedisPool({
+    port: redisPort,
+    host: "127.0.0.1",
+    password: process.env.REDIS_PASSWORD as string
+});
+
+
 /* Database Connection */
 console.log('Demanding the sauce...');
 
@@ -46,33 +55,37 @@ console.log('Demanding the sauce...');
     .connect(dbUri, {})
     .then(async () => {
         console.log('Sauce received!');
+        let ted = await pool.getTedis()
         try {
-            let data: UserDocument = await createUser({
-                name: "ash",
-                surname: "catchEm",
-                email: "mew@pokemon.com",
-                nickname: "All",
-                salt: '$2b$10$u4YAbPtjj2oCbZWKgFi1Nu',
-                pwd_hash: '$2b$10$u4YAbPtjj2oCbZWKgFi1NuTqpvHlj2.A7ATGkEy8PM5eSCbZdK/Da',
-                notifications: [
-                    {
-                        sender: new Types.ObjectId(),
-                        type: NotTypes.carOccupied
-                    }
-                ]
+            let users = await UserModel.find().catch(err => { console.log("LA findALL ha fallito")})
+            if (!users) {
+                let data: UserDocument = await createUser({
+                    name: "ash",
+                    surname: "catchEm",
+                    email: "mew@pokemon.com",
+                    nickname: "All",
+                    salt: '$2b$10$u4YAbPtjj2oCbZWKgFi1Nu',
+                    pwd_hash: '$2b$10$u4YAbPtjj2oCbZWKgFi1NuTqpvHlj2.A7ATGkEy8PM5eSCbZdK/Da',
+                    notifications: [
+                        {
+                            sender: new Types.ObjectId(),
+                            type: NotTypes.carOccupied
+                        }
+                    ]
 
-            })
-            const vehicleData = await createVehicle({
-                type: ModelTypes.projectZ,
-                pwd_hash: '$2b$10$u4YAbPtjj2oCbZWKgFi1NuTqpvHlj2.A7ATGkEy8PM5eSCbZdK/Da',
-                salt: '$2b$10$u4YAbPtjj2oCbZWKgFi1Nu',
-                owner: data.id
-            })
+                })
+                const vehicleData = await createVehicle({
+                    type: ModelTypes.projectZ,
+                    pwd_hash: '$2b$10$u4YAbPtjj2oCbZWKgFi1NuTqpvHlj2.A7ATGkEy8PM5eSCbZdK/Da',
+                    salt: '$2b$10$u4YAbPtjj2oCbZWKgFi1Nu',
+                    owner: data.id
+                })
 
-            console.log("user: ")
-            console.log(data._id)
-            console.log("and his vehicle: ")
-            console.log(vehicleData._id)
+                console.log("user: ")
+                console.log(data._id)
+                console.log("and his vehicle: ")
+                console.log(vehicleData._id)
+            }
         } catch(err) {
             console.log("errore o della create user o della vehicle")
         }
@@ -161,14 +174,5 @@ ioServer.on('connection', async function (client: io.Socket) {
     client.on('disconnect', function () {
         console.log(chalk.bgRed(`socket.io client ${client.id} disconnected`));
     });
-});
-
-
-const redisPort = parseInt(process.env.REDIS_PORT)
-// Redis pool set-up
-export const pool = new TedisPool({
-    port: redisPort,
-    host: "127.0.0.1",
-    password: process.env.REDIS_PASSWORD as string
 });
 
