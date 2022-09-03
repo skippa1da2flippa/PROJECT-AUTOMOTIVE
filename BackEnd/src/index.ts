@@ -57,6 +57,7 @@ console.log('Demanding the sauce...');
         console.log('Sauce received!');
         let ted = await pool.getTedis()
         try {
+            await ted.del("6310e39cd79ebaa7f59df822")
             let users = await UserModel.find().catch(err => { console.log("LA findALL ha fallito")})
             if (!users) {
                 let data: UserDocument = await createUser({

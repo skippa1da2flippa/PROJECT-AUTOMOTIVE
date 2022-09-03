@@ -8,9 +8,9 @@
                         <div class="navbar-link-vehicles-near-me helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/vehiclesNearMe')">Vehicles near me</div>
                         <div class="navbar-link-routines helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/routines')">Routines</div>
                         <div class="navbar-link-maps helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/maps')">Maps</div>
-                        <div class="navbar-link-my-vehicles helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/myVehicles')">My vehicles</div>
+                        <div class="navbar-link-my-vehicles helveticaneue-bold-white-18px pointer" (click)="redirect('/myVehicles')">My vehicles</div>
                         <div class="navbar-link-enjoyed-vehicles helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/enjoyedVehicles')">Enjoyed vehicles</div>
-                        <div class="navbar-link-notifications helveticaneue-bold-white-18px pointer" (click)="redirect('/notifications')">Notifications</div>
+                        <div class="navbar-link-notifications  helveticaneue-regular-normal-white-18px pointer" (click)="redirect('/notifications')">Notifications</div>
                     </div>
                     <div class="rettangolo-28"></div>
                 </div>
@@ -29,6 +29,7 @@
                     <div class="columns">
                         <div class="column is-half">Status: {{user.status}}</div>
                         <div class="p-5"></div>
+                        <div class="p-5"><button class="button mr-1 is-rounded is-small" (click)="removeEnjoyer(user.userId)">remove</button></div>
                     </div>
                 </div>
 

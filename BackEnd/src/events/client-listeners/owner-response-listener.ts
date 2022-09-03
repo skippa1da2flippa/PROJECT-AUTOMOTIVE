@@ -29,7 +29,7 @@ import { pool } from '../..';
             // gives back the connection
             pool.putTedis(tedis)
 
-            return (data.res)? Promise.resolve() : Promise.reject()
+            return (data.res)? Promise.resolve() : Promise.resolve()
         })
     }
 }

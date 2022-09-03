@@ -23,6 +23,7 @@ import {getVehicleById, ProjectVehicleDocument} from "../model/database/my-vehic
 import {ServerError} from "../model/errors/server-error";
 import {BanListPool} from "../model/ban-list/ban-list-pool";
 import {retrieveUserId} from "./utils/param-checking";
+import {UserEndpointResponse} from "./user-routes";
 
 export const router = Router();
 export const jsonWebToken = jsonwebtoken
@@ -332,9 +333,11 @@ router.get(
 router.get(
     '/auth/myVehicle/signout',
     authenticateToken,
-    async (req: AuthenticatedRequest, res: Response) => {
+    retrieveUserId,
+    async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
         try {
             const vehicleId: string = req.jwtContent.Id;
+            await setUserStatus(res.locals.userId, UserStatus.Offline)
             // Get the client of the user that is logging out and remove it
             // from the room of that user
             // If the room doesn't exist, clientIds is undefined

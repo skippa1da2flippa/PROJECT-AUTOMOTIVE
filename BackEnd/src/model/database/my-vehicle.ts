@@ -16,6 +16,7 @@ import {
 import bcrypt from "bcrypt";
 import {UserVehicle} from "../../routes/my-vehicle-routes";
 import {MyVehicle} from "../../routes/user-routes";
+import {Response} from "express";
 
 /*
     This collection is thought not to be an embedded document due to the fact that many users can use the same Vehicle, setting this schema as 
@@ -277,12 +278,13 @@ export async function addEnjoyer(
     enjoyerName: string,
     enjoyerSurname: string,
     ioServer: Server,
-    onComplete: (res: string) => void
+    onComplete: (res: string) => void,
 ) : Promise<void> {
     let vehicle: ProjectVehicleDocument
     let res: string = ""
     let temp: any
     let flag: boolean = false
+    let tedis = await pool.getTedis()
 
     vehicle = await getVehicleById(vehicleId)
 
@@ -302,31 +304,29 @@ export async function addEnjoyer(
     })
 
 
-    // gets a connection from the pool
-    let tedis = await pool.getTedis()
-
     let interval = setInterval(async () => {
         if (!flag) {
             res = !(temp = await tedis.get(vehicle.owner.toString())) ? "" : temp as string
             if (res === "true") {
-
                 await VehicleModel.findByIdAndUpdate(vehicleId, {
                     $push: { enjoyers: enjoyerId }
                 }).catch(err => Promise.reject(new ServerError("Internal server error")))
-                await updateUserEnjoyedVehicle(enjoyerId, vehicleId).catch(err => { console.log("update user sbanfa")})
+                await updateUserEnjoyedVehicle(enjoyerId, vehicleId)
                 flag = true
                 await tedis.del(vehicle.owner.toString()).catch(err => {
-                    console.log("tedis sbanfa")
+                 console.log("tedis sbanfa")
                 })
                 pool.putTedis(tedis)
+                clearInterval(interval)
                 onComplete(res)
             }
             else if (res === "false") {
                 flag = true
                 await tedis.del(vehicle.owner.toString()).catch(err => {
-                    console.log("tedis sbanfa")
+                  console.log("tedis sbanfa")
                 })
                 pool.putTedis(tedis)
+                clearInterval(interval)
                 onComplete(res)
             }
         }
@@ -336,28 +336,6 @@ export async function addEnjoyer(
         clearInterval(interval)
     }, 15000)
 
-    /**
-     * try {
-     *         setTimeout(async () => {
-     *             clearInterval(interval)
-     *             if (res === "") onComplete("false")
-     *             //pop the pair
-     *             await tedis.del(vehicle.owner.toString()).catch(err => {
-     *                 console.log("tedis sbanfa")
-     *             })
-     *
-     *             // gives back the connection
-     *             try {
-     *                 pool.putTedis(tedis)
-     *             } catch(err) {
-     *                 console.log("Teuds sbanfa2")
-     *             }
-     *
-     *         }, 60000)
-     *     } catch(err) {
-     *         console.log("si spacca neol tru")
-     *     }
-     * */
 }
 
 export async function updateVehiclePsw(vehicleId: Types.ObjectId, psw: string) {

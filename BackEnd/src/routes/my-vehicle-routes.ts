@@ -507,17 +507,14 @@ router.put(
     '/myVehicle/vehicleId/enjoyers',
     authenticateToken,
     async (req: UpdateEnjoyerRequest, res: UserVehicleEndPointResponse) => {
-        console.log("Sono nella route add/remove enoyer")
         const { vehicleId, enjoyerId, enjoyerName, enjoyerSurname } = req.body;
         if (enjoyerId) {
             try {
                 if (req.query.action === "add") {
                     const onComplete = (result: string) => {
-                        console.log("SONO NELLA ON COMPLETE RES: " + result)
                         if (result === "false") res.sendStatus(403);
                         else res.sendStatus(204)
                     }
-
                     // TODO add check if they friend
                     await addEnjoyer(
                         retrieveId(vehicleId, false),
@@ -525,10 +522,8 @@ router.put(
                         enjoyerName,
                         enjoyerSurname,
                         ioServer,
-                        onComplete
-                    ).catch(err => {
-                        console.log(err.message)
-                    });
+                        onComplete,
+                    )
                 }
                 else {
                     await removeEnjoyer(
@@ -548,7 +543,6 @@ router.put(
                 });
             }
         } else {
-            console.log("dentro al catch più esterno")
             return res.status(400).json({
                 timestamp: toUnixSeconds(new Date()),
                 errorMessage: 'Wrong parameters',

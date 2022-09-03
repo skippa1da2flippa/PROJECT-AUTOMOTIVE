@@ -14,15 +14,18 @@ import {User} from "../../../core/model/response-data/user";
 export class UsersScreenComponent extends ErrorHandler implements OnInit {
 
     public users: User[] = []
-    public data: string = localStorage.getItem(environment.localStorageUsersData) || ""
+    public id: string = ""
 
     constructor(public override router: Router, private userApi: UserApi, private vehicleApi: ProjectVehicleApi) {
         super(router)
     }
 
     ngOnInit(): void {
-        if (this.data.split("/")[0] === "v") {
-            this.vehicleApi.getVehicleEnjoyers(this.data.split("/")[1]).subscribe({
+        let data = localStorage.getItem(environment.localStorageUsersData) || ""
+        let type = data.split("/")[0]
+        this.id = data.split("/")[1]
+        if (type === "v") {
+            this.vehicleApi.getVehicleEnjoyers(this.id).subscribe({
                 next: (data: User[]) => {
                     this.users = data
                 },
@@ -36,6 +39,17 @@ export class UsersScreenComponent extends ErrorHandler implements OnInit {
                 error: super.errorHandler
             })
         }
+    }
+
+    protected removeEnjoyer(enjoyerId: string) {
+        this.vehicleApi.removeVehicleEnjoyer(this.id, enjoyerId).subscribe({
+            next: () => {
+                this.users = this.users.filter((elem) => {
+                    return elem.userId !== enjoyerId
+                })
+            },
+            error: super.errorHandler
+        })
     }
 
 }
