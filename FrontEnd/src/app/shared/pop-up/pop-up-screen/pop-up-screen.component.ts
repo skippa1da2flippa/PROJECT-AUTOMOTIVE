@@ -14,6 +14,7 @@ import {UserApi} from "../../../core/api/handlers/user-api";
 })
 export class PopUpScreenComponent extends ErrorHandler implements OnInit {
     private meh: User = new User()
+    private hasResponded: boolean = false
     public enjoyerId: string = ""
     public enjoyerName: string = ""
     public enjoyerSurname: string = ""
@@ -44,18 +45,20 @@ export class PopUpScreenComponent extends ErrorHandler implements OnInit {
         this.vehicleModel = data.vehicleModel
 
         setTimeout(async () => {
-            this.ownerResponseEmitter.emit({
-                res: false,
-                ownerId: this.meh.userId,
-                name: this.meh.name,
-                enjoyerId: this.enjoyerId
-            })
-
-            await this.router.navigate(["/homepage"])
+            if (!this.hasResponded) {
+                this.ownerResponseEmitter.emit({
+                    res: false,
+                    ownerId: this.meh.userId,
+                    name: this.meh.name,
+                    enjoyerId: this.enjoyerId
+                })
+                await this.router.navigate(["/homepage"])
+            }
         }, 60000)
     }
 
     public async ownerResponse(res: boolean = false) {
+        this.hasResponded = true
         this.ownerResponseEmitter.emit({
             res: res,
             ownerId: this.meh.userId,
