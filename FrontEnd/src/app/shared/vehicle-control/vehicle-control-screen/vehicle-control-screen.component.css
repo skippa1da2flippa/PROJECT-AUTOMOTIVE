@@ -310,6 +310,24 @@
     width: 93.99px;
 }
 
+.ipad-nexus-9-3 .raggruppa-2900 {
+    background-image: url(../../../../assets/images/raggruppa-230@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    width: 93.99px;
+    transform: scale(-1, 1);
+}
+
+
+.ipad-nexus-9-3 .raggruppa-1500 {
+    background-image: url(../../../../assets/images/raggruppa-228@1x.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    margin-right: 0;
+    width: 93.99px;
+    transform: scale(-1, 1);
+}
+
 .ipad-nexus-9-3 .raggruppa-253 {
     align-items: flex-start;
     display: flex;
@@ -444,11 +462,29 @@
     width: 48px;
 }
 
+.ipad-nexus-9-3 .raggruppa-1600 {
+    background-color: var(--white);
+    border-radius: 13px;
+    display: flex;
+    height: 25px;
+    margin-left: 48px;
+    width: 48px;
+}
+
 .ipad-nexus-9-3 .ellisse-9 {
     background-color: var(--white);
     border-radius: 9.5px;
     margin-bottom: 3px;
     margin-left: 3px;
+    margin-top: 3px;
+    width: 19px;
+}
+
+.ipad-nexus-9-3 .ellisse-1629 {
+    background-color: var(--granite-gray);
+    border-radius: 9.5px;
+    margin-bottom: 3px;
+    margin-left: 28px;
     margin-top: 3px;
     width: 19px;
 }
@@ -533,6 +569,16 @@
 
 .ipad-nexus-9-3 .raggruppa-135 {
     background-color: var(--canary);
+    border-radius: 13px;
+    display: flex;
+    height: 25px;
+    margin-bottom: 4.07px;
+    margin-left: 60px;
+    width: 48px;
+}
+
+.ipad-nexus-9-3 .raggruppa-1629 {
+    background-color: var(--white);
     border-radius: 13px;
     display: flex;
     height: 25px;
@@ -628,6 +674,18 @@
     width: 433px;
 }
 
+.ipad-nexus-9-3 .custom_-seat_2022-LightOn {
+    height: 277px;
+    left: 0;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 433px;
+    -moz-box-shadow: 0 0 5px #fff;
+    -webkit-box-shadow: 0 0 5px #fff;
+    box-shadow: 0 0 5px #fff;
+}
+
 .ipad-nexus-9-3 .custom_-seat_2022-au-1 {
     height: 277px;
     left: 127px;
@@ -635,6 +693,18 @@
     position: absolute;
     top: 0;
     width: 433px;
+}
+
+.ipad-nexus-9-3 .custom_-seat_2022-au-1-LightOn {
+    height: 277px;
+    left: 127px;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 433px;
+    -moz-box-shadow: 0 0 5px #fff;
+    -webkit-box-shadow: 0 0 5px #fff;
+    box-shadow: 0 0 5px #fff;
 }
 
 .ipad-nexus-9-3 .raggruppa-322 {

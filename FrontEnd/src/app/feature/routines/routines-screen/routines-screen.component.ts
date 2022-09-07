@@ -28,14 +28,15 @@ export class RoutinesScreenComponent extends ErrorHandler implements OnInit {
         })
     }
 
-    public addRoutineDiv() {
-        this.router.navigate(["/routines/creation"])
+    public async addRoutineDiv() {
+        await this.router.navigate(["/routines/creation"])
     }
 
     public deleteRoutine(name: string){
         this.routines = this.routines.filter(elem => {
             return elem.name !== name
         })
+        console.log(name)
         this.userRoutine.deleteRoutine(name).subscribe({
             error: super.errorHandler,
         })

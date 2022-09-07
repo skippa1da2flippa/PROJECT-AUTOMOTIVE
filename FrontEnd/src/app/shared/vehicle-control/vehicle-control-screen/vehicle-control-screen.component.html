@@ -40,8 +40,8 @@
             <div class="overlap-group1">
                 <img class="full-concept-v28-_-3" src="assets/images/full-concept-v28---3-1@1x.png" />
                 <div class="raggruppa-232">
-                    <div class="raggruppa-229"></div>
-                    <div class="raggruppa-231"></div>
+                    <div class="raggruppa-2900 pointer" (click)="leftLockEvent()"></div>
+                    <div class="raggruppa-231 pointer" (click)="rightLockEvent()"></div>
                 </div>
             </div>
             <div class="raggruppa-253">
@@ -65,29 +65,36 @@
                         </div>
                         <div class="ellisse-14"></div>
                     </div>
-                    <div class="raggruppa-132">
-                        <div class="ellisse-9 border-1px-canary"></div>
+                    <div *ngIf="!middleRightButton">
+                        <div class="raggruppa-1600 pointer" (click)="middleRightButtonEvent()">
+                            <div class="ellisse-1629 border-1px-canary"></div>
+                        </div>
+                    </div>
+                    <div *ngIf="middleRightButton">
+                        <div class="raggruppa-132 pointer" (click)="middleRightButtonEvent()">
+                            <div class="ellisse-9 border-1px-canary"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="flex-col-3">
                     <div class="raggruppa-container">
                         <img class="raggruppa-130" src="assets/images/raggruppa-130@1x.png" />
                         <div class="raggruppa-134">
-                            <div class="raggruppa-119"></div>
-                            <div class="x21-c">21°C</div>
-                            <div class="raggruppa-117"><img class="raggruppa-116" src="assets/images/raggruppa-116-5@1x.png" /></div>
+                            <div class="raggruppa-119 pointer" (click)="lowerTemperature()"></div>
+                            <div class="x21-c">{{temperature}}</div>
+                            <div class="raggruppa-117 pointer" (click)="raiseTemperature()"><img class="raggruppa-116" src="assets/images/raggruppa-116-5@1x.png" /></div>
                         </div>
-                        <div class="raggruppa-135">
-                            <div class="ellisse-9 border-1px-canary"></div>
-                        </div>
-                    </div>
-                    <div class="raggruppa-84">
-                        <div class="enjoyers helveticaneue-medium-white-18px">Enjoyers</div>
-                        <div class="raggruppa-83">
-                            <div class="raggruppa-65"></div>
-                            <div class="raggruppa-7"></div>
-                            <div class="raggruppa-7"></div>
-                            <div class="raggruppa-80"></div>
+                        <div>
+                            <div *ngIf="!bottomRightButton">
+                                <div class="raggruppa-1629 pointer" (click)="bottomRightButtonEvent()">
+                                    <div class="ellisse-1629 border-1px-canary"></div>
+                                </div>
+                            </div>
+                            <div *ngIf="bottomRightButton">
+                                <div class="raggruppa-135 pointer" (click)="bottomRightButtonEvent()">
+                                    <div class="ellisse-9 border-1px-canary"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -96,11 +103,13 @@
                 <div class="raggruppa-306">
                     <div class="custom_seat_-aug-container">
                         <img
-                            class="custom_-seat_2022-au"
+                            class="custom_-seat_2022-au pointer"
+                            (click)="leftSeatSwitchEvent()"
                             src="assets/images/custom-seat-2022-aug-13-09-43-03pm-000-customizedview41371135013-1@1x.png"
                         />
                         <img
-                            class="custom_-seat_2022-au-1"
+                            class="custom_-seat_2022-au-1 pointer"
+                            (click)="rightSeatSwitchEvent()"
                             src="assets/images/custom-seat-2022-aug-13-09-43-03pm-000-customizedview41371135013-1@1x.png"
                         />
                     </div>

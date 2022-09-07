@@ -59,7 +59,7 @@ console.log('Demanding the sauce...');
         try {
             await ted.del("6310e39cd79ebaa7f59df822")
             let users = await UserModel.find().catch(err => { console.log("LA findALL ha fallito")})
-            if (!users) {
+            if (users && !users.length) {
                 let data: UserDocument = await createUser({
                     name: "ash",
                     surname: "catchEm",

@@ -27,7 +27,7 @@ export class RoutineCreationScreenComponent extends ErrorHandler implements OnIn
             path
         }).subscribe({
             next: async () =>  {
-                await this.router.navigate(["/routine/all"])
+                await this.router.navigate(["/routines"])
             },
 
             error: super.errorHandler
