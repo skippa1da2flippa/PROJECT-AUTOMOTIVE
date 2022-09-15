@@ -47,7 +47,6 @@ router.put(
     authenticateToken,
     retrieveUserId,
     async (req: UpdateStatsRequest, res: UserEndpointResponse) => {
-        let user: UserDocument
         let userId = res.locals.userId
         try {
             await updateUserStats(userId, {

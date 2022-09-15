@@ -144,8 +144,6 @@ export const myVehicleSchema = new Schema<ProjectVehicleDocument>(
 )
 
 
-// TO DO remember to put in the front-end the 60 sec limit for the owner to answer and answer anyway
-
 
 myVehicleSchema.methods.setPassword = async function (pwd: string): Promise<ProjectVehicleDocument> {
     const salt: string = await bcrypt
@@ -376,7 +374,6 @@ export async function changeOwner(vehicleId: Types.ObjectId, ownerId: Types.Obje
 
 
 export async function removeEnjoyer(vehicleId: Types.ObjectId, enjoyerId: Types.ObjectId) : Promise<void> {
-    console.log("sono dentro la remove")
     let result = await VehicleModel.findByIdAndUpdate(vehicleId, {
         $pull: { enjoyers: enjoyerId }
     }).catch(err => Promise.reject(new ServerError("Internal server error")))
@@ -388,43 +385,36 @@ export async function removeEnjoyer(vehicleId: Types.ObjectId, enjoyerId: Types.
     return Promise.resolve()
 }
 
+export async function getUserVehicle(userId: Types.ObjectId): Promise<UserVehicle> {
+    const user: UserDocument = await getUserById(userId)
+    return {
+        name: user.name,
+        status: user.status,
+        surname:user.surname,
+        userId: user._id,
+        email: user.email,
+        nickname: user.nickname
+    }
+}
 
 export async function getFullVehicleData(vehicleId: Types.ObjectId): Promise<MyVehicle>{
-    try {
+    let enjoyers: UserVehicle[] = []
+    let vehicle: ProjectVehicleDocument = await getVehicleById(vehicleId)
+    let owner = await getUserVehicle(vehicle.owner)
 
-        let enjoyers: UserVehicle[] = []
-        let vehicle: ProjectVehicleDocument = await getVehicleById(vehicleId)
-        let user: UserDocument = await getUserById(vehicle.owner)
-        let owner: UserVehicle = {
-            name: user.name,
-            surname:user.surname,
-            status: user.status,
-            userId: user._id,
-            email: user.email,
-            nickname: user.nickname
-        }
-
-        for (let idx in vehicle.enjoyers) {
-            let user = await getUserById(vehicle.enjoyers[idx])
-            enjoyers.push({
-                name: user.name,
-                surname:user.surname,
-                userId: user._id,
-                status: user.status,
-                email: user.email,
-                nickname: user.nickname
-            })
-        }
-
-        return {
-            vehicleId: vehicle._id,
-            owner: owner,
-            status: vehicle.status,
-            legalInfos: vehicle.legalInfos,
-            enjoyers: enjoyers,
-            type: vehicle.type
-        }
-    } catch(err) {
-        return Promise.reject(err)
+    for (let idx in vehicle.enjoyers) {
+        enjoyers.push(
+            await getUserVehicle(vehicle.enjoyers[idx])
+        )
     }
+
+    return {
+        vehicleId: vehicle._id,
+        owner: owner,
+        status: vehicle.status,
+        legalInfos: vehicle.legalInfos,
+        enjoyers: enjoyers,
+        type: vehicle.type
+    }
+
 }

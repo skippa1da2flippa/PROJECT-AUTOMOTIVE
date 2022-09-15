@@ -13,7 +13,7 @@ import {
     addEnjoyer,
     removeEnjoyer,
     changeOwner,
-    updateVehiclePsw, VehicleModel
+    updateVehiclePsw, VehicleModel, getUserVehicle
 } from '../model/database/my-vehicle'
 import {LegalInfos} from "../model/database/legalInfos";
 import {ioServer} from "../index";
@@ -279,7 +279,7 @@ router.patch(
     }
 );
 
-// TODO delete this endpoint,
+// TODO delete this endpoint, created just for showing how a connection between an enjoyer and a vehicle should be
 router.get(
     "/myVehicle/allVehicles",
     authenticateToken,
@@ -351,25 +351,11 @@ router.patch(
         try {
             let vehicleId: Types.ObjectId = retrieveId(req.body.vehicleId, false)
             vehicle = await getVehicleById(vehicleId)
-            user = await getUserById(vehicle.owner)
-            owner = {
-                name: user.name,
-                status: user.status,
-                surname:user.surname,
-                userId: user._id,
-                email: user.email,
-                nickname: user.nickname
-            }
+            owner = await getUserVehicle(vehicle.owner)
             for(let idx in vehicle.enjoyers){
-                let enjoyer = await getUserById(vehicle.enjoyers[idx])
-                enjoyers.push({
-                    name: enjoyer.name,
-                    surname:enjoyer.surname,
-                    status: user.status,
-                    userId: enjoyer._id,
-                    email: enjoyer.email,
-                    nickname: enjoyer.nickname
-                })
+                enjoyers.push(
+                    await getUserVehicle(vehicle.enjoyers[idx])
+                )
             }
             return res.status(201).json({
                 vehicleId: vehicle._id,
@@ -554,7 +540,7 @@ router.put(
 
 router.put(
     "/myVehicle/vehicleId/owner",
-    // superUserAuth, TODO implementa sto middleware e controlla che lo user sia admin per cambiare owner car,
+    // superUserAuth, TODO implementa sto middleware e controlla che lo user sia admin per cambiare car owner,
     async (req: OwnerUpdateRequest, res: UserVehicleEndPointResponse) => {
         try {
             const vehicleId: Types.ObjectId = retrieveId(req.body.vehicleId, false)

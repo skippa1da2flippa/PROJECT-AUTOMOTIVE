@@ -6,7 +6,7 @@ import { toUnixSeconds } from './utils/date-utils';
 import { retrieveUserId, skipLimitChecker } from './utils/param-checking';
 import { authenticateToken } from './auth-routes';
 import {
-    getVehiclesByUserId, removeEnjoyer, VehicleStatus, ModelTypes, getFullVehicleData
+    getVehiclesByUserId, removeEnjoyer, VehicleStatus, ModelTypes, getFullVehicleData, getUserVehicle
 } from '../model/database/my-vehicle'
 import {ServerError} from "../model/errors/server-error";
 import {getUserById, updatePsw, User, UserDocument, validateEmail} from "../model/database/user";
@@ -52,20 +52,6 @@ export interface MyVehicle {
  */
 export interface UserEndpointResponse extends Response {
     locals: UserEndpointLocals;
-}
-
-interface UpdateStatsBody {
-    elo: number;
-    topElo: number;
-    wins: number;
-    losses: number;
-    shipsDestroyed: number;
-    totalHits: number;
-    totalShots: number;
-}
-
-interface UpdateStatsRequest extends AuthenticatedRequest {
-    body: UpdateStatsBody;
 }
 
 interface UpdatePasswordBody {
@@ -142,15 +128,9 @@ router.get(
         try {
             user = await usr.getUserById(userId);
             for (let idx in user.friends) {
-                let tempUser = await getUserById(user.friends[idx])
-                friends.push({
-                    userId: tempUser._id,
-                    name: tempUser.name,
-                    surname: tempUser.surname,
-                    nickname: tempUser.nickname,
-                    email: tempUser.email,
-                    status: tempUser.status
-                })
+                friends.push(
+                    await getUserVehicle(user.friends[idx])
+                )
             }
             return res.status(201).json({
                 friends,
@@ -287,6 +267,7 @@ router.patch(
     }
 );
 
+// TODO endpoint to retrieve one user (may be deleted later in the process)
 router.patch(
     '/users/@meh/one',
     authenticateToken,
@@ -323,9 +304,7 @@ router.patch(
     retrieveUserId,
     async (req: UpdateUsernameRequest, res: UserEndpointResponse) => {
         const { nickname } = req.body;
-
         const userId: Types.ObjectId = res.locals.userId;
-
         if (nickname) {
             try {
                 await usr.updateNickName(userId, nickname);

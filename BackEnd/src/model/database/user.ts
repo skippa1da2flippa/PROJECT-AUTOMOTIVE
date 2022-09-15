@@ -162,18 +162,6 @@ export interface UserDocument extends User, Document {
      * @param type type of the document to remove
      */
     removeDocument(type: DocTypes): Promise<UserDocument>;
-
-    /**
-     * add a routine for the user
-     * @param routine represents the newly routine
-     */
-    addRoutine(routine: Routine): Promise<void>;
-
-    /**
-     * remove a routine for the user
-     * @param name identifies the routine up to be removed
-     */
-    removeRoutine(name: string): Promise<void>;
 }
 
 
@@ -298,7 +286,7 @@ export async function removeNotification(_id: Types.ObjectId, type: NotTypes) {
 }
 
 
-// pop one notification with the same type as the one recieved as input
+// pop one notification with the same type as the one received as input, to change
 UserSchema.methods.removeNotification = async function (
     type: string
 ): Promise<UserDocument> {
@@ -317,7 +305,8 @@ UserSchema.methods.isFriend = function(friendId: Types.ObjectId) : boolean {
 }
 
 UserSchema.methods.addDocument = async function (doc: ODocument) : Promise<void> {
-    this.documents.push(doc)
+
+    this.docs.push(doc)
     await this.save().catch((err) => Promise.reject(new ServerError("Internal server error")))
     return Promise.resolve()
 }

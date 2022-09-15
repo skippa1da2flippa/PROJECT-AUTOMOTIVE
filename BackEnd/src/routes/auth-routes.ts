@@ -19,10 +19,10 @@ import {AuthenticatedRequest} from './utils/authenticated-request';
 import {toUnixSeconds} from './utils/date-utils';
 import {Socket} from 'socket.io';
 import chalk from 'chalk';
-import {getVehicleById, ProjectVehicleDocument} from "../model/database/my-vehicle";
+import {getVehicleById, ProjectVehicleDocument, setVehicleStatus, VehicleStatus} from "../model/database/my-vehicle";
 import {ServerError} from "../model/errors/server-error";
 import {BanListPool} from "../model/ban-list/ban-list-pool";
-import {retrieveUserId} from "./utils/param-checking";
+import {retrieveId, retrieveUserId} from "./utils/param-checking";
 import {UserEndpointResponse} from "./user-routes";
 
 export const router = Router();
@@ -164,9 +164,6 @@ interface SignInVehicleRequest extends Request {
 }
 
 
-
-
-
 export const generateAccessToken = (data: string): string => {
 
     const tokensData: JwtData = {
@@ -189,9 +186,10 @@ router.post(
         const tokensData: JwtData = {
             Id: req.user._id,
         };
-        // Refresh token generation with 2 h duration, allow a user to maintain a session and be issued with access tokens
+
+        // Refresh token generation with 10 minutes duration, allow a user to maintain a long enough session before logging in again
         const refreshToken = jsonwebtoken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
-            expiresIn: '1h',
+            expiresIn: '600s',
         });
 
         const accessToken = generateAccessToken(tokensData.Id);
@@ -228,7 +226,7 @@ router.post(
         };
         // Refresh token generation with 2 h duration, allow a user to maintain a session and be issued with access tokens
         const refreshToken = jsonwebtoken.sign(tokensData, process.env.JWT_REFRESH_TOKEN_SECRET, {
-            expiresIn: '10m',
+            expiresIn: '600s',
         });
 
         const accessToken = generateAccessToken(tokensData.Id);
@@ -336,12 +334,12 @@ router.get(
     retrieveUserId,
     async (req: AuthenticatedRequest, res: UserEndpointResponse) => {
         try {
-            const vehicleId: string = req.jwtContent.Id;
-            await setUserStatus(res.locals.userId, UserStatus.Offline)
+            const vehicleId = retrieveId(req.jwtContent.Id)
+            await setVehicleStatus(vehicleId, VehicleStatus.Offline)
             // Get the client of the user that is logging out and remove it
             // from the room of that user
             // If the room doesn't exist, clientIds is undefined
-            const vehicleIds: Set<string> | undefined = ioServer.sockets.adapter.rooms.get(vehicleId);
+            const vehicleIds: Set<string> | undefined = ioServer.sockets.adapter.rooms.get(vehicleId.toString());
             if (vehicleIds) {
                 if (vehicleIds.size > 1) {
                     throw new ServerError(
@@ -354,7 +352,7 @@ router.get(
                 if (vehicleIds.size === 1) {
                     const logoutClientId: string = vehicleIds.values().next().value;
                     const logoutClient: Socket = ioServer.sockets.sockets.get(logoutClientId);
-                    logoutClient.leave(vehicleId);
+                    logoutClient.leave(vehicleId.toString());
 
                     console.log(chalk.red.bold(`Vehicle ${vehicleId} left the server`));
                 }

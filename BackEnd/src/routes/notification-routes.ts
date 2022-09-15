@@ -165,7 +165,7 @@ router.post(
 
 /**
  *   /users/:userId/notifications | DELETE | Remove the notification from the specified user
- *   Query params: type, sender
+ *   Query params: type
  */
 router.delete(
     '/users/@meh/notifications/:type',

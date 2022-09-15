@@ -82,7 +82,6 @@ router.post(
     retrieveUserId,
     async (req: RoutineCreationRequest, res: UserEndpointResponse) => {
         let userId = res.locals.userId
-        let user: UserDocument
         try {
             const routine: Routine = {
                 name: req.body.name + "/" + userId,
